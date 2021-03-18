@@ -10,20 +10,11 @@
 yarn add @sovryn/wallet
 ```
 
-## Usage
 
-```tsx
-import React, { Component } from 'react'
+## Note
 
-import MyComponent from '@sovryn/react-elements'
-import '@sovryn/react-elements/dist/index.css'
-
-class Example extends Component {
-  render() {
-    return <MyComponent />
-  }
-}
-```
+A lot of wallet code was copied from [MyCrypto](https://github.com/MyCryptoHQ/MyCrypto) project, please watch on MyCrypto
+ issues to be aligned with possible bug's and fixes.
 
 ## License
 
