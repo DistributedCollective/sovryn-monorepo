@@ -9,7 +9,7 @@ export function WalletButton() {
 
   const onConnect = React.useCallback(async () => {
     wallet.loading.set(true);
-    const provider = await _wallet.connect('ledger');
+    const provider = await _wallet.start('ledger');
     console.log('provider', provider);
   }, []);
 
