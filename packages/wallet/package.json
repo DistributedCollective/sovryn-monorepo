@@ -1,6 +1,6 @@
 {
   "name": "@sovryn/wallet",
-  "version": "0.0.4-alpha.0",
+  "version": "0.0.5-alpha.0",
   "description": "Library for interacting with RSK and ETH wallets.",
   "author": "Rytis Grincevicius",
   "license": "MIT",
@@ -16,7 +16,7 @@
   "scripts": {
     "build": "tsc",
     "start": "tsc -w",
-    "prepare": "run-s build",
+    "prepare": "run-s build && cp package.json dist && cp README.md dist",
     "test": "run-s test:unit test:lint test:build",
     "test:build": "run-s build",
     "test:lint": "eslint .",
@@ -81,5 +81,5 @@
   "files": [
     "dist"
   ],
-  "gitHead": "aa161b077b3e23ec90c331a33e57b0d2fd1caf2e"
+  "gitHead": "ae86d4184859d8b2ab8bc2830f62e75721400ccc"
 }
