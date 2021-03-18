@@ -8,12 +8,14 @@
   "main": "dist/index.js",
   "module": "dist/index.es.js",
   "source": "src/index.ts",
+  "types": "src/index.d.ts",
+  "private": false,
   "engines": {
     "node": ">=10"
   },
   "scripts": {
     "build": "tsc",
-    "start": "parcel watch ./src/index.ts",
+    "start": "tsc -w",
     "prepare": "run-s build",
     "test": "run-s test:unit test:lint test:build",
     "test:build": "run-s build",
@@ -46,6 +48,7 @@
     "web3-utils": "^1.3.4"
   },
   "devDependencies": {
+    "@babel/core": "^7.0.0",
     "@babel/preset-typescript": "^7.13.0",
     "@parcel/packager-ts": "2.0.0-beta.2",
     "@parcel/transformer-typescript-tsc": "^2.0.0-alpha.3",
@@ -78,5 +81,5 @@
   "files": [
     "dist"
   ],
-  "gitHead": "59e7d06a167e5635ee589b474a5ceef60a3eea22"
+  "gitHead": "aa161b077b3e23ec90c331a33e57b0d2fd1caf2e"
 }

@@ -7,7 +7,7 @@ import TransportWebUSB from '@ledgerhq/hw-transport-webusb';
 // import { serializeTransaction, Signature, UnsignedTransaction } from 'ethers/utils';
 import { Wallet } from '../../wallet';
 import debug from '../../utils/debug';
-import { WalletType } from '../../constants';
+import { ProviderType } from '../../constants';
 import { ChainCodeResponse, LedgerWallet } from '../../wallets';
 import PromiEvent from '../../utils/promievent';
 import { WalletProviderInterface } from '../../interfaces';
@@ -97,7 +97,7 @@ export class LedgerWalletProvider implements WalletProviderInterface {
     const dpath =
       this._wallet.networkDictionary
         .get(31)
-        ?.getWalletDPaths(WalletType.LEDGER)?.[0] || '';
+        ?.getWalletDPaths(ProviderType.LEDGER)?.[0] || '';
 
     log('uses path', dpath);
 

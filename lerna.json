@@ -3,5 +3,8 @@
   "npmClient": "yarn",
   "packages": [
     "packages/*"
-  ]
+  ],
+  "publishConfig": {
+    "directory": "dist"
+  }
 }

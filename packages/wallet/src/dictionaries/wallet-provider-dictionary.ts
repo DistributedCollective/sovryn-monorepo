@@ -4,7 +4,7 @@ import {
   InjectedWalletProvider,
   LedgerWalletProvider,
 } from '../providers';
-import { WalletType } from '../constants';
+import { ProviderType } from '../constants';
 
 type Wallets = Map<string, typeof AbstractProvider>;
 
@@ -14,8 +14,8 @@ export class WalletProviderDictionary {
   constructor() {
     // @ts-ignore
     this._wallets = new Map([
-      [WalletType.WEB3, InjectedWalletProvider],
-      [WalletType.LEDGER, LedgerWalletProvider],
+      [ProviderType.WEB3, InjectedWalletProvider],
+      [ProviderType.LEDGER, LedgerWalletProvider],
     ]);
   }
 

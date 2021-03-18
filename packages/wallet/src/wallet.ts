@@ -1,13 +1,10 @@
 import { TransactionConfig } from 'web3-core';
 import { FullWallet } from './interfaces';
 import { NetworkDetails } from './models';
-import {
-  NetworkDictionary,
-  ProviderType,
-  providersDictionary,
-} from './dictionaries';
+import { NetworkDictionary, providersDictionary } from './dictionaries';
 import { Web3Wallet } from './wallets/non-deterministic';
 import debug from './utils/debug';
+import { ProviderType } from './constants';
 
 const { log, error } = debug('wallet');
 

@@ -9,6 +9,7 @@
   "module": "dist/index.modern.js",
   "source": "src/index.ts",
   "types": "dist/index.d.ts",
+  "private": false,
   "engines": {
     "node": ">=10"
   },
@@ -75,5 +76,5 @@
   "files": [
     "dist"
   ],
-  "gitHead": "59e7d06a167e5635ee589b474a5ceef60a3eea22"
+  "gitHead": "aa161b077b3e23ec90c331a33e57b0d2fd1caf2e"
 }

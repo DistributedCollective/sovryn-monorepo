@@ -1,4 +1,4 @@
-import { NetworkType, WalletType } from '../constants';
+import { ConnectionType, ProviderType } from '../constants';
 
 export class NetworkDetails {
   private _logo: string;
@@ -6,13 +6,13 @@ export class NetworkDetails {
   private _explorerTx: string;
   private _explorerAdr: string;
   private _networkId: number;
-  private _dPaths: Map<WalletType, string[]> = new Map<WalletType, string[]>();
+  private _dPaths: Map<ProviderType, string[]> = new Map<ProviderType, string[]>();
 
   // eslint-disable-next-line no-useless-constructor
   constructor(
     private _chainId: number,
     private _name: string,
-    private _networkType: NetworkType = NetworkType.MAINNET,
+    private _networkType: ConnectionType = ConnectionType.MAINNET,
   ) {}
 
   public setNodeUrl(value: string) {
@@ -72,21 +72,21 @@ export class NetworkDetails {
     return this._networkType;
   }
 
-  public setDPaths(dPaths: Map<WalletType, string[]>) {
+  public setDPaths(dPaths: Map<ProviderType, string[]>) {
     this._dPaths = dPaths;
     return this;
   }
 
-  public getDPaths(): Map<WalletType, string[]> {
+  public getDPaths(): Map<ProviderType, string[]> {
     return this._dPaths;
   }
 
-  public setWalletDPaths(wallet: WalletType, paths: string[]) {
+  public setWalletDPaths(wallet: ProviderType, paths: string[]) {
     this._dPaths.set(wallet, paths);
     return this;
   }
 
-  public getWalletDPaths(wallet: WalletType) {
+  public getWalletDPaths(wallet: ProviderType) {
     return this._dPaths.get(wallet);
   }
 }
