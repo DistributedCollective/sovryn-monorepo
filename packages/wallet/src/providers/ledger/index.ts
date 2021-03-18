@@ -14,21 +14,6 @@ import { WalletProviderInterface } from '../../interfaces';
 
 const { log, error } = debug('ledger-provider');
 
-// Ledger throws a few types of errors
-interface U2FError {
-  metaData: {
-    type: string;
-    code: number;
-  };
-}
-
-interface ErrorWithId {
-  id: string;
-  message: string;
-  name: string;
-  stack: string;
-}
-
 function translateRaw(key: string) {
   return key;
 }

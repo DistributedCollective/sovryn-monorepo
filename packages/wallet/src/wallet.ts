@@ -31,7 +31,14 @@ export class Wallet {
     }
   }
 
+  public async connect(wallet: FullWallet) {
+    this._wallet = wallet;
+    log('connected to wallet', wallet);
+  }
+
   public async disconnect() {
+    // @ts-ignore
+    this._wallet = null;
     error('disconnected');
   }
 
