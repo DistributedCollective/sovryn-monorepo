@@ -1,3 +1,3 @@
 export { NetworkDictionary } from './network-dictionary';
-export { providersDictionary } from './providers-dictionary';
-export { WalletProviderDictionary } from './wallet-provider-dictionary';
+export { walletProviderMap } from './wallet-provider-map';
+export { dPathMap } from './dpath-map';

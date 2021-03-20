@@ -1,5 +1,10 @@
-import { publicToAddress, toChecksumAddress } from 'ethereumjs-util';
+import {
+  addHexPrefix,
+  publicToAddress,
+  toChecksumAddress,
+} from 'ethereumjs-util';
 import HDKey from 'hdkey';
+import { LedgerWalletProvider } from '../../providers/ledger';
 
 export class DeterministicWallet {
   protected address: string;
@@ -42,6 +47,12 @@ export const getDeterministicWallets = (
   let pathBase;
   let hdk;
 
+  console.log(
+    'is hardened',
+    dPath.split('/').length - 1,
+    dPath.split('/').length - 1 === 2,
+  );
+
   // if seed present, treat as mnemonic
   // if pubKey & chainCode present, treat as HW wallet
   if (seed) {
@@ -62,8 +73,24 @@ export const getDeterministicWallets = (
     const address = publicToAddress(dkey.publicKey, true).toString('hex');
     wallets.push({
       index,
-      address: toChecksumAddress(address),
+      address: toChecksumAddress(addHexPrefix(address)),
     });
   }
   return wallets;
 };
+
+export async function determineWallet(dPath: string, index: number) {
+  const { publicKey, chainCode } = await LedgerWalletProvider.getChainCode(
+    dPath,
+  );
+  console.log({ publicKey, chainCode });
+  const hdk = new HDKey();
+  hdk.publicKey = Buffer.from(publicKey, 'hex');
+  hdk.chainCode = Buffer.from(chainCode, 'hex');
+  const pathBase = 'm';
+  const dkey = hdk.derive(`${pathBase}/${index}`);
+  console.log(dkey);
+  return toChecksumAddress(
+    addHexPrefix(publicToAddress(dkey.publicKey, true).toString('hex')),
+  );
+}

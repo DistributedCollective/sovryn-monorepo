@@ -10,6 +10,9 @@ const globalState = {
   },
 };
 
+/**
+ * @deprecated
+ */
 export function useWallet() {
   return useState(globalState);
 }

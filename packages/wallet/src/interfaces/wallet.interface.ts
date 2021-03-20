@@ -1,5 +1,4 @@
-import { TransactionConfig } from 'web3-core';
-import { NodeInterface } from './node.interface';
+import type { NodeInterface } from './node.interface';
 
 interface BaseWallet {
   isReadOnly?: boolean;
@@ -10,10 +9,20 @@ export interface ReadOnlyWallet extends BaseWallet {
   isReadOnly: true;
 }
 
+export interface RawTransactionData {
+  to?: string;
+  data?: string;
+  chainId?: number;
+  value: string;
+  gasPrice: string;
+  gasLimit: string;
+  nonce: number;
+}
+
 export interface FullWallet extends BaseWallet {
   isReadOnly?: false;
-  signRawTransaction(tx: TransactionConfig): Promise<Buffer> | Buffer;
-  signMessage(msg: string, node: NodeInterface): Promise<string> | string;
+  signRawTransaction(tx: RawTransactionData): Promise<string>;
+  signMessage(msg: string, node: NodeInterface): Promise<string>;
 }
 
 export type WalletType = ReadOnlyWallet | FullWallet;

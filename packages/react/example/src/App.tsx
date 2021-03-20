@@ -1,10 +1,12 @@
 import React from 'react'
 
-import { WalletButton } from '@sovryn/react/dist'
-import '@sovryn/react/dist/index.css'
+import { WalletProvider } from '@sovryn/react/dist';
+import { Wallet } from './Wallet';
+
+export const chainId = 30;
 
 const App = () => {
-  return <WalletButton />
+  return <WalletProvider defaultChainId={chainId}><Wallet/></WalletProvider>
 };
 
 export default App

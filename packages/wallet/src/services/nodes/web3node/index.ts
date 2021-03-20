@@ -1,1 +1,1 @@
-export { Web3Node } from './web3';
+export * from './web3';

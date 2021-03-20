@@ -1,66 +1,102 @@
-import { TransactionConfig } from 'web3-core';
 import { HardwareWallet } from './hardware';
-import { byContractAddress } from '@ledgerhq/hw-app-eth/erc20';
+// import { byContractAddress } from '@ledgerhq/hw-app-eth/erc20';
 import { ledgerErrToMessage, makeApp } from '../../providers/ledger';
-import { stripHexPrefix } from 'web3-utils';
-import { serializeTransaction } from 'ethers/lib/utils';
-import { Signature } from 'ethers';
+import { toHex } from 'web3-utils';
 import { addHexPrefix } from 'ethereumjs-util';
+// import { prepareHardwareTransaction } from '../../utils';
+import { Transaction } from 'ethereumjs-tx';
+import {
+  calculateChainIdFromV,
+  commonGenerator,
+  getBufferFromHex,
+} from '../../utils';
+// import { byContractAddress } from '@ledgerhq/hw-app-eth/erc20';
+import { RawTransactionData } from '../../interfaces/wallet.interface';
 
 export class LedgerWallet extends HardwareWallet {
-  public async signRawTransaction(t: TransactionConfig): Promise<Buffer> {
-    const { to, chainId } = t;
+  public async signRawTransaction(raw: RawTransactionData): Promise<string> {
+    const hexed = {
+      to: raw.to?.toLowerCase(),
+      value: toHex(raw.value),
+      gasLimit: toHex(raw.gasLimit),
+      gasPrice: toHex(raw.gasPrice),
+      nonce: toHex(raw.nonce),
+      data: raw.data ? toHex(raw.data) : '0x',
+    };
 
-    if (!chainId) {
+    console.log('data to send', hexed);
+
+    const common = commonGenerator(raw);
+
+    const tx = new Transaction(hexed, {
+      common,
+    });
+
+    const networkId = tx.getChainId();
+
+    // @ts-ignore
+    tx.raw[6] = Buffer.from([networkId]);
+    tx.raw[7] = Buffer.from([]);
+    tx.raw[8] = Buffer.from([]);
+
+    if (!raw.chainId) {
       throw Error('Missing chainId on tx');
     }
 
-    try {
-      const ethApp = await makeApp();
+    const ethApp = await makeApp();
 
-      if (chainId === 31 && to) {
-        const tokenInfo = byContractAddress(to);
-        if (tokenInfo) {
-          await ethApp.provideERC20TokenInformation(tokenInfo);
-        }
+    // if (tx.to) {
+    //   const tokenInfo = byContractAddress(tx.to.toString());
+    //   if (tokenInfo) {
+    //     await ethApp.provideERC20TokenInformation(tokenInfo);
+    //   }
+    // }
+
+    console.log('please', this.getPath(), tx.serialize().toString('hex'));
+
+    const result = await ethApp.signTransaction(
+      this.getPath(),
+      tx.serialize().toString('hex'),
+    );
+
+    let v = result.v;
+    if (raw.chainId && raw.chainId > 0) {
+      // EIP155 support. check/recalc signature v value.
+      // Please see https://github.com/LedgerHQ/blue-app-eth/commit/8260268b0214810872dabd154b476f5bb859aac0
+      // currently, ledger returns only 1-byte truncated signatur_v
+      const rv = parseInt(v, 16);
+      let cv = raw.chainId * 2 + 35; // calculated signature v, without signature bit.
+      /* tslint:disable no-bitwise */
+      if (rv !== cv && (rv & cv) !== rv) {
+        // (rv !== cv) : for v is truncated byte case
+        // (rv & cv): make cv to truncated byte
+        // (rv & cv) !== rv: signature v bit needed
+        cv += 1; // add signature v bit.
       }
-
-      const result = await ethApp.signTransaction(
-        this.getPath(),
-        stripHexPrefix(serializeTransaction(t as any)),
-      );
-
-      let v = result.v;
-      if (chainId > 0) {
-        // EIP155 support. check/recalc signature v value.
-        // Please see https://github.com/LedgerHQ/blue-app-eth/commit/8260268b0214810872dabd154b476f5bb859aac0
-        // currently, ledger returns only 1-byte truncated signatur_v
-        const rv = parseInt(v, 16);
-        let cv = chainId * 2 + 35; // calculated signature v, without signature bit.
-        /* tslint:disable no-bitwise */
-        if (rv !== cv && (rv & cv) !== rv) {
-          // (rv !== cv) : for v is truncated byte case
-          // (rv & cv): make cv to truncated byte
-          // (rv & cv) !== rv: signature v bit needed
-          cv += 1; // add signature v bit.
-        }
-        v = cv.toString(16);
-      }
-
-      // @ts-ignore
-      const signature: Signature = {
-        v: parseInt(v),
-        r: addHexPrefix(result.r),
-        s: addHexPrefix(result.s),
-      };
-
-      // @ts-ignore
-      const serializedTx = serializeTransaction(t, signature);
-
-      return Buffer.from(stripHexPrefix(serializedTx), 'hex');
-    } catch (err) {
-      throw Error(err + '. Check to make sure contract data is on');
+      v = cv.toString(16);
     }
+
+    const signedTx = new Transaction(
+      {
+        ...hexed,
+        v: getBufferFromHex(v),
+        r: getBufferFromHex(result.r),
+        s: getBufferFromHex(result.s),
+      },
+      {
+        common,
+      },
+    );
+
+    console.log({ signedTx }, signedTx.serialize().toString('hex'));
+
+    const signedChainId = calculateChainIdFromV(signedTx.v as any);
+
+    if (signedChainId !== networkId) {
+      throw Error("Chains doesn't match");
+    }
+
+    return addHexPrefix(signedTx.serialize().toString('hex'));
   }
 
   public async signMessage(msg: string): Promise<string> {

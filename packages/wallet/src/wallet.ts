@@ -1,27 +1,31 @@
-import { TransactionConfig } from 'web3-core';
 import { FullWallet } from './interfaces';
 import { NetworkDetails } from './models';
-import { NetworkDictionary, providersDictionary } from './dictionaries';
+import { NetworkDictionary, walletProviderMap } from './dictionaries';
 import { Web3Wallet } from './wallets/non-deterministic';
 import debug from './utils/debug';
 import { ProviderType } from './constants';
+import { EventBag } from './utils';
+import type { RawTransactionData } from './interfaces/wallet.interface';
 
 const { log, error } = debug('wallet');
 
+type WalletServiceEvents = 'connected' | 'error' | 'disconnected';
+
 export class Wallet {
+  public readonly events: EventBag<WalletServiceEvents>;
   readonly networkDictionary: NetworkDictionary;
 
   private _wallet: FullWallet;
 
   constructor(defaultChainId: number, networks?: NetworkDetails[]) {
+    this.events = new EventBag<WalletServiceEvents>();
     this.networkDictionary = new NetworkDictionary(networks);
     log('loaded for id', defaultChainId);
   }
 
   public async start(provider: ProviderType) {
     log(`get provider ${provider}`);
-    const Provider = providersDictionary[provider];
-    log(`retrieved provider aa`, Provider);
+    const Provider = walletProviderMap[provider];
     if (Provider) {
       // @ts-ignore
       return new Provider(this);
@@ -33,12 +37,14 @@ export class Wallet {
 
   public async connect(wallet: FullWallet) {
     this._wallet = wallet;
+    this.events.trigger('connected', this._wallet);
     log('connected to wallet', wallet);
   }
 
   public async disconnect() {
     // @ts-ignore
     this._wallet = null;
+    this.events.trigger('disconnected');
     error('disconnected');
   }
 
@@ -57,7 +63,7 @@ export class Wallet {
 
   // todo dont actually use this.
   // todo remove this
-  public signTransaction(tx: TransactionConfig) {
+  public signTransaction(tx: RawTransactionData) {
     log('sign tx', tx, this.getWallet());
     const wallet = this.getWallet();
     if (wallet instanceof Web3Wallet) {

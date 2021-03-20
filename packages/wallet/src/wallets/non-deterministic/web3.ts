@@ -3,6 +3,7 @@ import { bufferToHex } from 'ethereumjs-util';
 import { TransactionConfig } from 'web3-core';
 import { FullWallet, NodeInterface } from '../../interfaces';
 import debug from '../../utils/debug';
+import { RawTransactionData } from '../../interfaces/wallet.interface';
 
 const { log, error } = debug('web3-wallet');
 
@@ -24,14 +25,14 @@ export class Web3Wallet implements FullWallet {
 
   // @ts-ignore
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  public signRawTransaction(tx: TransactionConfig): Promise<Buffer> {
+  public signRawTransaction(tx: RawTransactionData): Promise<string> {
     throw new Error('signRawTransaction is not available for web3 wallets.');
   }
 
-  public sendTransaction(tx: TransactionConfig) {
+  public sendTransaction(tx: RawTransactionData) {
     return new Promise((resolve, reject) => {
       new Web3(this.provider).eth
-        .sendTransaction(tx)
+        .sendTransaction(this.prepareRawTransactionData(tx))
         .once('transactionHash', (response: string) => {
           log('signed transaction', response);
           resolve(Buffer.from(response));
@@ -57,5 +58,20 @@ export class Web3Wallet implements FullWallet {
     // return this.provider.
     return Promise.resolve('abc');
     // return nodeLib.signMessage(msgHex, this.address);
+  }
+
+  protected prepareRawTransactionData(
+    tx: RawTransactionData,
+  ): TransactionConfig {
+    return {
+      chainId: Number(tx.chainId || this.chainId),
+      data: tx.data,
+      from: this.getAddressString(),
+      gas: tx.gasLimit,
+      gasPrice: tx.gasPrice,
+      nonce: Number(tx.nonce),
+      to: tx.to,
+      value: tx.value,
+    };
   }
 }

@@ -1,19 +1,14 @@
 import Web3 from 'web3';
 import debug from '../utils/debug';
 import { Web3Wallet } from '../wallets/non-deterministic';
-import { AbstractProvider } from './abstract-provider';
-import { Wallet } from '../wallet';
-import { FullWallet } from '../interfaces';
-import PromiEvent from '../utils/promievent';
+import { WalletProviderInterface, FullWallet } from '../interfaces';
 
 const { log, error } = debug('injected-wallet');
 
-export class InjectedWalletProvider extends AbstractProvider {
+export class InjectedWalletProvider implements WalletProviderInterface {
   provider: any;
-  wallet: Wallet;
 
-  constructor(wallet: Wallet) {
-    super(wallet);
+  constructor() {
     log('constructing injected wallet provider.');
     const { ethereum } = window as any;
     if (ethereum) {
@@ -37,12 +32,9 @@ export class InjectedWalletProvider extends AbstractProvider {
     }
   }
 
-  // eslint-disable-next-line @typescript-eslint/no-empty-function
-  init(): any {}
-
-  unlock(): PromiEvent<FullWallet> {
+  unlock(): Promise<FullWallet> {
     log('connecting using injectable wallet');
-    return new PromiEvent(async resolve => {
+    return new Promise(async resolve => {
       const accounts = await this.provider
         .send('eth_requestAccounts')
         .then((response: any) =>

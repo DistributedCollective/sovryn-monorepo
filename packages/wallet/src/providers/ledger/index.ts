@@ -1,15 +1,12 @@
-import LedgerEth from '@ledgerhq/hw-app-eth';
+import LedgerEth from './ledger-eth-app';
 // import { byContractAddress } from '@ledgerhq/hw-app-eth/erc20';
 // import Transport from '@ledgerhq/hw-transport';
 import TransportU2F from '@ledgerhq/hw-transport-u2f';
 import TransportWebUSB from '@ledgerhq/hw-transport-webusb';
 // import { addHexPrefix, stripHexPrefix } from 'ethereumjs-util';
 // import { serializeTransaction, Signature, UnsignedTransaction } from 'ethers/utils';
-import { Wallet } from '../../wallet';
 import debug from '../../utils/debug';
-import { ProviderType } from '../../constants';
 import { ChainCodeResponse, LedgerWallet } from '../../wallets';
-import PromiEvent from '../../utils/promievent';
 import { WalletProviderInterface } from '../../interfaces';
 
 const { log, error } = debug('ledger-provider');
@@ -45,8 +42,6 @@ export async function makeApp() {
 }
 
 export class LedgerWalletProvider implements WalletProviderInterface {
-  protected _wallet: Wallet;
-
   public static async getChainCode(dPath: string): Promise<ChainCodeResponse> {
     return makeApp()
       .then(app => app.getAddress(dPath, false, true))
@@ -54,7 +49,6 @@ export class LedgerWalletProvider implements WalletProviderInterface {
         return {
           publicKey: res.publicKey,
           chainCode: res.chainCode as string,
-          address: res.address,
         };
       })
       .catch((err: LedgerError) => {
@@ -63,58 +57,18 @@ export class LedgerWalletProvider implements WalletProviderInterface {
       });
   }
 
-  // @ts-ignore signature is different than parent.
-  async init(dPath: string): Promise<ChainCodeResponse> {
-    return await LedgerWalletProvider.getChainCode(dPath);
-  }
-
   // @ts-ignore
   async unlock(
-    address: string,
     dPath: string,
+    address: string,
     index: number,
   ): Promise<LedgerWallet> {
-    return new LedgerWallet(address || '', dPath, index);
-  }
-
-  connect(): PromiEvent<LedgerWallet> {
-    log('this is an app?');
-    const dpath =
-      this._wallet.networkDictionary
-        .get(31)
-        ?.getWalletDPaths(ProviderType.LEDGER)?.[0] || '';
-
-    log('uses path', dpath);
-
-    const promi = new PromiEvent<LedgerWallet>(async (resolve, reject) => {
-      let condition = true;
-      let chain;
-      while (condition) {
-        try {
-          chain = await LedgerWalletProvider.getChainCode(dpath);
-          condition = false;
-          console.log(chain);
-        } catch (e) {
-          condition = false;
-          error(e);
-          reject('Something was wrong.');
-        }
-      }
-
-      log('got wallet info?', dpath);
-
-      resolve(new LedgerWallet(chain?.address || '', dpath, 0));
-    });
-
-    // this.app.get
-    return promi;
+    return new LedgerWallet(address, dPath, index);
   }
 
   disconnect(): Promise<boolean> {
     return Promise.resolve(true);
   }
-
-  // getC
 }
 
 const isU2FError = (err: LedgerError): err is U2FError =>
