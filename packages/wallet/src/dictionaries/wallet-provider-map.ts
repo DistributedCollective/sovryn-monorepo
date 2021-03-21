@@ -1,6 +1,5 @@
 import { ProviderType } from '../constants';
-import { InjectedWalletProvider } from '../providers';
-import { LedgerWalletProvider } from '../providers/ledger';
+import { InjectedWalletProvider, LedgerWalletProvider } from '../providers';
 
 export const walletProviderMap = {
   [ProviderType.WEB3]: InjectedWalletProvider,

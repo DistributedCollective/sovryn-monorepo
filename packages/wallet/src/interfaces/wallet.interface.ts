@@ -23,6 +23,7 @@ export interface FullWallet extends BaseWallet {
   isReadOnly?: false;
   signRawTransaction(tx: RawTransactionData): Promise<string>;
   signMessage(msg: string, node: NodeInterface): Promise<string>;
+  getWalletType(): string;
 }
 
 export type WalletType = ReadOnlyWallet | FullWallet;

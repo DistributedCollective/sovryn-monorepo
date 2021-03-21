@@ -1,12 +1,10 @@
 import React from 'react'
 
 import { WalletProvider } from '@sovryn/react/dist';
-import { Wallet } from './Wallet';
-
-export const chainId = 30;
+import { Home } from './Home';
 
 const App = () => {
-  return <WalletProvider defaultChainId={chainId}><Wallet/></WalletProvider>
+  return <WalletProvider chainId={30}><Home /></WalletProvider>
 };
 
 export default App

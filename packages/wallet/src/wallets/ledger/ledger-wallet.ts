@@ -1,6 +1,6 @@
-import { HardwareWallet } from './hardware';
+import { HardwareWallet } from '../deterministic';
 // import { byContractAddress } from '@ledgerhq/hw-app-eth/erc20';
-import { ledgerErrToMessage, makeApp } from '../../providers/ledger';
+import { ledgerErrToMessage, makeApp } from '../../providers';
 import { toHex } from 'web3-utils';
 import { addHexPrefix } from 'ethereumjs-util';
 // import { prepareHardwareTransaction } from '../../utils';
@@ -12,6 +12,7 @@ import {
 } from '../../utils';
 // import { byContractAddress } from '@ledgerhq/hw-app-eth/erc20';
 import { RawTransactionData } from '../../interfaces/wallet.interface';
+import { ProviderType } from '../../constants';
 
 export class LedgerWallet extends HardwareWallet {
   public async signRawTransaction(raw: RawTransactionData): Promise<string> {
@@ -134,6 +135,6 @@ export class LedgerWallet extends HardwareWallet {
   }
 
   public getWalletType(): string {
-    return 'Ledger';
+    return ProviderType.LEDGER;
   }
 }

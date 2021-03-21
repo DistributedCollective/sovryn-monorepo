@@ -1,4 +1,5 @@
 import Web3 from 'web3';
+import { toChecksumAddress } from 'ethereumjs-util';
 import debug from '../utils/debug';
 import { Web3Wallet } from '../wallets/non-deterministic';
 import { WalletProviderInterface, FullWallet } from '../interfaces';
@@ -34,23 +35,33 @@ export class InjectedWalletProvider implements WalletProviderInterface {
 
   unlock(): Promise<FullWallet> {
     log('connecting using injectable wallet');
-    return new Promise(async resolve => {
-      const accounts = await this.provider
-        .send('eth_requestAccounts')
-        .then((response: any) =>
-          Array.isArray(response) ? response : response?.result || [],
-        )
-        .catch((err: any) => {
-          if (err.code === 4001) {
-            error('Connection rejected by user.');
-          } else {
-            error('Failed to connect', err);
-          }
-        });
-      const chainId = await this.provider
-        .send('eth_chainId')
-        .then((response: any) => Number(response.result || response));
-      resolve(new Web3Wallet(accounts[0], chainId, this.provider));
+    return new Promise(async (resolve, reject) => {
+      try {
+        const accounts = await this.provider
+          .send('eth_requestAccounts')
+          .then((response: any) =>
+            Array.isArray(response) ? response : response?.result || [],
+          )
+          .catch((err: any) => {
+            if (err.code === 4001) {
+              error('Connection rejected by user.');
+            } else {
+              error('Failed to connect', err);
+            }
+          });
+        const chainId = await this.provider
+          .send('eth_chainId')
+          .then((response: any) => Number(response.result || response));
+        resolve(
+          new Web3Wallet(
+            toChecksumAddress(accounts[0], chainId),
+            chainId,
+            this.provider,
+          ),
+        );
+      } catch (e) {
+        reject(e);
+      }
     });
   }
 

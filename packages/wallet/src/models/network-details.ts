@@ -1,4 +1,5 @@
 import { ConnectionType, ProviderType } from '../constants';
+import type { DPath } from '../wallets/bip44/paths';
 
 export class NetworkDetails {
   private _logo: string;
@@ -6,13 +7,17 @@ export class NetworkDetails {
   private _explorerTx: string;
   private _explorerAdr: string;
   private _networkId: number;
-  private _dPaths: Map<ProviderType, string[]> = new Map<ProviderType, string[]>();
+  private _dPaths: Map<ProviderType, DPath[]> = new Map<
+    ProviderType,
+    DPath[]
+  >();
 
   // eslint-disable-next-line no-useless-constructor
   constructor(
     private _chainId: number,
     private _name: string,
     private _networkType: ConnectionType = ConnectionType.MAINNET,
+    private _currencyName: string,
   ) {}
 
   public setNodeUrl(value: string) {
@@ -68,20 +73,24 @@ export class NetworkDetails {
     return this._name;
   }
 
+  public getCurrencyName() {
+    return this._currencyName;
+  }
+
   public getNetworkType() {
     return this._networkType;
   }
 
-  public setDPaths(dPaths: Map<ProviderType, string[]>) {
+  public setDPaths(dPaths: Map<ProviderType, DPath[]>) {
     this._dPaths = dPaths;
     return this;
   }
 
-  public getDPaths(): Map<ProviderType, string[]> {
+  public getDPaths(): Map<ProviderType, DPath[]> {
     return this._dPaths;
   }
 
-  public setWalletDPaths(wallet: ProviderType, paths: string[]) {
+  public setWalletDPaths(wallet: ProviderType, paths: DPath[]) {
     this._dPaths.set(wallet, paths);
     return this;
   }

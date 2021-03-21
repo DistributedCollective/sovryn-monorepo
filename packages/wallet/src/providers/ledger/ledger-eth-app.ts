@@ -37,7 +37,6 @@ function maybeHexBuffer(str) {
 }
 
 const remapTransactionRelatedErrors = e => {
-  console.log('wfdsf', e, e.statusCode);
   if (e && e.statusCode === 0x6a80) {
     return new EthAppPleaseEnableContractData(
       'Please enable Contract data on the Ethereum app Settings',
@@ -228,13 +227,10 @@ export default class Eth {
       offset += chunkSize;
     }
 
-    console.log('sending to apdu', toSend);
-
     return foreach(toSend, (data, i) =>
       this.transport
         .send(0xe0, 0x04, i === 0 ? 0x00 : 0x80, 0x00, data)
         .then(apduResponse => {
-          console.log('apdu data', data, apduResponse);
           response = apduResponse;
         }),
     ).then(

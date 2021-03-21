@@ -1,5 +1,4 @@
 import { FullWallet } from './interfaces';
-import { NetworkDetails } from './models';
 import { NetworkDictionary, walletProviderMap } from './dictionaries';
 import { Web3Wallet } from './wallets/non-deterministic';
 import debug from './utils/debug';
@@ -7,20 +6,20 @@ import { ProviderType } from './constants';
 import { EventBag } from './utils';
 import type { RawTransactionData } from './interfaces/wallet.interface';
 
-const { log, error } = debug('wallet');
+const { log, error } = debug('wallet.service');
 
 type WalletServiceEvents = 'connected' | 'error' | 'disconnected';
 
-export class Wallet {
+export class WalletService {
   public readonly events: EventBag<WalletServiceEvents>;
   readonly networkDictionary: NetworkDictionary;
 
   private _wallet: FullWallet;
 
-  constructor(defaultChainId: number, networks?: NetworkDetails[]) {
+  constructor() {
     this.events = new EventBag<WalletServiceEvents>();
-    this.networkDictionary = new NetworkDictionary(networks);
-    log('loaded for id', defaultChainId);
+    this.networkDictionary = new NetworkDictionary();
+    log('initialized');
   }
 
   public async start(provider: ProviderType) {
@@ -57,7 +56,6 @@ export class Wallet {
   }
 
   public getWallet(): FullWallet {
-    log('get wallet info', this._wallet);
     return this._wallet;
   }
 
@@ -74,10 +72,5 @@ export class Wallet {
 
   public signMessage(message: string) {
     return this.getWallet().signMessage(message, {} as any);
-  }
-
-  protected setWallet(wallet: FullWallet) {
-    this._wallet = wallet;
-    return this;
   }
 }

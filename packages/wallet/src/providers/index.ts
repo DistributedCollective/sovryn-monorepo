@@ -1,2 +1,2 @@
 export * from './injected-wallet-provider';
-export * from './ledger';
+export * from './ledger-wallet-provider';

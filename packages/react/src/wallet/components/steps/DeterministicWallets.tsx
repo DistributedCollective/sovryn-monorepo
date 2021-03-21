@@ -3,21 +3,23 @@ import {
   getDeterministicWallets,
   DeterministicWalletData,
 } from '@sovryn/wallet';
-import { useCallback, useEffect, useState } from 'react';
+import { toChecksumAddress } from 'ethereumjs-util';
+import { Dialog } from '../Dialog';
 
 interface Props {
+  isOpen: boolean;
+  onClose: () => void;
+  chainId: number;
   seed?: string;
   dPath: string;
   chainCode?: string;
   publicKey?: string;
   limit?: number;
-  dPaths: { value: string; label: string }[];
-  onUnlock: (dPath: string, address: string, index: number) => void;
-  onChangeDPath: (dPath: string) => void;
+  onUnlock: (address: string, index: number) => void;
 }
 
 export function DeterministicWallets(props: Props) {
-  const [state, setState] = useState<{
+  const [state, setState] = React.useState<{
     offset: number;
     wallets: DeterministicWalletData[];
     selected: DeterministicWalletData;
@@ -27,9 +29,7 @@ export function DeterministicWallets(props: Props) {
     selected: undefined as any,
   });
 
-  useEffect(() => {
-    setState(prevState => ({ ...prevState, wallets: [] }));
-
+  React.useEffect(() => {
     const wallets = getDeterministicWallets({
       seed: props.seed,
       dPath: props.dPath,
@@ -37,8 +37,10 @@ export function DeterministicWallets(props: Props) {
       publicKey: props.publicKey,
       limit: props.limit || 10,
       offset: state.offset,
-    });
-
+    }).map(item => ({
+      index: item.index,
+      address: toChecksumAddress(item.address, props.chainId),
+    }));
     setState(prevState => ({ ...prevState, wallets }));
   }, [
     props.seed,
@@ -49,42 +51,27 @@ export function DeterministicWallets(props: Props) {
     state.offset,
   ]);
 
-  const onSelect = useCallback(
+  const onSelect = React.useCallback(
     (item: DeterministicWalletData) => {
       setState(prevState => ({ ...prevState, selected: item }));
     },
     [state],
   );
 
-  const onUnlock = useCallback(() => {
-    props.onUnlock(props.dPath, state.selected.address, state.selected.index);
+  const onUnlock = React.useCallback(() => {
+    props.onUnlock(state.selected.address, state.selected.index);
   }, [state]);
 
-  const onChangeOffset = useCallback(
+  const onChangeOffset = React.useCallback(
     (offset: number) => {
       setState(prevState => ({ ...prevState, offset: offset }));
     },
     [state],
   );
 
-  const onChangeDPath = useCallback(
-    (event: React.ChangeEvent<HTMLSelectElement>) => {
-      props.onChangeDPath(event.currentTarget.value);
-    },
-    [],
-  );
-
   return (
-    <React.Fragment>
-      <div>
-        <select value={props.dPath} onChange={onChangeDPath}>
-          {props.dPaths.map(item => (
-            <option value={item.value} key={item.value}>
-              {item.label} ({item.value})
-            </option>
-          ))}
-        </select>
-      </div>
+    <Dialog onClose={props.onClose} isOpen={props.isOpen}>
+      <h1>Choose Wallet</h1>
       {state.wallets.map(item => (
         <button key={item.address} onClick={() => onSelect(item)}>
           {item.index + 1}.{' '}
@@ -103,22 +90,21 @@ export function DeterministicWallets(props: Props) {
             onClick={() => onChangeOffset(state.offset - (props.limit || 10))}
             disabled={state.offset <= 0}
           >
-            Back
+            &lt; Back
           </button>
           <button
             onClick={() => onChangeOffset(state.offset + (props.limit || 10))}
           >
-            Next
+            Next &gt;
           </button>
         </div>
         <div>
-          <button>Cancel</button>
           <button disabled={!state.selected} onClick={onUnlock}>
-            Unlock
+            Access My Wallet
           </button>
         </div>
       </div>
-    </React.Fragment>
+    </Dialog>
   );
 }
 

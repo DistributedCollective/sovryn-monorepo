@@ -1,9 +1,15 @@
+/**
+ * @deprecated
+ */
 interface DPath {
   value: string;
   label: string;
   chainId: number;
 }
 
+/**
+ * @deprecated
+ */
 export const dPathMap: DPath[] = [
   { value: "m/44'/60'", label: 'Ledger Live', chainId: 1 },
   { value: "m/44'/60'/0'", label: 'MyEtherWallet', chainId: 1 },
