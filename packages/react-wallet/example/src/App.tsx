@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { WalletProvider } from '@sovryn/react/dist';
+import { WalletProvider } from '@sovryn/react-wallet';
 import { Home } from './Home';
 
 const App = () => {

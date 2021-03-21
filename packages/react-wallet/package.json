@@ -1,8 +1,8 @@
 {
-  "name": "@sovryn/react",
+  "name": "@sovryn/react-wallet",
   "version": "1.0.0",
   "description": "Made with create-react-library",
-  "author": "grinry",
+  "author": "Rytis Grincevicius",
   "license": "MIT",
   "repository": "",
   "main": "dist/index.js",
@@ -14,7 +14,7 @@
   "scripts": {
     "build": "microbundle-crl --no-compress --format modern,cjs",
     "start": "microbundle-crl watch --no-compress --format modern,cjs",
-    "prepare": "run-s build",
+    "prepare": "run-s build && cp package.json ./dist/package.json && cp README.md ./dist/README.md",
     "test": "run-s test:unit test:lint test:build",
     "test:build": "run-s build",
     "test:lint": "eslint .",

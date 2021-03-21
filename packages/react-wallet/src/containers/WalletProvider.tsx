@@ -9,9 +9,9 @@ import {
 } from '@sovryn/wallet';
 import { useWalletContext } from '../hooks';
 import { walletService } from '../services';
-import { ProviderList } from './steps/ProviderList';
-import { LedgerConnector } from './steps/LedgerConnector';
-import { DeterministicWallets } from './steps/DeterministicWallets';
+import { ProviderList } from '../components/steps/ProviderList';
+import { LedgerConnector } from '../components/steps/LedgerConnector';
+import { DeterministicWallets } from '../components/steps/DeterministicWallets';
 
 interface Props {
   chainId?: number;

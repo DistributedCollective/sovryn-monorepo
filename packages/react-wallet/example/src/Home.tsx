@@ -1,7 +1,7 @@
 import React, { useCallback } from 'react';
 
-import { useWalletContext, WalletButton, walletService } from '@sovryn/react/dist';
-import '@sovryn/react/dist/index.css';
+import { useWalletContext, WalletButton, walletService } from '@sovryn/react-wallet';
+import '@sovryn/react-wallet/index.css';
 
 export const Home = () => {
   const { address, connected } = useWalletContext();
