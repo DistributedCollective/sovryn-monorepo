@@ -7,6 +7,9 @@ export class WalletConnectWallet extends Web3Wallet {
   }
 
   public disconnect(): Promise<boolean> {
+    if (!this.provider) {
+      return Promise.resolve(true);
+    }
     return (this.provider as any)
       .disconnect()
       .then(() => true)

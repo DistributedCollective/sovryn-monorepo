@@ -1,6 +1,5 @@
 import { toChecksumAddress } from 'ethereumjs-util';
 import WCProvider from '@walletconnect/web3-provider';
-// import Web3 from 'web3';
 import debug from '../utils/debug';
 import { WalletConnectWallet } from '../wallets/non-deterministic';
 import { FullWallet, WalletProviderInterface } from '../interfaces';
@@ -40,7 +39,6 @@ export class WalletConnectProvider implements WalletProviderInterface {
         );
       } catch (e) {
         error('WalletConnect login errored', e);
-        this.provider.disconnect().catch();
         reject(e);
       }
     });

@@ -1,37 +1,7 @@
-# Sovryn Monorepo
-[![lerna](https://img.shields.io/badge/maintained%20with-lerna-cc00ff.svg)](https://lerna.js.org/)
-
-Monorepo for design system, react components and blockchain wallet implementations.
-
-## Packages
-
-- [![npm](https://img.shields.io/npm/v/@sovryn/wallet.svg)](https://www.npmjs.com/package/@sovryn/wallet) [@sovryn/wallet](https://github.com/DistributedCollective/sovryn-monorepo/tree/master/packages/wallet)
-- [![npm](https://img.shields.io/npm/v/@sovryn/react-wallet.svg)](https://www.npmjs.com/package/@sovryn/react-wallet) [@sovryn/react-wallet](https://github.com/DistributedCollective/sovryn-monorepo/tree/master/packages/react-wallet)
-
-## Development
-
-```bash
-lerna bootstrap
-```
-
-If you want to use some of packages in another project when updating package, for example you are working with wallet package - then run these:
-
-```bash
-cd packages/wallet
-yarn link
-```
-
-And if you want to use and test wallet package in sovryn-frontend project you run this too:
-
-```bash
-cd {YourProjectsPath}/Sovryn-frontend
-yarn link @sovryn/wallet
-```
-
 ## Contributing
 
-<a href="https://github.com/DistributedCollective/sovryn-monorepo/graphs/contributors">
-  <img src="https://contrib.rocks/image?repo=DistributedCollective/sovryn-monorepo" />
+<a href="https://github.com/DistributedCollective/Sovryn-frontend/graphs/contributors">
+  <img src="https://contrib.rocks/image?repo=DistributedCollective/Sovryn-frontend" />
 </a>
 
 ### Bug Reports
@@ -73,12 +43,4 @@ All UI designs used for this repository should be available publically in [Googl
 
 ## Security Vulnerabilities
 
-If you discover a security vulnerability within DApp, please send an e-mail to Victor Creed via victor@sovryn.app. All security vulnerabilities will be promptly addressed.
-
-## Code of Conduct
-
-This project has adopted the [Microsoft Open Source Code of Conduct](https://opensource.microsoft.com/codeofconduct/). For more information see the [Code of Conduct FAQ](https://opensource.microsoft.com/codeofconduct/faq/) or contact [opencode@microsoft.com](mailto:opencode@microsoft.com) with any additional questions or comments.
-
-## Licence
-
-The Sovryn Monorepo is open-sourced software licensed under the [MIT license](LICENSE).
+If you discover a security vulnerability within DApp, please send an e-mail to Victor Creed via creed-victor@protonmail.com. All security vulnerabilities will be promptly addressed.
