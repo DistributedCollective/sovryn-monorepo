@@ -91,7 +91,11 @@ export function ProviderList(props: Props) {
         <div className={styles.provider__value}>
           <div>Trezor</div>
           <div className={styles.provider__download}>
-            <a href='#' target='_blank' rel='noreferrer nofollow'>
+            <a
+              href='https://trezor.io/?offer_id=12&aff_id=7144&source=sovryn'
+              target='_blank'
+              rel='noreferrer nofollow'
+            >
               Buy Now
             </a>
           </div>
@@ -106,7 +110,7 @@ export function ProviderList(props: Props) {
           onChange={e => setProvider(e.currentTarget.value as any)}
         />
         <div className={styles.provider__value}>
-          <div>Portis</div>
+          <div>Portis Wallet</div>
           <div className={styles.provider__download}>
             <a
               href='https://www.portis.io/'

@@ -3,10 +3,11 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   ChainCodeResponse,
   FullWallet,
-  ProviderType,
-  Web3Wallet,
   hardwareWallets,
   providerToWalletMap,
+  ProviderType,
+  Web3Wallet,
+  web3Wallets,
 } from '@sovryn/wallet';
 import { useWalletContext } from '../hooks';
 import { session, walletService } from '../services';
@@ -55,7 +56,10 @@ export function WalletProvider(props: Props) {
   }, [props.chainId, state.chainId]);
 
   useEffect(() => {
-    if (context.loading && state.step === DialogType.NONE) {
+    if (
+      context.state.showProviderList.value &&
+      state.step === DialogType.NONE
+    ) {
       setState(prevState => ({ ...prevState, step: DialogType.PROVIDER_LIST }));
     }
   }, [context.loading]);
@@ -79,30 +83,29 @@ export function WalletProvider(props: Props) {
 
   const onProviderChosen = React.useCallback(async (provider: ProviderType) => {
     setState(prevState => ({ ...prevState, provider, loading: true }));
+    context.state.loading.set(true);
     try {
-      switch (provider) {
-        default:
-          console.error('Incorrect provider selected.');
-          setState(prevState => ({
-            ...prevState,
-            provider: (null as unknown) as ProviderType,
-            loading: false,
-          }));
-          break;
-        case ProviderType.WEB3: {
-          const s = await walletService.start(provider);
-          const w = await s.unlock();
-          await setConnectedWallet(w);
-          break;
-        }
-        case ProviderType.LEDGER:
-        case ProviderType.TREZOR:
-          setState(prevState => ({
-            ...prevState,
-            step: DialogType.HD_PATH_CHOSER,
-          }));
-          break;
+      if (web3Wallets.includes(provider)) {
+        const s = await walletService.start(provider);
+        const w = await s.unlock(props.chainId || 30);
+        await setConnectedWallet(w);
+        return;
       }
+
+      if (hardwareWallets.includes(provider)) {
+        setState(prevState => ({
+          ...prevState,
+          step: DialogType.HD_PATH_CHOSER,
+        }));
+        return;
+      }
+
+      console.error('Incorrect provider selected.');
+      setState(prevState => ({
+        ...prevState,
+        provider: (null as unknown) as ProviderType,
+        loading: false,
+      }));
     } catch (e) {
       console.error(e);
       setState(prevState => ({ ...prevState, loading: false }));
@@ -151,7 +154,6 @@ export function WalletProvider(props: Props) {
 
   useEffect(() => {
     walletService.events.on('connected', (value: FullWallet) => {
-      console.log('connected', value);
       context.state.address.set(value.getAddressString());
       context.state.connected.set(true);
       context.state.loading.set(false);
@@ -164,7 +166,11 @@ export function WalletProvider(props: Props) {
               provider: value.getWalletType(),
               // @ts-ignore
               chainId: value?.chainId || state.chainId,
-              data: value,
+              data: hardwareWallets.includes(
+                value.getWalletType() as ProviderType,
+              )
+                ? value
+                : null,
             }),
           ),
         );
@@ -220,23 +226,19 @@ export function WalletProvider(props: Props) {
           chainId: number;
           data: any;
         };
-
         console.log('history:', parsed, wallet);
+        if (web3Wallets.includes(parsed.provider)) {
+          onProviderChosen(parsed.provider);
+        }
 
-        switch (parsed.provider) {
-          case ProviderType.WEB3:
-            onProviderChosen(parsed.provider);
-            break;
-          case ProviderType.LEDGER:
-          case ProviderType.TREZOR:
-            onUnlockDeterministicWallet(
-              parsed.data.address,
-              parsed.data.index,
-              parsed.provider,
-              parsed.data.dPath,
-              parsed.chainId,
-            );
-            break;
+        if (hardwareWallets.includes(parsed.provider)) {
+          onUnlockDeterministicWallet(
+            parsed.data.address,
+            parsed.data.index,
+            parsed.provider,
+            parsed.data.dPath,
+            parsed.chainId,
+          );
         }
       }
     } catch (e) {
@@ -249,7 +251,7 @@ export function WalletProvider(props: Props) {
     <React.Fragment>
       {context.wallet.providerType === ProviderType.WEB3 && (
         <React.Fragment>
-          {props.chainId &&
+          {!!props.chainId &&
             (context.wallet.wallet as Web3Wallet)?.chainId !== props.chainId &&
             'You are connected to wrong network.'}
         </React.Fragment>

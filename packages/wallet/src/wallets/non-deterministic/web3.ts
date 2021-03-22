@@ -1,7 +1,7 @@
 import Web3 from 'web3';
 import { bufferToHex } from 'ethereumjs-util';
 import { TransactionConfig, provider } from 'web3-core';
-import { FullWallet, NodeInterface } from '../../interfaces';
+import { FullWallet } from '../../interfaces';
 import debug from '../../utils/debug';
 import { RawTransactionData } from '../../interfaces/wallet.interface';
 import { ProviderType } from '../../constants';
@@ -36,7 +36,7 @@ export class Web3Wallet implements FullWallet {
         .sendTransaction(this.prepareRawTransactionData(tx))
         .once('transactionHash', (response: string) => {
           log('signed transaction', response);
-          resolve(Buffer.from(response));
+          resolve(response);
         })
         .once('error', err => {
           error('sending failed', err);
@@ -45,20 +45,13 @@ export class Web3Wallet implements FullWallet {
     });
   }
 
-  public async signMessage(
-    msg: string,
-    nodeLib: NodeInterface,
-  ): Promise<string> {
+  public async signMessage(msg: string): Promise<string> {
     const msgHex = bufferToHex(Buffer.from(msg));
-    console.log(msgHex);
-
-    if (!nodeLib) {
-      throw new Error('');
-    }
-
-    // return this.provider.
-    return Promise.resolve('abc');
-    // return nodeLib.signMessage(msgHex, this.address);
+    return new Web3(this.provider).eth.personal.sign(
+      msgHex,
+      this.address.toLowerCase(),
+      '',
+    );
   }
 
   public getWalletType(): string {
@@ -68,14 +61,15 @@ export class Web3Wallet implements FullWallet {
   protected prepareRawTransactionData(
     tx: RawTransactionData,
   ): TransactionConfig {
+    const chainId = Number(tx.chainId || this.chainId);
     return {
-      chainId: Number(tx.chainId || this.chainId),
+      chainId,
       data: tx.data,
-      from: this.getAddressString(),
+      from: this.address.toLowerCase(),
       gas: tx.gasLimit,
       gasPrice: tx.gasPrice,
       nonce: Number(tx.nonce),
-      to: tx.to,
+      to: tx.to?.toLowerCase(),
       value: tx.value,
     };
   }

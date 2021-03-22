@@ -1,18 +1,19 @@
-import { HardwareWallet } from '../deterministic';
-// import { byContractAddress } from '@ledgerhq/hw-app-eth/erc20';
-import { ledgerErrToMessage, makeApp } from '../../providers';
 import { toHex } from 'web3-utils';
 import { addHexPrefix } from 'ethereumjs-util';
-// import { prepareHardwareTransaction } from '../../utils';
 import { Transaction } from 'ethereumjs-tx';
+import { byContractAddress } from '@ledgerhq/hw-app-eth/erc20';
+import { HardwareWallet } from '../deterministic';
+import { ledgerErrToMessage, makeApp } from '../../providers';
 import {
   calculateChainIdFromV,
   commonGenerator,
   getBufferFromHex,
+  debug,
 } from '../../utils';
-// import { byContractAddress } from '@ledgerhq/hw-app-eth/erc20';
 import { RawTransactionData } from '../../interfaces/wallet.interface';
 import { ProviderType } from '../../constants';
+
+const { error } = debug('ledger-wallet');
 
 export class LedgerWallet extends HardwareWallet {
   public async signRawTransaction(raw: RawTransactionData): Promise<string> {
@@ -25,10 +26,7 @@ export class LedgerWallet extends HardwareWallet {
       data: raw.data ? toHex(raw.data) : '0x',
     };
 
-    console.log('data to send', hexed);
-
     const common = commonGenerator(raw);
-
     const tx = new Transaction(hexed, {
       common,
     });
@@ -46,14 +44,12 @@ export class LedgerWallet extends HardwareWallet {
 
     const ethApp = await makeApp();
 
-    // if (tx.to) {
-    //   const tokenInfo = byContractAddress(tx.to.toString());
-    //   if (tokenInfo) {
-    //     await ethApp.provideERC20TokenInformation(tokenInfo);
-    //   }
-    // }
-
-    console.log('please', this.getPath(), tx.serialize().toString('hex'));
+    if (tx.to) {
+      const tokenInfo = byContractAddress(tx.to.toString());
+      if (tokenInfo) {
+        await ethApp.provideERC20TokenInformation(tokenInfo);
+      }
+    }
 
     const result = await ethApp.signTransaction(
       this.getPath(),
@@ -89,8 +85,6 @@ export class LedgerWallet extends HardwareWallet {
       },
     );
 
-    console.log({ signedTx }, signedTx.serialize().toString('hex'));
-
     const signedChainId = calculateChainIdFromV(signedTx.v as any);
 
     if (signedChainId !== networkId) {
@@ -112,10 +106,7 @@ export class LedgerWallet extends HardwareWallet {
       /*
        @ts-expect-error: There is a type mismatch between Signature and how we use it. @todo: resolve conflicts.
       */
-      const combined = addHexPrefix(
-        signed.r + signed.s + (signed.v as any).toString(16),
-      );
-      return combined;
+      return addHexPrefix(signed.r + signed.s + (signed.v as any).toString(16));
     } catch (err) {
       throw new Error(ledgerErrToMessage(err));
     }
@@ -129,7 +120,7 @@ export class LedgerWallet extends HardwareWallet {
       await ethApp.getAddress(path, true, false);
       return true;
     } catch (err) {
-      console.error('Failed to display Ledger address:', err);
+      error('Failed to display Ledger address:', err);
       return false;
     }
   }

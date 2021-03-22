@@ -23,7 +23,7 @@ export class Web3Node implements NodeInterface {
   }
 
   getBalance(address: string): Promise<string> {
-    return this.provider.eth.getBalance(address);
+    return this.provider.eth.getBalance(address.toLowerCase());
   }
 
   getCurrentBlock(): Promise<number> {
@@ -39,7 +39,7 @@ export class Web3Node implements NodeInterface {
   }
 
   getTransactionCount(address: string): Promise<number> {
-    return this.provider.eth.getTransactionCount(address);
+    return this.provider.eth.getTransactionCount(address.toLowerCase());
   }
 
   getTransactionReceipt(txhash: string): Promise<TransactionReceipt> {

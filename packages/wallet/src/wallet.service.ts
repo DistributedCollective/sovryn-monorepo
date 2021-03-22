@@ -1,6 +1,9 @@
 import { FullWallet } from './interfaces';
-import { NetworkDictionary, walletProviderMap } from './dictionaries';
-import { Web3Wallet } from './wallets/non-deterministic';
+import {
+  NetworkDictionary,
+  walletProviderMap,
+  web3Wallets,
+} from './dictionaries';
 import debug from './utils/debug';
 import { ProviderType } from './constants';
 import { EventBag } from './utils';
@@ -104,8 +107,8 @@ export class WalletService {
   public signTransaction(tx: RawTransactionData) {
     log('sign tx', tx, this.providerType);
     if (!this.wallet) throw Error('Not connected');
-    if (this.wallet instanceof Web3Wallet) {
-      return this.wallet.sendTransaction(tx);
+    if (web3Wallets.includes(this.wallet.getWalletType() as ProviderType)) {
+      return (this.wallet as any).sendTransaction(tx);
     }
     return this.wallet.signRawTransaction(tx);
   }
