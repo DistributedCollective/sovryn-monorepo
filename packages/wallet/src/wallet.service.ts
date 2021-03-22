@@ -51,30 +51,34 @@ export class WalletService {
   }
 
   public async disconnect() {
+    if (this.wallet) {
+      await this.wallet.disconnect();
+    }
     // @ts-ignore
     this._wallet = null;
     // @ts-ignore
     this._providerType = null;
     this.events.trigger('disconnected');
-    error('disconnected');
+    log('disconnected');
+    return true;
   }
 
   /**
    * @deprecated use connected prop instead.
    */
   public isConnected() {
-    return !!this.getWallet()?.getAddressString();
+    return !!this.address;
   }
 
   public get connected() {
-    return !!this.wallet?.getAddressString() || !this.providerType;
+    return !!this.address && !!this.providerType;
   }
 
   /**
    * @deprecated use address prop instead.
    */
   public getAddress() {
-    return this.getWallet()?.getAddressString() || '';
+    return this.address || '';
   }
 
   /**

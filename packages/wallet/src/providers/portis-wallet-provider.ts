@@ -34,7 +34,7 @@ export class PortisWalletProvider implements WalletProviderInterface {
           new PortisWallet(
             toChecksumAddress(accounts[0], chainId),
             chainId,
-            this.provider,
+            portis,
           ),
         );
       } catch (e) {
@@ -42,10 +42,6 @@ export class PortisWalletProvider implements WalletProviderInterface {
         reject(e);
       }
     });
-  }
-
-  disconnect(): Promise<boolean> {
-    return Promise.resolve(true);
   }
 
   protected getNetwork(chainId: number) {

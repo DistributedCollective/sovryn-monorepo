@@ -52,12 +52,11 @@ export function useWalletContext(): ContextInterface {
   }, []);
 
   const onDisconnect = useCallback(() => {
-    walletService.events.trigger('disconnect');
     state.showProviderList.set(false);
     state.loading.set(false);
     state.connected.set(false);
     state.address.set('');
-    walletService.events.trigger('disconnected');
+    walletService.disconnect();
   }, []);
 
   return {

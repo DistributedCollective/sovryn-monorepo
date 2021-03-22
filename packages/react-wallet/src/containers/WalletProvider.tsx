@@ -87,6 +87,7 @@ export function WalletProvider(props: Props) {
     try {
       if (web3Wallets.includes(provider)) {
         const s = await walletService.start(provider);
+        // @ts-ignore
         const w = await s.unlock(props.chainId || 30);
         await setConnectedWallet(w);
         return;
@@ -100,15 +101,16 @@ export function WalletProvider(props: Props) {
         return;
       }
 
-      console.error('Incorrect provider selected.');
       setState(prevState => ({
         ...prevState,
         provider: (null as unknown) as ProviderType,
         loading: false,
       }));
+      context.state.loading.set(false);
     } catch (e) {
       console.error(e);
       setState(prevState => ({ ...prevState, loading: false }));
+      context.state.loading.set(false);
     }
   }, []);
 
@@ -146,6 +148,7 @@ export function WalletProvider(props: Props) {
       const chainID = chainId || state.chainId;
       if (hardwareWallets.includes(provider)) {
         const Wallet = providerToWalletMap[provider];
+        // @ts-ignore
         await setConnectedWallet(new Wallet(address, dPath, index, chainID));
       }
     },
@@ -193,23 +196,31 @@ export function WalletProvider(props: Props) {
 
   useEffect(() => {
     const wallet = walletService.wallet as Web3Wallet;
-    if (wallet?.getWalletType() === ProviderType.WEB3 && wallet?.provider) {
+
+    if (
+      wallet &&
+      wallet?.provider &&
+      [ProviderType.WEB3, ProviderType.WALLET_CONNECT].includes(
+        wallet.getWalletType() as ProviderType,
+      )
+    ) {
       const p = wallet.provider;
+      const providerType = wallet.getWalletType() as ProviderType;
 
       // @ts-ignore
       p.on('disconnect', value => {
-        console.log('disconnect web3');
+        console.log('disconnect web3', value);
       });
 
       // @ts-ignore
       p.on('accountsChanged', async value => {
         console.log('account changed', value);
-        await onProviderChosen(ProviderType.WEB3);
+        await onProviderChosen(providerType);
       });
 
       // @ts-ignore
       p.on('chainChanged', async value => {
-        await onProviderChosen(ProviderType.WEB3);
+        await onProviderChosen(providerType);
         console.log('chain changed', Number(value));
       });
     }
@@ -226,7 +237,6 @@ export function WalletProvider(props: Props) {
           chainId: number;
           data: any;
         };
-        console.log('history:', parsed, wallet);
         if (web3Wallets.includes(parsed.provider)) {
           onProviderChosen(parsed.provider);
         }
@@ -249,10 +259,12 @@ export function WalletProvider(props: Props) {
 
   return (
     <React.Fragment>
-      {context.wallet.providerType === ProviderType.WEB3 && (
+      {[ProviderType.WALLET_CONNECT, ProviderType.WEB3].includes(
+        context.wallet.providerType,
+      ) && (
         <React.Fragment>
           {!!props.chainId &&
-            (context.wallet.wallet as Web3Wallet)?.chainId !== props.chainId &&
+            context.wallet.wallet?.chainId !== props.chainId &&
             'You are connected to wrong network.'}
         </React.Fragment>
       )}

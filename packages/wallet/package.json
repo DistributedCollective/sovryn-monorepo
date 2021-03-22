@@ -29,6 +29,7 @@
     "@ledgerhq/hw-transport-webusb": "^5.46.0",
     "@portis/web3": "^3.0.8",
     "@trezor/rollout": "^1.0.7",
+    "@walletconnect/web3-provider": "^1.4.0",
     "debug": "^4.3.1",
     "ethereumjs-common": "1.5.2",
     "ethereumjs-tx": "2.1.2",

@@ -64,8 +64,4 @@ export class InjectedWalletProvider implements WalletProviderInterface {
       }
     });
   }
-
-  disconnect(): Promise<boolean> {
-    return Promise.resolve(true);
-  }
 }

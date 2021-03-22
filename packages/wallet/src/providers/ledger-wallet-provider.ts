@@ -64,10 +64,6 @@ export class LedgerWalletProvider implements WalletProviderInterface {
   ): Promise<LedgerWallet> {
     return new LedgerWallet(address, dPath, index);
   }
-
-  disconnect(): Promise<boolean> {
-    return Promise.resolve(true);
-  }
 }
 
 const isU2FError = (err: LedgerError): err is U2FError =>

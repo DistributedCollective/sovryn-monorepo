@@ -1,2 +1,3 @@
-export { Web3Wallet } from './web3';
+export * from './web3';
 export * from './portis-wallet';
+export * from './wallet-connect-wallet';

@@ -24,4 +24,8 @@ export abstract class HardwareWallet
   public abstract signMessage(msg: string): Promise<string>;
   public abstract displayAddress(): Promise<boolean>;
   public abstract getWalletType(): string;
+
+  public disconnect(): Promise<boolean> {
+    return Promise.resolve(true);
+  }
 }

@@ -3,7 +3,6 @@ import React, { useCallback, useEffect } from 'react';
 import { HardwareWallet, hardwareWallets, Web3Node } from '@sovryn/wallet';
 import { useWalletContext, WalletButton, walletService,  } from '@sovryn/react-wallet';
 import '@sovryn/react-wallet/index.css';
-import { toChecksumAddress } from 'ethereumjs-util';
 
 const node = new Web3Node('https://public-node.testnet.rsk.co');
 
@@ -55,7 +54,7 @@ export const Home = () => {
     } catch (e) {
       console.error(e);
     }
-  }, [chainId, wallet.chainId]);
+  }, [chainId]);
 
   const [balance, setBalance] = React.useState('0');
 
@@ -84,11 +83,6 @@ export const Home = () => {
         <div>
           <button onClick={verifyAddress} disabled={!hardwareWallets.includes(wallet.providerType)}>Verify address</button>
         </div>
-        <div>1: {toChecksumAddress(address, 1)}</div>
-        <div>2: {toChecksumAddress(address, 2)}</div>
-        <div>3: {toChecksumAddress(address, 3)}</div>
-        <div>30: {toChecksumAddress(address, 30)}</div>
-        <div>31: {toChecksumAddress(address, 31)}</div>
       </React.Fragment>
     )}
   </div>

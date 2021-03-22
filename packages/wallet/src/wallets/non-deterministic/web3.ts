@@ -58,6 +58,10 @@ export class Web3Wallet implements FullWallet {
     return ProviderType.WEB3;
   }
 
+  public disconnect(): Promise<boolean> {
+    return Promise.resolve(true);
+  }
+
   protected prepareRawTransactionData(
     tx: RawTransactionData,
   ): TransactionConfig {

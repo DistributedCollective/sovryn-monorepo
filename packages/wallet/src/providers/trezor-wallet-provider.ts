@@ -39,8 +39,4 @@ export class TrezorWalletProvider implements WalletProviderInterface {
   ): Promise<TrezorWallet> {
     return new TrezorWallet(address, dPath, index);
   }
-
-  disconnect(): Promise<boolean> {
-    return Promise.resolve(true);
-  }
 }

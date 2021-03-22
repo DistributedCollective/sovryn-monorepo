@@ -1,28 +1,34 @@
-# @sovryn/react
+# @sovryn/react-wallet
 
-> Made with create-react-library
-
-[![NPM](https://img.shields.io/npm/v/@sovryn/react.svg)](https://www.npmjs.com/package/@sovryn/react) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
+[![NPM](https://img.shields.io/npm/v/@sovryn/react-wallet.svg)](https://www.npmjs.com/package/@sovryn/react-wallet) [![JavaScript Style Guide](https://img.shields.io/badge/code_style-standard-brightgreen.svg)](https://standardjs.com)
 
 ## Install
 
 ```bash
-npm install --save @sovryn/react
+npm install --save @sovryn/react-wallet
 ```
 
 ## Usage
 
 ```tsx
-import React, { Component } from 'react'
+import React, { Component } from 'react';
 
-import MyComponent from '@sovryn/react'
-import '@sovryn/react/dist/index.css'
+import { WalletProvider, WalletButton, useWalletContext } from '@sovryn/react-wallet';
+import '@sovryn/react-wallet/index.css'
 
-class Example extends Component {
+class App extends Component {
   render() {
-    return <MyComponent />
+    return <WalletProvider chainId={30} remember><Home /></WalletProvider>
   }
 }
+
+class Home extends Component {
+  const { address } = useWalletContext();
+  render() {
+    return <>{!address ? <WalletButton /> : <p>Connected with {address}</p>)}</>
+  }
+}
+
 ```
 
 ## License
