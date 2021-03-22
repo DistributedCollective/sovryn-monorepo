@@ -1,10 +1,11 @@
 import React, { useCallback } from 'react';
 
-import { useWalletContext, WalletButton, walletService } from '@sovryn/react-wallet';
+import { HardwareWallet, hardwareWallets } from '@sovryn/wallet';
+import { useWalletContext, WalletButton, walletService,  } from '@sovryn/react-wallet';
 import '@sovryn/react-wallet/index.css';
 
 export const Home = () => {
-  const { address, connected } = useWalletContext();
+  const { address, connected, disconnect, chainId, wallet } = useWalletContext();
 
   const sign = useCallback(async () => {
     try {
@@ -16,30 +17,47 @@ export const Home = () => {
     }
   }, []);
 
-  const send = useCallback(async () => {
+  const verifyAddress = useCallback(async () => {
     try {
-      // const tx = await getWallet().signTransaction({
-      //   value: 0,
-      //   to: '0x2bD2201bfe156a71EB0d02837172FFc237218505',
-      //   chainId: chainId,
-      //   nonce: 1,
-      //   gasPrice: 75,
-      //   gas: 750000,
-      // });
-      // console.log('send', tx);
+      const result = await (walletService.wallet as HardwareWallet).displayAddress();
+      console.log(result);
     } catch (e) {
       console.error(e);
     }
   }, []);
 
+  const send = useCallback(async () => {
+    try {
+
+      console.log('chain id: ', chainId, walletService.chainId);
+
+      const tx = await walletService.signTransaction({
+        value: '0',
+        to: walletService.address,
+        chainId: walletService.chainId,
+        nonce: 1,
+        gasPrice: '75',
+        gasLimit: '21000',
+      });
+      console.log('send', tx);
+    } catch (e) {
+      console.error(e);
+    }
+  }, [chainId]);
+
   return <div>
     {!connected && <WalletButton/>}
     {connected && (
       <React.Fragment>
-        <div>Connected: {address}</div>
+        <div>Connected: {address} ({chainId})<button onClick={disconnect}>Disconnect</button></div>
         <div>
           <button onClick={sign}>Sign message</button>
+        </div>
+        <div>
           <button onClick={send}>Send balance</button>
+        </div>
+        <div>
+          <button onClick={verifyAddress} disabled={!hardwareWallets.includes(wallet.providerType)}>Verify address</button>
         </div>
       </React.Fragment>
     )}

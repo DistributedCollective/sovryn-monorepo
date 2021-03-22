@@ -2,14 +2,16 @@ import { addHexPrefix, publicToAddress } from 'ethereumjs-util';
 import HDKey from 'hdkey';
 
 export class DeterministicWallet {
+  chainId?: number;
   protected address: string;
   protected dPath: string;
   protected index: number;
 
-  constructor(address: string, dPath: string, index: number) {
+  constructor(address: string, dPath: string, index: number, chainId?: number) {
     this.address = address;
     this.dPath = dPath;
     this.index = index;
+    this.chainId = chainId;
   }
 
   public getAddressString(): string {

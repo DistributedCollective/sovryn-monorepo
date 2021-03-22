@@ -3,25 +3,28 @@ import { useCallback, useEffect, useRef, useState } from 'react';
 import {
   ChainCodeResponse,
   FullWallet,
-  LedgerWallet,
   ProviderType,
   Web3Wallet,
+  hardwareWallets,
+  providerToWalletMap,
 } from '@sovryn/wallet';
 import { useWalletContext } from '../hooks';
-import { walletService } from '../services';
+import { session, walletService } from '../services';
 import { ProviderList } from '../components/steps/ProviderList';
-import { LedgerConnector } from '../components/steps/LedgerConnector';
 import { DeterministicWallets } from '../components/steps/DeterministicWallets';
+import { HardwarePathChooser } from '../components/steps/HardwarePathChooser';
+import { base64Decode, base64Encode } from '../services/helpers';
 
 interface Props {
   chainId?: number;
+  remember?: boolean;
   children: React.ReactNode;
 }
 
 enum DialogType {
   NONE,
   PROVIDER_LIST,
-  LEDGER_CONNECTOR,
+  HD_PATH_CHOSER,
   DETERMINISTIC_WALLET_LIST,
 }
 
@@ -49,7 +52,7 @@ export function WalletProvider(props: Props) {
     if (props.chainId) {
       context.state.chainId.set(props.chainId);
     }
-  }, [props.chainId]);
+  }, [props.chainId, state.chainId]);
 
   useEffect(() => {
     if (context.loading && state.step === DialogType.NONE) {
@@ -65,15 +68,27 @@ export function WalletProvider(props: Props) {
   const setConnectedWallet = React.useCallback(
     async (wallet: FullWallet) => {
       await walletService.connect(wallet);
-      setState(prevState => ({ ...prevState, step: DialogType.NONE }));
+      setState(prevState => ({
+        ...prevState,
+        step: DialogType.NONE,
+        loading: false,
+      }));
     },
-    [context],
+    [context, props.remember, state],
   );
 
   const onProviderChosen = React.useCallback(async (provider: ProviderType) => {
     setState(prevState => ({ ...prevState, provider, loading: true }));
     try {
       switch (provider) {
+        default:
+          console.error('Incorrect provider selected.');
+          setState(prevState => ({
+            ...prevState,
+            provider: (null as unknown) as ProviderType,
+            loading: false,
+          }));
+          break;
         case ProviderType.WEB3: {
           const s = await walletService.start(provider);
           const w = await s.unlock();
@@ -81,9 +96,10 @@ export function WalletProvider(props: Props) {
           break;
         }
         case ProviderType.LEDGER:
+        case ProviderType.TREZOR:
           setState(prevState => ({
             ...prevState,
-            step: DialogType.LEDGER_CONNECTOR,
+            step: DialogType.HD_PATH_CHOSER,
           }));
           break;
       }
@@ -115,14 +131,19 @@ export function WalletProvider(props: Props) {
   );
 
   const onUnlockDeterministicWallet = useCallback(
-    async (address: string, index: number) => {
-      switch (state.provider) {
-        case ProviderType.LEDGER: {
-          await setConnectedWallet(
-            new LedgerWallet(address, state.dPath, index),
-          );
-          break;
-        }
+    async (
+      address: string,
+      index: number,
+      providerType?: ProviderType,
+      path?: string,
+      chainId?: number,
+    ) => {
+      const provider = providerType || state.provider;
+      const dPath = path || state.dPath;
+      const chainID = chainId || state.chainId;
+      if (hardwareWallets.includes(provider)) {
+        const Wallet = providerToWalletMap[provider];
+        await setConnectedWallet(new Wallet(address, dPath, index, chainID));
       }
     },
     [state],
@@ -134,17 +155,38 @@ export function WalletProvider(props: Props) {
       context.state.address.set(value.getAddressString());
       context.state.connected.set(true);
       context.state.loading.set(false);
+
+      if (props.remember) {
+        session.setItem(
+          '__sovryn_wallet',
+          base64Encode(
+            JSON.stringify({
+              provider: value.getWalletType(),
+              // @ts-ignore
+              chainId: value?.chainId || state.chainId,
+              data: value,
+            }),
+          ),
+        );
+      }
     });
+
     walletService.events.on('disconnected', () => {
       context.state.address.set('');
       context.state.connected.set(false);
       context.state.loading.set(false);
+      setState(prevState => ({
+        ...prevState,
+        provider: null as any,
+        loading: false,
+      }));
+      session.removeItem('__sovryn_wallet');
     });
     return () => {};
   }, []);
 
   useEffect(() => {
-    const wallet = walletService.getWallet() as Web3Wallet;
+    const wallet = walletService.wallet as Web3Wallet;
     if (wallet?.getWalletType() === ProviderType.WEB3 && wallet?.provider) {
       const p = wallet.provider;
 
@@ -166,22 +208,54 @@ export function WalletProvider(props: Props) {
       });
     }
     return () => {};
-  }, [context.wallet.getWallet()?.getWalletType()]);
+  }, [context.wallet.wallet?.getWalletType()]);
+
+  useEffect(() => {
+    try {
+      const data = session.getItem('__sovryn_wallet');
+      if (data) {
+        const wallet = base64Decode(data) as any;
+        const parsed = JSON.parse(wallet) as {
+          provider: ProviderType;
+          chainId: number;
+          data: any;
+        };
+
+        console.log('history:', parsed, wallet);
+
+        switch (parsed.provider) {
+          case ProviderType.WEB3:
+            onProviderChosen(parsed.provider);
+            break;
+          case ProviderType.LEDGER:
+          case ProviderType.TREZOR:
+            onUnlockDeterministicWallet(
+              parsed.data.address,
+              parsed.data.index,
+              parsed.provider,
+              parsed.data.dPath,
+              parsed.chainId,
+            );
+            break;
+        }
+      }
+    } catch (e) {
+      console.error(e);
+      session.removeItem('__sovryn_wallet');
+    }
+  }, []);
 
   return (
     <React.Fragment>
-      {context.wallet.getWallet()?.getWalletType() === ProviderType.WEB3 && (
+      {context.wallet.providerType === ProviderType.WEB3 && (
         <React.Fragment>
           {props.chainId &&
-            (context.wallet.getWallet() as Web3Wallet)?.chainId !==
-              props.chainId &&
+            (context.wallet.wallet as Web3Wallet)?.chainId !== props.chainId &&
             'You are connected to wrong network.'}
         </React.Fragment>
       )}
 
       <div>{props.children}</div>
-
-      <div>{JSON.stringify(context.state.value)}</div>
 
       <React.Fragment>
         <ProviderList
@@ -190,11 +264,12 @@ export function WalletProvider(props: Props) {
           onClose={onDismiss}
           onProvider={onProviderChosen}
         />
-        <LedgerConnector
-          isOpen={state.step === DialogType.LEDGER_CONNECTOR}
+        <HardwarePathChooser
+          provider={state.provider}
+          chainId={context.chainId}
+          isOpen={state.step === DialogType.HD_PATH_CHOSER}
           onClose={onDismiss}
           onComplete={onChainCodeChanged}
-          chainId={context.chainId}
         />
         <DeterministicWallets
           isOpen={state.step === DialogType.DETERMINISTIC_WALLET_LIST}
@@ -207,34 +282,6 @@ export function WalletProvider(props: Props) {
           onUnlock={onUnlockDeterministicWallet}
         />
       </React.Fragment>
-
-      {/* <Dialog */}
-      {/*  onClose={() => context.disconnect()} */}
-      {/*  isOpen={context.state.loading.value} */}
-      {/* > */}
-      {/*  {dialog === DialogType.PROVIDER_LIST && ( */}
-      {/*    <React.Fragment> */}
-      {/*      {error && <p>{error}</p>} */}
-      {/*      <button onClick={() => onConnect(ProviderType.WEB3)}> */}
-      {/*        MetaMask */}
-      {/*      </button> */}
-      {/*      <button onClick={() => onConnect(ProviderType.LEDGER)}> */}
-      {/*        Ledger */}
-      {/*      </button> */}
-      {/*    </React.Fragment> */}
-      {/*  )} */}
-      {/*  {dialog === DialogType.WALLET_LIST && ( */}
-      {/*    <React.Fragment> */}
-      {/*      {error && <p>{error}</p>} */}
-      {/*      <DeterministicWallets */}
-      {/*        {...deterministic} */}
-      {/*        dPaths={dPathMap} */}
-      {/*        onUnlock={onDeterministicUnlock} */}
-      {/*        onChangeDPath={onChangeDPath} */}
-      {/*      /> */}
-      {/*    </React.Fragment> */}
-      {/*  )} */}
-      {/* </Dialog> */}
     </React.Fragment>
   );
 }

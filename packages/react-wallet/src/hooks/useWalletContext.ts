@@ -48,13 +48,16 @@ export function useWalletContext(): ContextInterface {
   const onConnect = useCallback(() => {
     state.showProviderList.set(true);
     state.loading.set(true);
+    walletService.events.trigger('connect');
   }, []);
 
   const onDisconnect = useCallback(() => {
+    walletService.events.trigger('disconnect');
     state.showProviderList.set(false);
     state.loading.set(false);
     state.connected.set(false);
     state.address.set('');
+    walletService.events.trigger('disconnected');
   }, []);
 
   return {

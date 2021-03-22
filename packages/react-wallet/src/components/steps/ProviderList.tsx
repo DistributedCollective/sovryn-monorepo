@@ -81,6 +81,65 @@ export function ProviderList(props: Props) {
         </div>
       </label>
 
+      <label className={styles.provider}>
+        <input
+          name='provider'
+          value={ProviderType.TREZOR}
+          type='radio'
+          onChange={e => setProvider(e.currentTarget.value as any)}
+        />
+        <div className={styles.provider__value}>
+          <div>Trezor</div>
+          <div className={styles.provider__download}>
+            <a href='#' target='_blank' rel='noreferrer nofollow'>
+              Buy Now
+            </a>
+          </div>
+        </div>
+      </label>
+
+      <label className={styles.provider}>
+        <input
+          name='provider'
+          value={ProviderType.PORTIS}
+          type='radio'
+          onChange={e => setProvider(e.currentTarget.value as any)}
+        />
+        <div className={styles.provider__value}>
+          <div>Portis</div>
+          <div className={styles.provider__download}>
+            <a
+              href='https://www.portis.io/'
+              target='_blank'
+              rel='noreferrer nofollow'
+            >
+              Learn more
+            </a>
+          </div>
+        </div>
+      </label>
+
+      <label className={styles.provider}>
+        <input
+          name='provider'
+          value={ProviderType.WALLET_CONNECT}
+          type='radio'
+          onChange={e => setProvider(e.currentTarget.value as any)}
+        />
+        <div className={styles.provider__value}>
+          <div>Wallet Connect</div>
+          <div className={styles.provider__download}>
+            <a
+              href='https://walletconnect.org/'
+              target='_blank'
+              rel='noreferrer nofollow'
+            >
+              Learn more
+            </a>
+          </div>
+        </div>
+      </label>
+
       <button
         type='button'
         disabled={!provider || props.loading}
