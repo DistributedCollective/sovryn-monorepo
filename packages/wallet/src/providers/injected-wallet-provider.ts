@@ -38,7 +38,7 @@ export class InjectedWalletProvider implements WalletProviderInterface {
     return new Promise(async (resolve, reject) => {
       try {
         const accounts = await this.provider
-          .send('eth_requestAccounts')
+          .request({ method: 'eth_requestAccounts' })
           .then((response: any) =>
             Array.isArray(response) ? response : response?.result || [],
           )
@@ -49,8 +49,13 @@ export class InjectedWalletProvider implements WalletProviderInterface {
               error('Failed to connect', err);
             }
           });
+
+        if (!accounts) {
+          return reject(Error('Permission was not given.'));
+        }
+
         const chainId = await this.provider
-          .send('eth_chainId')
+          .request({ method: 'eth_chainId' })
           .then((response: any) => Number(response.result || response));
         resolve(
           new Web3Wallet(
