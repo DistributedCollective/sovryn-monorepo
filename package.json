@@ -2,6 +2,7 @@
   "name": "sovryn-monorepo",
   "private": false,
   "scripts": {
+    "lerna:publish": "lerna publish --contents dist",
     "changelog": "lerna-changelog"
   },
   "devDependencies": {

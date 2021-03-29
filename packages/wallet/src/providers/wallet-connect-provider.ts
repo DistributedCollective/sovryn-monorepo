@@ -20,10 +20,10 @@ export class WalletConnectProvider implements WalletProviderInterface {
         this.provider = new WCProvider({
           infuraId: '8a669f27b05a457b880dfa89b536c220',
           chainId,
-          // rpc: {
-          //   30: 'https://public-node.rsk.co',
-          //   31: 'https://public-node.testnet.rsk.co',
-          // },
+          rpc: {
+            30: 'https://public-node.rsk.co',
+            31: 'https://public-node.testnet.rsk.co',
+          },
           qrcodeModalOptions: {
             mobileLinks: ['rwallet', 'metamask'],
           },

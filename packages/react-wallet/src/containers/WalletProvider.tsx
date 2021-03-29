@@ -280,7 +280,7 @@ export function WalletProvider(props: Props) {
         />
         <HardwarePathChooser
           provider={state.provider}
-          chainId={context.chainId}
+          chainId={props.chainId}
           isOpen={state.step === DialogType.HD_PATH_CHOSER}
           onClose={onDismiss}
           onComplete={onChainCodeChanged}
