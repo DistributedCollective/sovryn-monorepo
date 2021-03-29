@@ -1,6 +1,6 @@
 {
   "name": "@sovryn/react-wallet",
-  "version": "0.0.9-alpha.0",
+  "version": "0.1.0-alpha.0",
   "description": "Made with create-react-library",
   "author": "Rytis Grincevicius",
   "license": "MIT",
@@ -26,7 +26,7 @@
   "dependencies": {
     "@blueprintjs/core": "^3.41.0",
     "@hookstate/core": "^3.0.6",
-    "@sovryn/wallet": "^0.0.8-alpha.0",
+    "@sovryn/wallet": "^0.1.0-alpha.0",
     "@types/classnames": "^2.2.11",
     "classnames": "^2.2.6",
     "ethereumjs-util": "^7.0.9",
