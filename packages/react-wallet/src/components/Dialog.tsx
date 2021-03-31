@@ -1,5 +1,6 @@
 import * as React from 'react';
-import { Overlay, Classes } from '@blueprintjs/core';
+import { Overlay } from '@blueprintjs/core/lib/esm/components/overlay/overlay';
+import Classes from '@blueprintjs/core/lib/esm/common/classes';
 import classNames from 'classnames';
 
 interface Props {
