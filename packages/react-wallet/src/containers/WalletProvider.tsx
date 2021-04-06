@@ -11,22 +11,14 @@ import {
 } from '@sovryn/wallet';
 import { useWalletContext } from '../hooks';
 import { session, walletService } from '../services';
-import { ProviderList } from '../components/steps/ProviderList';
-import { DeterministicWallets } from '../components/steps/DeterministicWallets';
-import { HardwarePathChooser } from '../components/steps/HardwarePathChooser';
 import { base64Decode, base64Encode } from '../services/helpers';
+import { ProviderDialog } from './ProviderDialog';
+import { ProviderDialogStep } from './ProviderDialog/types';
 
 interface Props {
   chainId?: number;
   remember?: boolean;
   children: React.ReactNode;
-}
-
-enum DialogType {
-  NONE,
-  PROVIDER_LIST,
-  HD_PATH_CHOSER,
-  DETERMINISTIC_WALLET_LIST,
 }
 
 export function WalletProvider(props: Props) {
@@ -39,7 +31,7 @@ export function WalletProvider(props: Props) {
   }, [wallet]);
 
   const [state, setState] = useState({
-    step: DialogType.NONE,
+    step: ProviderDialogStep.NONE,
     chainId: props.chainId || 30,
     provider: (null as unknown) as ProviderType,
     dPath: '',
@@ -58,14 +50,17 @@ export function WalletProvider(props: Props) {
   useEffect(() => {
     if (
       context.state.showProviderList.value &&
-      state.step === DialogType.NONE
+      state.step === ProviderDialogStep.NONE
     ) {
-      setState(prevState => ({ ...prevState, step: DialogType.PROVIDER_LIST }));
+      setState(prevState => ({
+        ...prevState,
+        step: ProviderDialogStep.PROVIDERS,
+      }));
     }
   }, [context.loading]);
 
   const onDismiss = React.useCallback(() => {
-    setState(prevState => ({ ...prevState, step: DialogType.NONE }));
+    setState(prevState => ({ ...prevState, step: ProviderDialogStep.NONE }));
     context.disconnect();
   }, [context]);
 
@@ -74,7 +69,7 @@ export function WalletProvider(props: Props) {
       await walletService.connect(wallet);
       setState(prevState => ({
         ...prevState,
-        step: DialogType.NONE,
+        step: ProviderDialogStep.NONE,
         loading: false,
       }));
     },
@@ -96,7 +91,7 @@ export function WalletProvider(props: Props) {
       if (hardwareWallets.includes(provider)) {
         setState(prevState => ({
           ...prevState,
-          step: DialogType.HD_PATH_CHOSER,
+          step: ProviderDialogStep.HARDWARE_PATH_SELECTOR,
         }));
         return;
       }
@@ -108,15 +103,12 @@ export function WalletProvider(props: Props) {
       }));
       context.state.loading.set(false);
     } catch (e) {
-      console.error(e);
       setState(prevState => ({ ...prevState, loading: false }));
       context.state.loading.set(false);
     }
   }, []);
 
-  /**
-   * Ledger
-   * */
+  // @ts-ignore
   const onChainCodeChanged = React.useCallback(
     (
       { chainCode, publicKey }: ChainCodeResponse,
@@ -129,7 +121,7 @@ export function WalletProvider(props: Props) {
         chainId,
         chainCode,
         publicKey,
-        step: DialogType.DETERMINISTIC_WALLET_LIST,
+        step: ProviderDialogStep.HARDWARE_ADDRESS_SELECTOR,
       }));
     },
     [context],
@@ -154,6 +146,10 @@ export function WalletProvider(props: Props) {
     },
     [state],
   );
+
+  const onStepChange = useCallback((value: ProviderDialogStep) => {
+    setState(prevState => ({ ...prevState, step: value }));
+  }, []);
 
   useEffect(() => {
     walletService.events.on('connected', (value: FullWallet) => {
@@ -269,32 +265,49 @@ export function WalletProvider(props: Props) {
         </React.Fragment>
       )}
 
-      <div>{props.children}</div>
+      <React.Fragment>{props.children}</React.Fragment>
 
       <React.Fragment>
-        <ProviderList
-          isOpen={state.step === DialogType.PROVIDER_LIST}
-          loading={state.loading}
+        <ProviderDialog
+          step={state.step}
           onClose={onDismiss}
-          onProvider={onProviderChosen}
-        />
-        <HardwarePathChooser
+          onStep={onStepChange}
           provider={state.provider}
           chainId={props.chainId}
-          isOpen={state.step === DialogType.HD_PATH_CHOSER}
-          onClose={onDismiss}
-          onComplete={onChainCodeChanged}
+          onProviderChosen={onProviderChosen}
+          onChainCodeChanged={onChainCodeChanged}
+          onUnlockDeterministicWallet={onUnlockDeterministicWallet}
+          hwOptions={{
+            chainId: state.chainId,
+            dPath: state.dPath,
+            seed: state.seed,
+            chainCode: state.chainCode,
+            publicKey: state.publicKey,
+          }}
         />
-        <DeterministicWallets
-          isOpen={state.step === DialogType.DETERMINISTIC_WALLET_LIST}
-          onClose={onDismiss}
-          chainId={state.chainId}
-          dPath={state.dPath}
-          seed={state.seed}
-          chainCode={state.chainCode}
-          publicKey={state.publicKey}
-          onUnlock={onUnlockDeterministicWallet}
-        />
+        {/* <ProviderList */}
+        {/*  isOpen={state.step === DialogType.PROVIDER_LIST} */}
+        {/*  loading={state.loading} */}
+        {/*  onClose={onDismiss} */}
+        {/*  onProvider={onProviderChosen} */}
+        {/* /> */}
+        {/* <HardwarePathChooser */}
+        {/*  provider={state.provider} */}
+        {/*  chainId={props.chainId} */}
+        {/*  isOpen={state.step === DialogType.HD_PATH_CHOSER} */}
+        {/*  onClose={onDismiss} */}
+        {/*  onComplete={onChainCodeChanged} */}
+        {/* /> */}
+        {/* <DeterministicWallets */}
+        {/*  isOpen={state.step === DialogType.DETERMINISTIC_WALLET_LIST} */}
+        {/*  onClose={onDismiss} */}
+        {/*  chainId={state.chainId} */}
+        {/*  dPath={state.dPath} */}
+        {/*  seed={state.seed} */}
+        {/*  chainCode={state.chainCode} */}
+        {/*  publicKey={state.publicKey} */}
+        {/*  onUnlock={onUnlockDeterministicWallet} */}
+        {/* /> */}
       </React.Fragment>
     </React.Fragment>
   );

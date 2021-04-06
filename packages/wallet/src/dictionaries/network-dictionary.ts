@@ -1,7 +1,14 @@
 import { NetworkDetails } from '../models';
 import { ConnectionType, ProviderType } from '../constants';
 import { Optional } from '../types';
-import { ethereum, ledgerEthereum, ledgerLiveEthereum, ropsten, rskMainnet, rskTestnet } from '../wallets/bip44/paths';
+import {
+  ethereum,
+  ledgerEthereum,
+  ledgerLiveEthereum,
+  ropsten,
+  rskMainnet,
+  rskTestnet,
+} from '../wallets/bip44/paths';
 
 const defaultNetworks = [
   new NetworkDetails(1, 'ETH', ConnectionType.MAINNET, 'ETH')

@@ -2,6 +2,9 @@ import * as React from 'react';
 import { Overlay } from '@blueprintjs/core/lib/esm/components/overlay/overlay';
 import Classes from '@blueprintjs/core/lib/esm/common/classes';
 import classNames from 'classnames';
+import styles from './Dialog.module.css';
+
+type DialogSize = 'normal' | 'large' | 'small';
 
 interface Props {
   isOpen: boolean;
@@ -10,7 +13,7 @@ interface Props {
   onClosing?: () => void;
   className?: string;
   children?: React.ReactNode;
-  style?: React.CSSProperties;
+  size?: DialogSize;
 }
 
 export function Dialog(props: Props) {
@@ -21,17 +24,32 @@ export function Dialog(props: Props) {
       hasBackdrop
     >
       <div className={Classes.DIALOG_CONTAINER}>
-        <div
-          className={classNames(Classes.DIALOG, props.className)}
-          style={props.style}
+        <article
+          role='modal'
+          className={classNames(
+            Classes.DIALOG,
+            styles.dialog,
+            props.size === 'normal' && styles.dialog_normal,
+            props.size === 'large' && styles.dialog_large,
+            props.size === 'small' && styles.dialog_small,
+            props.className,
+          )}
         >
-          {props.children}
-        </div>
+          <button
+            className={styles.close}
+            onClick={props.onClose}
+            type='button'
+            title='Close'
+          >
+            <span className={styles.sr_only}>Close</span>
+          </button>
+          <React.Fragment>{props.children}</React.Fragment>
+        </article>
       </div>
     </Overlay>
   );
 }
 
 Dialog.defaultProps = {
-  style: { padding: 20 },
+  size: 'normal',
 };
