@@ -1,16 +1,16 @@
 .dialog {
-  width: 100%;
-  min-height: 100vh;
-  max-width: 1000px;
-  background-color: #000000;
-  color: #E9EAE9;
+  width: 100%!important;
+  min-height: 100vh!important;
+  max-width: 1000px!important;
+  background-color: #000000!important;
+  color: #E9EAE9!important;
   transition: width 0.5s, height 0.5s, padding 0.5s;
   will-change: width, height, padding;
-  position: relative;
-  display: block;
-  padding: 20px;
-  margin: 0;
-  border-radius: 0;
+  position: relative!important;
+  display: block!important;
+  padding: 20px!important;
+  margin: 0!important;
+  border-radius: 0!important;
 }
 
 .content {
@@ -40,14 +40,14 @@
 
 @media screen and (min-width: 768px) {
   .dialog {
-    padding: 30px 30px 30px;
-    margin: 15px;
-    border-radius: 20px;
-    min-height: 0;
+    padding: 30px 30px 30px!important;
+    margin: 15px!important;
+    border-radius: 20px!important;
+    min-height: 0!important;
   }
 
   .dialog_small {
-    max-width: 470px;
+    max-width: 470px!important;
   }
 
   .content {
@@ -60,15 +60,15 @@
 
 @media screen and (min-width: 1280px) {
   .dialog {
-    padding: 30px 70px 70px;
-    margin: 40px;
+    padding: 30px 70px 70px!important;
+    margin: 40px!important;
   }
 
   .dialog_normal {
-    max-width: 1000px;
+    max-width: 1000px!important;
   }
   .dialog_large {
-    max-width: 1000px;
+    max-width: 1000px!important;
   }
 
   .close {
@@ -88,9 +88,10 @@
 }
 
 .dialog h1 {
-  font-size: 23px;
-  font-weight: bold;
-  text-align: center;
+  font-size: 23px!important;
+  font-weight: bold!important;
+  text-align: center!important;
+  text-transform: none!important;
 }
 
 .dialog, .dialog * {
@@ -98,10 +99,12 @@
 }
 
 .dialog a {
-  color: #FEC004;
-  text-decoration: underline;
+  color: #FEC004!important;
+  text-decoration: underline!important;
+  font-size: 12px!important;
+  font-weight: 500!important;
 }
 
 .dialog a:hover {
-  text-decoration: none;
+  text-decoration: none!important;
 }
