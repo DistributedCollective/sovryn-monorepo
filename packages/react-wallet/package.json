@@ -1,6 +1,6 @@
 {
   "name": "@sovryn/react-wallet",
-  "version": "0.1.4-alpha.0",
+  "version": "1.0.0",
   "description": "Made with create-react-library",
   "author": "Rytis Grincevicius",
   "license": "MIT",
@@ -25,11 +25,13 @@
   },
   "dependencies": {
     "@hookstate/core": "^3.0.6",
-    "@sovryn/wallet": "^0.1.3-alpha.0",
+    "@sovryn/wallet": "^1.0.0",
     "@types/classnames": "^2.2.11",
     "classnames": "^2.2.6",
+    "detect-browser": "^5.2.0",
     "ethereumjs-util": "^7.0.9",
-    "storage-factory": "^0.2.0"
+    "storage-factory": "^0.2.0",
+    "styled-components": "^5.2.3"
   },
   "peerDependencies": {
     "@blueprintjs/core": "^3.41.0",
@@ -43,6 +45,7 @@
     "@types/node": "^12.12.38",
     "@types/react": "^16.9.27",
     "@types/react-dom": "^16.9.7",
+    "@types/styled-components": "^5.1.9",
     "@typescript-eslint/eslint-plugin": "^2.26.0",
     "@typescript-eslint/parser": "^2.26.0",
     "babel-eslint": "^10.0.3",

@@ -1,12 +1,15 @@
 import * as React from 'react';
 import {
   ChainCodeResponse,
-  ProviderType,
   LedgerWalletProvider,
+  ProviderType,
   TrezorWalletProvider,
 } from '@sovryn/wallet';
-import { walletService } from '../../services';
-import { Dialog } from '../Dialog';
+import styled from 'styled-components/macro';
+import { walletService } from '../../../services';
+import { images } from '../../../assets/images';
+import { Button } from '../../Button';
+import { Select } from '../../Select';
 
 interface Props {
   chainId?: number;
@@ -16,8 +19,6 @@ interface Props {
     chainId: number,
     dPath: string,
   ) => void;
-  isOpen: boolean;
-  onClose: () => void;
 }
 
 export function HardwarePathChooser(props: Props) {
@@ -94,49 +95,48 @@ export function HardwarePathChooser(props: Props) {
   };
 
   return (
-    <Dialog onClose={props.onClose} isOpen={props.isOpen}>
-      <h1>{getTitle(props.provider)}</h1>
+    <Container>
+      <h1>Connect {getTitle(props.provider)}</h1>
+      <Image src={getLogo(props.provider)} />
+      {props.provider === ProviderType.LEDGER && (
+        <P>Connect your ledger device via USB and open {networkName} app.</P>
+      )}
       {!props.chainId && (
-        <div>
-          <div>
-            <label htmlFor='network'>Choose a network:</label>
-          </div>
-          <select id='network' value={state.chainId} onChange={onChangeChain}>
-            {networks.map(item => (
-              <option value={item.getChainId()} key={item.getChainId()}>
-                {item.getName()}
-              </option>
-            ))}
-          </select>
-        </div>
+        <Select
+          id='network'
+          label='Choose a network:'
+          value={String(state.chainId)}
+          options={networks.map(item => ({
+            value: item.getChainId().toString(),
+            label: item.getName(),
+          }))}
+          onChange={onChangeChain}
+        />
       )}
       {paths?.length ? (
-        <div>
-          <div>
-            <label htmlFor='path'>Derivation path:</label>
-          </div>
-          <select id='path' value={state.dPath} onChange={onChangePath}>
-            {paths.map(item => (
-              <option value={item.path} key={item.path}>
-                {item.label} - {item.path}
-              </option>
-            ))}
-          </select>
-        </div>
+        <Select
+          id='path'
+          label='Derivation path:'
+          value={state.dPath}
+          options={paths.map(item => ({
+            value: item.path,
+            label: `${item.label} - ${item.path}`,
+          }))}
+          onChange={onChangePath}
+        />
       ) : (
-        <div>
-          Dapp doesn't have any {getDeviceName(props.provider)} paths for{' '}
+        <P>
+          DApp doesn't have any {getDeviceName(props.provider)} paths for{' '}
           {networkName || 'selected network'}
-        </div>
+        </P>
       )}
       {state.error && <div>{state.error}</div>}
-      <button
+      <Button
         onClick={onSubmit}
         disabled={!state.chainId || !state.dPath || state.loading}
-      >
-        Next
-      </button>
-    </Dialog>
+        text='Continue'
+      />
+    </Container>
   );
 }
 
@@ -200,3 +200,43 @@ function getChainCode(provider: ProviderType, dPath: string) {
       throw Error('Unknown HD device.');
   }
 }
+
+function getLogo(provider: ProviderType) {
+  const items = {
+    [ProviderType.LEDGER]: images.ledgerWallet,
+    [ProviderType.TREZOR]: images.trezorWallet,
+  };
+
+  // eslint-disable-next-line no-prototype-builtins
+  if (items.hasOwnProperty(provider)) {
+    return items[provider];
+  }
+
+  return items[ProviderType.TREZOR];
+}
+
+interface ImageProps {
+  src: string;
+}
+
+const Image = styled.div`
+  width: 160px;
+  height: 160px;
+  margin: 0 auto 35px;
+  background: transparent center center no-repeat;
+  border: 5px solid #e9eae9;
+  border-radius: 20px;
+  background-image: url('${(props: ImageProps) => props.src}');
+`;
+
+const P = styled.p`
+  margin: 0 auto 35px;
+  max-width: 236px;
+`;
+
+const Container = styled.div`
+  max-width: 320px;
+  width: 100%;
+  margin: 0 auto;
+  text-align: center;
+`;
