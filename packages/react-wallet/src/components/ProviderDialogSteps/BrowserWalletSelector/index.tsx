@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { ProviderType } from '@sovryn/wallet';
+import styled from 'styled-components/macro';
 import { ItemList } from '../../ItemList';
 import { Item } from '../../Item';
 import { images } from '../../../assets/images';
@@ -15,6 +16,10 @@ export function BrowserWalletSelector(props: Props) {
   return (
     <div>
       <h1>Select browser wallet type:</h1>
+      <P>
+        Make sure to disable other wallet browser extensions than the one you
+        want to use.
+      </P>
       <ItemList>
         {wallet === 'liquality' && (
           <Item
@@ -25,13 +30,14 @@ export function BrowserWalletSelector(props: Props) {
             linkTitle='Download'
           />
         )}
-        {['metamask', 'unknown'].includes(wallet) && (
+        {['metamask', 'unknown', 'none'].includes(wallet) && (
           <Item
             image={images.metamaskWallet}
             title='MetaMask'
             onClick={() => props.onWalletSelected(ProviderType.WEB3)}
             linkHref='https://metamask.io/download.html'
             linkTitle='Download'
+            disabled={wallet === 'none'}
           />
         )}
         {wallet === 'nifty' && (
@@ -71,6 +77,12 @@ function detectInjectableWallet() {
     if (ethereum.isLiquality) return 'liquality';
     if (ethereum.isNifty) return 'nifty';
     if (ethereum.isMetaMask) return 'metamask';
+    return 'unknown';
   }
-  return 'unknown';
+  return 'none';
 }
+
+const P = styled.p`
+  margin: 0 auto 35px;
+  max-width: 236px;
+`;

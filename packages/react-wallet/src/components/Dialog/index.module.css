@@ -11,6 +11,7 @@
   padding: 20px!important;
   margin: 0!important;
   border-radius: 0!important;
+  border: 0!important;
 }
 
 .content {
@@ -92,6 +93,7 @@
   font-weight: bold!important;
   text-align: center!important;
   text-transform: none!important;
+  margin-bottom: 35px!important;
 }
 
 .dialog, .dialog * {

@@ -31,6 +31,7 @@
   flex-direction: column;
   justify-content: center;
   align-items: center;
+  text-transform: none;
 }
 
 .button:hover {
@@ -60,6 +61,7 @@
 .title {
   margin-top: 14px;
   text-align: center;
+  text-transform: none;
 }
 
 .button:focus {
@@ -67,17 +69,17 @@
 }
 
 
-.link {
-  margin-top: 15px;
-  font-size: 13px;
+.container .link {
+  margin-top: 15px!important;
+  font-size: 13px!important;
   color: #E9EAE9!important;
   text-decoration: none!important;
-  transition: opacity;
-  will-change: opacity;
-  font-weight: 500;
+  transition: opacity!important;
+  will-change: opacity!important;
+  font-weight: 500!important;
 }
 
-.link:hover {
+.container .link:hover {
   opacity: 0.7;
   text-decoration: underline!important;
 }
