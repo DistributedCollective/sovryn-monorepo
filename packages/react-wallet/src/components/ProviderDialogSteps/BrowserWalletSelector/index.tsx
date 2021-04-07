@@ -83,6 +83,6 @@ function detectInjectableWallet() {
 }
 
 const P = styled.p`
-  margin: 0 auto 35px;
-  max-width: 236px;
+  margin: 0 auto;
+  text-align: center;
 `;
