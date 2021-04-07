@@ -78,6 +78,7 @@ export function HardwareAddressSelector(props: Props) {
             key={item.address}
             onClick={() => onSelect(item)}
             active={state.selected?.address === item.address}
+            title={item.address}
           >
             <div className='key'>{item.index + 1}</div>
             <div className='value'>{item.address}</div>
@@ -123,6 +124,9 @@ const WalletList = styled.div`
   background: #222222;
   border: 1px solid #707070;
   border-radius: 5px;
+  max-width: 360px;
+  width: 100%;
+  margin: 0 auto;
 `;
 
 interface WalletItemProps {
@@ -154,7 +158,21 @@ const WalletItem = styled.button`
     `}
 
   & .key {
-    margin-right: 15px;
+    margin-right: 5px;
+    flex-grow: 0;
+    flex-shrink: 1;
+    width: 30px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: left;
+  }
+
+  & .value {
+    flex-grow: 0;
+    flex-shrink: 1;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    text-align: left;
   }
 `;
 
@@ -177,6 +195,7 @@ const Arrow = styled.button`
   height: 24px;
   border: 0;
   background: transparent center center no-repeat;
+  background-image: url(${images.arrowRight});
   cursor: pointer;
   transition: opacity 0.3s;
   will-change: opacity;
@@ -190,11 +209,6 @@ const Arrow = styled.button`
   ${(props: ArrowProps) =>
     props.left &&
     css`
-      background-image: url(${images.arrowLeft});
-    `}
-  ${(props: ArrowProps) =>
-    props.right &&
-    css`
-      background-image: url(${images.arrowRight});
+      transform: rotateY(180deg);
     `}
 `;

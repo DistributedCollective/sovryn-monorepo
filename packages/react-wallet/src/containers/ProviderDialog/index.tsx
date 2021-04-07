@@ -2,13 +2,13 @@ import * as React from 'react';
 import { useMemo } from 'react';
 import { ProviderType, ChainCodeResponse } from '@sovryn/wallet';
 import { Dialog } from '../../components/Dialog';
-import { ProviderTypeSelector } from '../../components/steps/ProviderTypeSelector';
-import { BrowserWalletSelector } from '../../components/steps/BrowserWalletSelector';
+import { ProviderTypeSelector } from '../../components/ProviderDialogSteps/ProviderTypeSelector';
+import { BrowserWalletSelector } from '../../components/ProviderDialogSteps/BrowserWalletSelector';
 import { ProviderDialogStep } from './types';
 import { BackButton } from '../../components/BackButton';
-import { HardwareWalletSelector } from '../../components/steps/HardwareWalletSelector';
-import { HardwarePathChooser } from '../../components/steps/HardwarePathChooser';
-import { HardwareAddressSelector } from '../../components/steps/HardwareAddressSelector';
+import { HardwareWalletSelector } from '../../components/ProviderDialogSteps/HardwareWalletSelector';
+import { HardwarePathChooser } from '../../components/ProviderDialogSteps/HardwarePathChooser';
+import { HardwareAddressSelector } from '../../components/ProviderDialogSteps/HardwareAddressSelector';
 
 interface HwOptions {
   chainId: number;
@@ -60,7 +60,10 @@ export function ProviderDialog(props: Props) {
         />
       )}
       {props.step === ProviderDialogStep.PROVIDERS && (
-        <ProviderTypeSelector onStep={props.onStep} />
+        <ProviderTypeSelector
+          onStep={props.onStep}
+          onProvider={props.onProviderChosen}
+        />
       )}
       {props.step === ProviderDialogStep.BROWSER_PROVIDERS && (
         <BrowserWalletSelector onWalletSelected={props.onProviderChosen} />
@@ -86,7 +89,7 @@ export function ProviderDialog(props: Props) {
         />
       )}
       {props.step === ProviderDialogStep.WALLET_CONNECT_PROVIDERS && (
-        <BrowserWalletSelector onWalletSelected={props.onProviderChosen} />
+        <p>Working on it.</p>
       )}
     </Dialog>
   );

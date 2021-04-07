@@ -7,7 +7,7 @@ import portisWallet from './wallets/portis';
 import liqualityWallet from './wallets/liquality';
 import ledgerWallet from './wallets/ledger';
 import trezorWallet from './wallets/trezor';
-import { arrowLeft, arrowRight } from './arrows';
+import { arrowDown, arrowRight } from './arrows';
 
 export const images = {
   browserWallets,
@@ -22,6 +22,6 @@ export const images = {
   ledgerWallet,
   trezorWallet,
 
-  arrowLeft,
   arrowRight,
+  arrowDown,
 };

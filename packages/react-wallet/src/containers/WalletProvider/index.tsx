@@ -9,15 +9,27 @@ import {
   Web3Wallet,
   web3Wallets,
 } from '@sovryn/wallet';
-import { useWalletContext } from '../hooks';
-import { session, walletService } from '../services';
-import { base64Decode, base64Encode } from '../services/helpers';
-import { ProviderDialog } from './ProviderDialog';
-import { ProviderDialogStep } from './ProviderDialog/types';
+import { useWalletContext } from '../../hooks';
+import { session, walletService } from '../../services';
+import { base64Decode, base64Encode } from '../../services/helpers';
+import { ProviderDialog } from '../ProviderDialog';
+import { ProviderDialogStep } from '../ProviderDialog/types';
+
+interface Options {
+  // allow connection only to this chain id.
+  chainId?: number;
+  // use localstorage to remember to which wallet user was connected when user comes back.
+  remember?: boolean;
+  // show ribbon with alert when user connects to wrong network, used together with chainId.
+  showWrongNetworkRibbon?: boolean;
+}
 
 interface Props {
+  /** @deprecated use options instead */
   chainId?: number;
+  /** @deprecated use options instead */
   remember?: boolean;
+  options?: Options;
   children: React.ReactNode;
 }
 
@@ -32,7 +44,7 @@ export function WalletProvider(props: Props) {
 
   const [state, setState] = useState({
     step: ProviderDialogStep.NONE,
-    chainId: props.chainId || 30,
+    chainId: props.options?.chainId || props.chainId || 30,
     provider: (null as unknown) as ProviderType,
     dPath: '',
     seed: '',
@@ -42,10 +54,10 @@ export function WalletProvider(props: Props) {
   });
 
   useEffect(() => {
-    if (props.chainId) {
-      context.state.chainId.set(props.chainId);
+    if (props.options?.chainId || props.chainId) {
+      context.state.chainId.set(props.options?.chainId || props.chainId);
     }
-  }, [props.chainId, state.chainId]);
+  }, [props.options?.chainId, props.chainId, state.chainId]);
 
   useEffect(() => {
     if (
@@ -73,7 +85,7 @@ export function WalletProvider(props: Props) {
         loading: false,
       }));
     },
-    [context, props.remember, state],
+    [context, props.options?.remember, props.remember, state],
   );
 
   const onProviderChosen = React.useCallback(async (provider: ProviderType) => {
@@ -83,7 +95,7 @@ export function WalletProvider(props: Props) {
       if (web3Wallets.includes(provider)) {
         const s = await walletService.start(provider);
         // @ts-ignore
-        const w = await s.unlock(props.chainId || 30);
+        const w = await s.unlock(props.options?.chainId || props.chainId || 30);
         await setConnectedWallet(w);
         return;
       }
@@ -157,7 +169,7 @@ export function WalletProvider(props: Props) {
       context.state.connected.set(true);
       context.state.loading.set(false);
 
-      if (props.remember) {
+      if (props.options?.remember || props.remember) {
         session.setItem(
           '__sovryn_wallet',
           base64Encode(
@@ -255,13 +267,16 @@ export function WalletProvider(props: Props) {
 
   return (
     <React.Fragment>
-      {[ProviderType.WALLET_CONNECT, ProviderType.WEB3].includes(
-        context.wallet.providerType,
-      ) && (
+      {props.options?.showWrongNetworkRibbon && props.options.chainId && (
         <React.Fragment>
-          {!!props.chainId &&
-            context.wallet.wallet?.chainId !== props.chainId &&
-            'You are connected to wrong network.'}
+          {[ProviderType.WALLET_CONNECT, ProviderType.WEB3].includes(
+            context.wallet.providerType,
+          ) && (
+            <React.Fragment>
+              {context.wallet.wallet?.chainId !== props.options.chainId &&
+                'You are connected to wrong network.'}
+            </React.Fragment>
+          )}
         </React.Fragment>
       )}
 
@@ -273,7 +288,7 @@ export function WalletProvider(props: Props) {
           onClose={onDismiss}
           onStep={onStepChange}
           provider={state.provider}
-          chainId={props.chainId}
+          chainId={props.options?.chainId || props.chainId}
           onProviderChosen={onProviderChosen}
           onChainCodeChanged={onChainCodeChanged}
           onUnlockDeterministicWallet={onUnlockDeterministicWallet}
@@ -285,29 +300,6 @@ export function WalletProvider(props: Props) {
             publicKey: state.publicKey,
           }}
         />
-        {/* <ProviderList */}
-        {/*  isOpen={state.step === DialogType.PROVIDER_LIST} */}
-        {/*  loading={state.loading} */}
-        {/*  onClose={onDismiss} */}
-        {/*  onProvider={onProviderChosen} */}
-        {/* /> */}
-        {/* <HardwarePathChooser */}
-        {/*  provider={state.provider} */}
-        {/*  chainId={props.chainId} */}
-        {/*  isOpen={state.step === DialogType.HD_PATH_CHOSER} */}
-        {/*  onClose={onDismiss} */}
-        {/*  onComplete={onChainCodeChanged} */}
-        {/* /> */}
-        {/* <DeterministicWallets */}
-        {/*  isOpen={state.step === DialogType.DETERMINISTIC_WALLET_LIST} */}
-        {/*  onClose={onDismiss} */}
-        {/*  chainId={state.chainId} */}
-        {/*  dPath={state.dPath} */}
-        {/*  seed={state.seed} */}
-        {/*  chainCode={state.chainCode} */}
-        {/*  publicKey={state.publicKey} */}
-        {/*  onUnlock={onUnlockDeterministicWallet} */}
-        {/* /> */}
       </React.Fragment>
     </React.Fragment>
   );

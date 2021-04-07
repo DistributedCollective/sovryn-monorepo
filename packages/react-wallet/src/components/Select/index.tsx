@@ -1,5 +1,6 @@
 import * as React from 'react';
 import styled from 'styled-components/macro';
+import { images } from '../../assets/images';
 
 interface Option {
   value: string;
@@ -18,7 +19,7 @@ export function Select(props: Props) {
   return (
     <Container>
       <label htmlFor={props.id}>{props.label}</label>
-      <select
+      <SelectItem
         id={props.id}
         name={props.id}
         value={props.value}
@@ -29,7 +30,7 @@ export function Select(props: Props) {
             {item.label}
           </option>
         ))}
-      </select>
+      </SelectItem>
     </Container>
   );
 }
@@ -44,8 +45,23 @@ const Container = styled.div`
     width: 100%;
     text-align: left;
   }
-  select {
-    display: block;
-    width: 100%;
-  }
+`;
+
+const SelectItem = styled.select`
+  display: block;
+  width: 100%;
+  margin: 0;
+  box-sizing: border-box;
+  background: #222222 url(${images.arrowDown}) right 10px center no-repeat;
+  border: 1px solid #575757;
+  border-radius: 8px;
+  display: block;
+  font: inherit;
+  line-height: 1;
+  padding: 10px;
+  font-size: 14px;
+  font-weight: 500;
+  color: #e9eae9;
+  appearance: none;
+  padding-right: 35px;
 `;

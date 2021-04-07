@@ -2,7 +2,7 @@ import * as React from 'react';
 import { Overlay } from '@blueprintjs/core/lib/esm/components/overlay/overlay';
 import Classes from '@blueprintjs/core/lib/esm/common/classes';
 import classNames from 'classnames';
-import styles from './Dialog.module.css';
+import styles from './index.module.css';
 
 type DialogSize = 'normal' | 'large' | 'small';
 
@@ -43,7 +43,7 @@ export function Dialog(props: Props) {
           >
             <span className={styles.sr_only}>Close</span>
           </button>
-          <React.Fragment>{props.children}</React.Fragment>
+          <div className={styles.content}>{props.children}</div>
         </article>
       </div>
     </Overlay>

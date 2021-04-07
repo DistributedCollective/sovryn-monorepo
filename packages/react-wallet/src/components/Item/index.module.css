@@ -1,23 +1,23 @@
 .container {
   flex-grow: 0;
   flex-shrink: 0;
-  width: 160px;
-  height: 160px;
   display: flex;
   flex-direction: column;
   justify-content: flex-start;
   align-items: center;
-  margin: 35px 30px;
+  width: 120px;
+  height: 120px;
+  margin: 15px;
 }
 
 .container_big {
-  height: 192px;
+  height: 152px;
   margin-bottom: 15px;
 }
 
 .button {
-  width: 160px;
-  height: 160px;
+  width: 120px;
+  height: 120px;
   padding: 15px;
   transition: opacity 0.5s, border-color 0.5s;
   cursor: pointer;
@@ -51,8 +51,8 @@
 }
 
 .image {
-  width: 100px;
-  height: 100px;
+  width: 60px;
+  height: 60px;
   background: center center no-repeat;
   background-size: contain;
 }
@@ -80,4 +80,27 @@
 .link:hover {
   opacity: 0.7;
   text-decoration: underline!important;
+}
+
+@media screen and (min-width: 768px) {
+  .container {
+    width: 160px;
+    height: 160px;
+    margin: 35px 30px;
+  }
+
+  .container_big {
+    height: 192px;
+  }
+
+  .button {
+    width: 160px;
+    height: 160px;
+    padding: 15px;
+  }
+
+  .image {
+    width: 100px;
+    height: 100px;
+  }
 }

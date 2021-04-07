@@ -236,6 +236,7 @@ const P = styled.p`
 
 const Container = styled.div`
   max-width: 320px;
+  width: 100%;
   margin: 0 auto;
   text-align: center;
 `;
