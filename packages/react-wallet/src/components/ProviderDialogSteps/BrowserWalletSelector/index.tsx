@@ -75,7 +75,7 @@ function detectInjectableWallet() {
   if (ethereum) {
     ethereum.autoRefreshOnNetworkChange = false;
     if (ethereum.isLiquality) return 'liquality';
-    if (ethereum.isNifty) return 'nifty';
+    if (ethereum.isNiftyWallet) return 'nifty';
     if (ethereum.isMetaMask) return 'metamask';
     return 'unknown';
   }
