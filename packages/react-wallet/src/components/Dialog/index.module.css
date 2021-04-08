@@ -49,8 +49,8 @@
 @media screen and (min-width: 768px) {
   .dialog {
     padding: 30px 30px 30px;
-    margin: 15px;
-    border-radius: 20px;
+    margin: 15px!important;
+    border-radius: 20px!important;
     min-height: 0;
   }
 
@@ -69,7 +69,7 @@
 @media screen and (min-width: 1280px) {
   .dialog {
     padding: 30px 70px 70px;
-    margin: 40px;
+    margin: 40px!important;
   }
 
   .dialog_normal {
