@@ -1,6 +1,6 @@
 .dialog {
   all: initial;
-  width: 100%;
+  width: 100%!important;
   min-height: 100vh;
   max-width: 1000px;
   background-color: #000000;
@@ -10,15 +10,14 @@
   position: relative;
   display: block;
   padding: 20px;
-  margin: 0;
-  border-radius: 0;
-  border: 0;
 
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-  'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue', 'Montserrat',
-  sans-serif;
+  font-family: 'Montserrat', sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+
+  margin: 0!important;
+  border-radius: 0!important;
+  border: 0!important;
 }
 
 .content {
@@ -102,6 +101,7 @@
   text-align: center;
   text-transform: none;
   margin-bottom: 35px;
+  margin-top: 15px;
 }
 
 .dialog, .dialog * {
@@ -117,4 +117,5 @@
 
 .dialog a:hover {
   text-decoration: none;
+  color: #FEC004;
 }
