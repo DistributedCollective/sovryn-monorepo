@@ -21,15 +21,14 @@ export function BrowserWalletSelector(props: Props) {
         want to use.
       </P>
       <ItemList>
-        {['liquality', 'none'].includes(wallet) && (
-          <Item
-            image={images.liqualityWallet}
-            title='Liquality'
-            onClick={() => props.onWalletSelected(ProviderType.WEB3)}
-            linkHref='https://liquality.io/atomic-swap-wallet.html'
-            linkTitle='Download'
-          />
-        )}
+        <Item
+          image={images.liqualityWallet}
+          title='Liquality'
+          onClick={() => props.onWalletSelected(ProviderType.WEB3)}
+          linkHref='https://liquality.io/atomic-swap-wallet.html'
+          linkTitle='Download'
+          disabled={wallet !== 'liquality'}
+        />
         {wallet === 'nifty' && (
           <Item
             image={images.niftyWallet}
@@ -46,7 +45,6 @@ export function BrowserWalletSelector(props: Props) {
             onClick={() => props.onWalletSelected(ProviderType.WEB3)}
             linkHref='https://metamask.io/download.html'
             linkTitle='Download'
-            disabled={wallet === 'none'}
           />
         )}
         <Item

@@ -18,9 +18,9 @@ export function ProviderTypeSelector(props: Props) {
       <h1>Select wallet type:</h1>
       <ItemList>
         <Item
-          image={images.browserWallets}
-          title='Browser'
-          onClick={() => props.onStep(ProviderDialogStep.BROWSER_PROVIDERS)}
+          image={images.hardwareWallets}
+          title='Hardware'
+          onClick={() => props.onStep(ProviderDialogStep.HARDWARE_PROVIDERS)}
         />
         <Item
           image={images.mobileWallets}
@@ -28,9 +28,9 @@ export function ProviderTypeSelector(props: Props) {
           onClick={() => props.onProvider(ProviderType.WALLET_CONNECT)}
         />
         <Item
-          image={images.hardwareWallets}
-          title='Hardware'
-          onClick={() => props.onStep(ProviderDialogStep.HARDWARE_PROVIDERS)}
+          image={images.browserWallets}
+          title='Browser'
+          onClick={() => props.onStep(ProviderDialogStep.BROWSER_PROVIDERS)}
         />
       </ItemList>
       <BottomLinkContainer>
