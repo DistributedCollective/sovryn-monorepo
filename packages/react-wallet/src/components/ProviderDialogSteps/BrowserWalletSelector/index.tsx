@@ -21,23 +21,13 @@ export function BrowserWalletSelector(props: Props) {
         want to use.
       </P>
       <ItemList>
-        {wallet === 'liquality' && (
+        {['liquality', 'none'].includes(wallet) && (
           <Item
             image={images.liqualityWallet}
             title='Liquality'
             onClick={() => props.onWalletSelected(ProviderType.WEB3)}
             linkHref='https://liquality.io/atomic-swap-wallet.html'
             linkTitle='Download'
-          />
-        )}
-        {['metamask', 'unknown', 'none'].includes(wallet) && (
-          <Item
-            image={images.metamaskWallet}
-            title='MetaMask'
-            onClick={() => props.onWalletSelected(ProviderType.WEB3)}
-            linkHref='https://metamask.io/download.html'
-            linkTitle='Download'
-            disabled={wallet === 'none'}
           />
         )}
         {wallet === 'nifty' && (
@@ -47,6 +37,16 @@ export function BrowserWalletSelector(props: Props) {
             onClick={() => props.onWalletSelected(ProviderType.WEB3)}
             linkHref='https://chrome.google.com/webstore/detail/nifty-wallet/jbdaocneiiinmjbjlgalhcelgbejmnid'
             linkTitle='Download'
+          />
+        )}
+        {['metamask', 'unknown'].includes(wallet) && (
+          <Item
+            image={images.metamaskWallet}
+            title='MetaMask'
+            onClick={() => props.onWalletSelected(ProviderType.WEB3)}
+            linkHref='https://metamask.io/download.html'
+            linkTitle='Download'
+            disabled={wallet === 'none'}
           />
         )}
         <Item

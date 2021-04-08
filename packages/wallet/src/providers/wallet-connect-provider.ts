@@ -25,7 +25,7 @@ export class WalletConnectProvider implements WalletProviderInterface {
             31: 'https://public-node.testnet.rsk.co',
           },
           qrcodeModalOptions: {
-            mobileLinks: ['rwallet', 'metamask'],
+            mobileLinks: ['defiant', 'rwallet'],
           },
         });
         const accounts = await this.provider.enable();
