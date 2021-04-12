@@ -170,21 +170,27 @@ export function WalletProvider(props: Props) {
       context.state.loading.set(false);
 
       if (props.options?.remember || props.remember) {
-        session.setItem(
-          '__sovryn_wallet',
-          base64Encode(
-            JSON.stringify({
-              provider: value.getWalletType(),
-              // @ts-ignore
-              chainId: value?.chainId || state.chainId,
-              data: hardwareWallets.includes(
-                value.getWalletType() as ProviderType,
-              )
-                ? value
-                : null,
-            }),
-          ),
-        );
+        if (
+          ![ProviderType.WALLET_CONNECT, ProviderType.PORTIS].includes(
+            value.getWalletType() as ProviderType,
+          )
+        ) {
+          session.setItem(
+            '__sovryn_wallet',
+            base64Encode(
+              JSON.stringify({
+                provider: value.getWalletType(),
+                // @ts-ignore
+                chainId: value?.chainId || state.chainId,
+                data: hardwareWallets.includes(
+                  value.getWalletType() as ProviderType,
+                )
+                  ? value
+                  : null,
+              }),
+            ),
+          );
+        }
       }
     });
 
