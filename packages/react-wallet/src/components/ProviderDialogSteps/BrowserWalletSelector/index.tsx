@@ -22,22 +22,39 @@ export function BrowserWalletSelector(props: Props) {
       </P>
       <ItemList>
         <Item
-          image={images.liqualityWallet}
-          title='Liquality'
+          image={images.niftyWallet}
+          title='Nifty'
           onClick={() => props.onWalletSelected(ProviderType.WEB3)}
-          linkHref='https://liquality.io/atomic-swap-wallet.html'
+          linkHref='https://chrome.google.com/webstore/detail/nifty-wallet/jbdaocneiiinmjbjlgalhcelgbejmnid'
           linkTitle='Download'
-          disabled={wallet !== 'liquality'}
+          disabled={wallet !== 'nifty'}
         />
-        {wallet === 'nifty' && (
+        {wallet === 'liquality' && (
           <Item
-            image={images.niftyWallet}
-            title='Nifty'
+            image={images.liqualityWallet}
+            title='Liquality'
             onClick={() => props.onWalletSelected(ProviderType.WEB3)}
-            linkHref='https://chrome.google.com/webstore/detail/nifty-wallet/jbdaocneiiinmjbjlgalhcelgbejmnid'
+            linkHref='https://liquality.io/atomic-swap-wallet.html'
             linkTitle='Download'
           />
         )}
+        {/* <Item */}
+        {/*  image={images.liqualityWallet} */}
+        {/*  title='Liquality' */}
+        {/*  onClick={() => props.onWalletSelected(ProviderType.WEB3)} */}
+        {/*  linkHref='https://liquality.io/atomic-swap-wallet.html' */}
+        {/*  linkTitle='Download' */}
+        {/*  disabled={wallet !== 'liquality'} */}
+        {/* /> */}
+        {/* {wallet === 'nifty' && ( */}
+        {/*  <Item */}
+        {/*    image={images.niftyWallet} */}
+        {/*    title='Nifty' */}
+        {/*    onClick={() => props.onWalletSelected(ProviderType.WEB3)} */}
+        {/*    linkHref='https://chrome.google.com/webstore/detail/nifty-wallet/jbdaocneiiinmjbjlgalhcelgbejmnid' */}
+        {/*    linkTitle='Download' */}
+        {/*  /> */}
+        {/* )} */}
         {['metamask', 'unknown'].includes(wallet) && (
           <Item
             image={images.metamaskWallet}
