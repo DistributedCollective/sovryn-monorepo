@@ -181,7 +181,6 @@ export function WalletProvider(props: Props) {
       context.state.address.set(value.getAddressString());
       context.state.connected.set(true);
       context.state.loading.set(false);
-      console.log('props:', value.getWalletType());
       if ((props.options?.remember || props.remember) && value.getWalletType() !== ProviderType.WALLET_CONNECT) {
         session.setItem(
           '__sovryn_wallet',
