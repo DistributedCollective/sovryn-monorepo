@@ -50,6 +50,7 @@ export function WalletProvider(props: Props) {
     seed: '',
     chainCode: '',
     publicKey: '',
+    uri: '',
     loading: false,
   });
 
@@ -93,14 +94,25 @@ export function WalletProvider(props: Props) {
     context.state.loading.set(true);
     try {
       if (web3Wallets.includes(provider)) {
+        console.log('web3Wallets');
         const s = await walletService.start(provider);
         // @ts-ignore
-        const w = await s.unlock(props.options?.chainId || props.chainId || 30);
-        await setConnectedWallet(w);
+        const uri = await s.unlock(
+          props.options?.chainId || props.chainId || 30,
+          async w => {
+            await setConnectedWallet(w);
+          },
+        );
+        //@ts-ignore
+        setState(prevState => ({
+          ...prevState,
+          uri,
+        }));
         return;
       }
 
       if (hardwareWallets.includes(provider)) {
+        console.log('hardwareWallets');
         setState(prevState => ({
           ...prevState,
           step: ProviderDialogStep.HARDWARE_PATH_SELECTOR,
@@ -108,6 +120,7 @@ export function WalletProvider(props: Props) {
         return;
       }
 
+      console.log('prevState');
       setState(prevState => ({
         ...prevState,
         provider: (null as unknown) as ProviderType,
@@ -168,8 +181,8 @@ export function WalletProvider(props: Props) {
       context.state.address.set(value.getAddressString());
       context.state.connected.set(true);
       context.state.loading.set(false);
-
-      if (props.options?.remember || props.remember) {
+      console.log('props:', value.getWalletType());
+      if ((props.options?.remember || props.remember) && value.getWalletType() !== ProviderType.WALLET_CONNECT) {
         session.setItem(
           '__sovryn_wallet',
           base64Encode(
@@ -288,6 +301,7 @@ export function WalletProvider(props: Props) {
           onClose={onDismiss}
           onStep={onStepChange}
           provider={state.provider}
+          uri={state.uri}
           chainId={props.options?.chainId || props.chainId}
           onProviderChosen={onProviderChosen}
           onChainCodeChanged={onChainCodeChanged}

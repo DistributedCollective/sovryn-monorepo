@@ -7,6 +7,7 @@ import portisWallet from './wallets/portis';
 import liqualityWallet from './wallets/liquality';
 import ledgerWallet from './wallets/ledger';
 import trezorWallet from './wallets/trezor';
+import rskWallet from './wallets/rsk';
 import { arrowDown, arrowRight } from './arrows';
 
 export const images = {
@@ -18,6 +19,7 @@ export const images = {
   niftyWallet,
   portisWallet,
   liqualityWallet,
+  rskWallet,
 
   ledgerWallet,
   trezorWallet,

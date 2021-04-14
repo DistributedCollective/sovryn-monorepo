@@ -25,7 +25,7 @@ export function ProviderTypeSelector(props: Props) {
         <Item
           image={images.mobileWallets}
           title='Mobile'
-          onClick={() => props.onProvider(ProviderType.WALLET_CONNECT)}
+          onClick={() => props.onStep(ProviderDialogStep.WALLET_CONNECT_PROVIDERS)}
         />
         <Item
           image={images.browserWallets}

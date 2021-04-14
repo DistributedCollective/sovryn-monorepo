@@ -11,6 +11,7 @@ interface Props {
   disabled?: boolean;
   linkTitle?: string;
   linkHref?: string;
+  small?: boolean;
 }
 
 export function Item(props: Props) {
@@ -18,6 +19,7 @@ export function Item(props: Props) {
     <div
       className={cn(style.container, {
         [style.container_big]: props.linkHref && props.linkTitle,
+        [style.small]: props.small
       })}
     >
       <button

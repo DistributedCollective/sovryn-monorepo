@@ -9,6 +9,7 @@ import { BackButton } from '../../components/BackButton';
 import { HardwareWalletSelector } from '../../components/ProviderDialogSteps/HardwareWalletSelector';
 import { HardwarePathChooser } from '../../components/ProviderDialogSteps/HardwarePathChooser';
 import { HardwareAddressSelector } from '../../components/ProviderDialogSteps/HardwareAddressSelector';
+import { WalletConnectProviders } from '../../components/ProviderDialogSteps/WalletConnectProviders';
 
 interface HwOptions {
   chainId: number;
@@ -32,6 +33,7 @@ interface Props {
   ) => void;
   onUnlockDeterministicWallet: (address: string, index: number) => void;
   hwOptions: HwOptions;
+  uri?: string;
 }
 
 export function ProviderDialog(props: Props) {
@@ -87,10 +89,13 @@ export function ProviderDialog(props: Props) {
           chainCode={props.hwOptions.chainCode}
           publicKey={props.hwOptions.publicKey}
           onUnlock={props.onUnlockDeterministicWallet}
-        />
-      )}
+          />
+          )}
       {props.step === ProviderDialogStep.WALLET_CONNECT_PROVIDERS && (
-        <p>Working on it.</p>
+        <WalletConnectProviders
+          onWalletSelected={props.onProviderChosen} 
+          uri={props.uri}
+        />
       )}
     </Dialog>
   );
