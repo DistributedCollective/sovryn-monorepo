@@ -32,8 +32,8 @@ export class WalletConnectProvider implements WalletProviderInterface {
         log(accounts);
         resolve(
           new WalletConnectWallet(
-            toChecksumAddress(accounts[0], chainId),
-            chainId,
+            toChecksumAddress(accounts[0], this.provider.chainId),
+            this.provider.chainId,
             this.provider as any,
           ),
         );

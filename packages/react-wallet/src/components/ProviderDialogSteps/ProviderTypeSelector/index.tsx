@@ -22,11 +22,11 @@ export function ProviderTypeSelector(props: Props) {
           title='Hardware'
           onClick={() => props.onStep(ProviderDialogStep.HARDWARE_PROVIDERS)}
         />
-        {/* <Item */}
-        {/*  image={images.mobileWallets} */}
-        {/*  title='Mobile' */}
-        {/*  onClick={() => props.onProvider(ProviderType.WALLET_CONNECT)} */}
-        {/* /> */}
+        <Item
+          image={images.mobileWallets}
+          title='Mobile'
+          onClick={() => props.onProvider(ProviderType.WALLET_CONNECT)}
+        />
         <Item
           image={images.browserWallets}
           title='Browser'

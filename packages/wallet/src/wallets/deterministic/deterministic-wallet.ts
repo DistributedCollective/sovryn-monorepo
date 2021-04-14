@@ -64,7 +64,7 @@ export const getDeterministicWallets = (
     const address = publicToAddress(dkey.publicKey, true).toString('hex');
     wallets.push({
       index,
-      address: addHexPrefix(address),
+      address: addHexPrefix(address).toLowerCase(),
     });
   }
   return wallets;
