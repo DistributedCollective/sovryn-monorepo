@@ -8,9 +8,12 @@ const { log, error } = debug('wallet-connect-provider');
 
 export class WalletConnectProvider implements WalletProviderInterface {
   provider: WCProvider;
+  constructor() {
+    log('initialized WalletConnect');
+  }
 
   // @ts-ignore
-  unlock(chainId: number, onConnect: (w: FullWallet) => void): Promise<String> {
+  unlock(chainId: number, onConnect: (w: FullWallet) => void): Promise<string> {
     return new Promise(async (resolve, reject) => {
       try {
         log('connecting using WalletConnect');
@@ -21,9 +24,6 @@ export class WalletConnectProvider implements WalletProviderInterface {
             30: 'https://public-node.rsk.co',
             31: 'https://public-node.testnet.rsk.co',
           },
-          qrcodeModalOptions: {
-            mobileLinks: ['defiant', 'rwallet'],
-          },
           qrcode: false,
         });
         const wc = this.provider.wc;
@@ -31,7 +31,7 @@ export class WalletConnectProvider implements WalletProviderInterface {
 
         await wc.createSession(sessionRequestOpions);
 
-        console.log('WC URI: ', wc.uri);
+        log('WC URI: ', wc.uri);
 
         wc.on('connect', (err, payload) => {
           if (err) return err;
@@ -44,15 +44,12 @@ export class WalletConnectProvider implements WalletProviderInterface {
           );
 
           wc.on('disconnect', err => {
-            console.log('disconnect');
+            log('disconnect wallet connect');
             if (err) return;
             wallet.disconnect();
           });
 
           onConnect(wallet);
-          // setTimeout(() => {
-          //   localStorage.removeItem('walletconnect');
-          // }, 0);
         });
 
         resolve(wc.uri);

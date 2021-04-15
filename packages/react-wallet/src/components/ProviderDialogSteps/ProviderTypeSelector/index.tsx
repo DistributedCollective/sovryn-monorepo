@@ -1,5 +1,4 @@
 import * as React from 'react';
-import { ProviderType } from '@sovryn/wallet';
 import { ItemList } from '../../ItemList';
 import { Item } from '../../Item';
 import { images } from '../../../assets/images';
@@ -8,8 +7,6 @@ import { BottomLinkContainer } from '../../BottomLinkContainer';
 
 interface Props {
   onStep: (value: ProviderDialogStep) => void;
-  // todo remove after full wallet-connect integration
-  onProvider: (value: ProviderType) => void;
 }
 
 export function ProviderTypeSelector(props: Props) {
@@ -25,7 +22,9 @@ export function ProviderTypeSelector(props: Props) {
         <Item
           image={images.mobileWallets}
           title='Mobile'
-          onClick={() => props.onStep(ProviderDialogStep.WALLET_CONNECT_PROVIDERS)}
+          onClick={() =>
+            props.onStep(ProviderDialogStep.WALLET_CONNECT_PROVIDERS)
+          }
         />
         <Item
           image={images.browserWallets}

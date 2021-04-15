@@ -2,7 +2,7 @@ import * as React from 'react';
 import { ProviderType } from '@sovryn/wallet';
 import styled from 'styled-components/macro';
 import { ItemList } from '../../ItemList';
-import { Item } from '../../Item';
+import { Item, ItemLink } from '../../Item';
 import { images } from '../../../assets/images';
 import { BottomLinkContainer } from '../../BottomLinkContainer';
 
@@ -21,14 +21,15 @@ export function BrowserWalletSelector(props: Props) {
         want to use.
       </P>
       <ItemList>
-        <Item
-          image={images.niftyWallet}
-          title='Nifty'
-          onClick={() => props.onWalletSelected(ProviderType.WEB3)}
-          linkHref='https://chrome.google.com/webstore/detail/nifty-wallet/jbdaocneiiinmjbjlgalhcelgbejmnid'
-          linkTitle='Download'
-          disabled={wallet !== 'nifty'}
-        />
+        {wallet !== 'liquality' && (
+          <ItemLink
+            image={images.liqualityWallet}
+            title='Liquality'
+            href='https://liquality.io/atomic-swap-wallet.html'
+            linkHref='https://liquality.io/atomic-swap-wallet.html'
+            linkTitle='Download'
+          />
+        )}
         {wallet === 'liquality' && (
           <Item
             image={images.liqualityWallet}
@@ -38,23 +39,15 @@ export function BrowserWalletSelector(props: Props) {
             linkTitle='Download'
           />
         )}
-        {/* <Item */}
-        {/*  image={images.liqualityWallet} */}
-        {/*  title='Liquality' */}
-        {/*  onClick={() => props.onWalletSelected(ProviderType.WEB3)} */}
-        {/*  linkHref='https://liquality.io/atomic-swap-wallet.html' */}
-        {/*  linkTitle='Download' */}
-        {/*  disabled={wallet !== 'liquality'} */}
-        {/* /> */}
-        {/* {wallet === 'nifty' && ( */}
-        {/*  <Item */}
-        {/*    image={images.niftyWallet} */}
-        {/*    title='Nifty' */}
-        {/*    onClick={() => props.onWalletSelected(ProviderType.WEB3)} */}
-        {/*    linkHref='https://chrome.google.com/webstore/detail/nifty-wallet/jbdaocneiiinmjbjlgalhcelgbejmnid' */}
-        {/*    linkTitle='Download' */}
-        {/*  /> */}
-        {/* )} */}
+        {wallet === 'nifty' && (
+          <Item
+            image={images.niftyWallet}
+            title='Nifty'
+            onClick={() => props.onWalletSelected(ProviderType.WEB3)}
+            linkHref='https://chrome.google.com/webstore/detail/nifty-wallet/jbdaocneiiinmjbjlgalhcelgbejmnid'
+            linkTitle='Download'
+          />
+        )}
         {['metamask', 'unknown'].includes(wallet) && (
           <Item
             image={images.metamaskWallet}
