@@ -2,7 +2,7 @@ import * as React from 'react';
 import { ProviderType } from '@sovryn/wallet';
 import styled from 'styled-components/macro';
 import { ItemList } from '../../ItemList';
-import { Item } from '../../Item';
+import { Item, ItemLink } from '../../Item';
 import { images } from '../../../assets/images';
 import { BottomLinkContainer } from '../../BottomLinkContainer';
 
@@ -21,14 +21,24 @@ export function BrowserWalletSelector(props: Props) {
         want to use.
       </P>
       <ItemList>
-        <Item
-          image={images.liqualityWallet}
-          title='Liquality'
-          onClick={() => props.onWalletSelected(ProviderType.WEB3)}
-          linkHref='https://liquality.io/atomic-swap-wallet.html'
-          linkTitle='Download'
-          disabled={wallet !== 'liquality'}
-        />
+        {wallet !== 'liquality' && (
+          <ItemLink
+            image={images.liqualityWallet}
+            title='Liquality'
+            href='https://liquality.io/atomic-swap-wallet.html'
+            linkHref='https://liquality.io/atomic-swap-wallet.html'
+            linkTitle='Download'
+          />
+        )}
+        {wallet === 'liquality' && (
+          <Item
+            image={images.liqualityWallet}
+            title='Liquality'
+            onClick={() => props.onWalletSelected(ProviderType.WEB3)}
+            linkHref='https://liquality.io/atomic-swap-wallet.html'
+            linkTitle='Download'
+          />
+        )}
         {wallet === 'nifty' && (
           <Item
             image={images.niftyWallet}

@@ -24,14 +24,15 @@
   border: 1px solid #E9EAE9;
   border-radius: 20px;
   background: transparent;
-  color: #E9EAE9;
-  font-size: 14px;
+  color: #E9EAE9!important;
+  font-size: 14px!important;
   text-align: center;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   text-transform: none;
+  text-decoration: none!important;
 }
 
 .button:hover {
