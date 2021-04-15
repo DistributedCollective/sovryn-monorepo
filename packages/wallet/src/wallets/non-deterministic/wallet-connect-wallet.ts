@@ -1,11 +1,13 @@
 import { bufferToHex } from 'ethereumjs-util';
-import { RawTransactionData } from './../../interfaces/wallet.interface';
+import type WCProvider from '@walletconnect/web3-provider';
+import { RawTransactionData } from '../../interfaces/wallet.interface';
 import { ProviderType } from '../../constants';
 import { Web3Wallet } from './web3';
 
 export class WalletConnectWallet extends Web3Wallet {
-  //add constructor
-  //disconnect if the user is is out
+  // @ts-ignore
+  readonly provider: WCProvider;
+  // disconnect if the user is is out
   public getWalletType(): string {
     return ProviderType.WALLET_CONNECT;
   }
@@ -14,31 +16,28 @@ export class WalletConnectWallet extends Web3Wallet {
     if (!this.provider) {
       return Promise.resolve(true);
     }
-    return (this.provider as any)
-      .disconnect()
-      .then(() => true)
-      .catch(() => false);
+    return this.provider.wc.killSession().then(() => true);
   }
 
   public async sendTransaction(tx: RawTransactionData) {
     if (!this.provider) {
-      return Promise.reject('provider is not availble');
+      return Promise.reject(Error('provider is not availble'));
     }
-    //@ts-ignore
     return await this.provider.wc.sendTransaction(
+      // @ts-ignore
       this.prepareRawTransactionData(tx),
     );
   }
 
   public async signMessage(msg: string): Promise<string> {
     if (!this.provider) {
-      return Promise.reject('provider is not availble');
+      return Promise.reject(Error('provider is not availble'));
     }
     const msgHex = bufferToHex(Buffer.from(msg));
-    //@ts-ignore
+    // @ts-ignore
     return await this.provider.wc.signPersonalMessage([
-      this.address.toLowerCase(),
       msgHex,
+      this.address.toLowerCase(),
     ]);
   }
 }

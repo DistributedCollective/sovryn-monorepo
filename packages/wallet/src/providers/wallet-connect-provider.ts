@@ -3,13 +3,14 @@ import WCProvider from '@walletconnect/web3-provider';
 import debug from '../utils/debug';
 import { WalletConnectWallet } from '../wallets/non-deterministic';
 import { FullWallet, WalletProviderInterface } from '../interfaces';
+import type { WalletService } from '../wallet.service';
 
 const { log, error } = debug('wallet-connect-provider');
 
 export class WalletConnectProvider implements WalletProviderInterface {
   provider: WCProvider;
-  constructor() {
-    log('initialized WalletConnect');
+  constructor(private readonly service: WalletService) {
+    log('initialized WalletConnect', service);
   }
 
   // @ts-ignore
@@ -29,27 +30,32 @@ export class WalletConnectProvider implements WalletProviderInterface {
         const wc = this.provider.wc;
         const sessionRequestOpions = { chainId };
 
-        await wc.createSession(sessionRequestOpions);
+        if (!wc.connected) {
+          await wc.createSession(sessionRequestOpions);
+        }
 
         log('WC URI: ', wc.uri);
+        let wallet;
 
         wc.on('connect', (err, payload) => {
           if (err) return err;
           const { params } = payload;
           const { chainId, accounts } = params[0];
-          const wallet = new WalletConnectWallet(
+          wallet = new WalletConnectWallet(
             toChecksumAddress(accounts[0], chainId),
             chainId,
             this.provider as any,
           );
-
-          wc.on('disconnect', err => {
-            log('disconnect wallet connect');
-            if (err) return;
-            wallet.disconnect();
-          });
-
           onConnect(wallet);
+        });
+
+        wc.on('disconnect', () => {
+          log('disconnect event received', wallet);
+          this.service.disconnect();
+        });
+
+        wc.on('session_update', () => {
+          log('session updated.');
         });
 
         resolve(wc.uri);

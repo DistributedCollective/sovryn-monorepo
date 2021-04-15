@@ -33,6 +33,8 @@ interface Props {
   children: React.ReactNode;
 }
 
+const REMEMBER_SESSION_KEY = '__sovryn_wallet';
+
 export function WalletProvider(props: Props) {
   const walletRef = useRef(walletService);
   const wallet = walletRef.current;
@@ -93,8 +95,7 @@ export function WalletProvider(props: Props) {
     setState(prevState => ({ ...prevState, provider, loading: true }));
     context.state.loading.set(true);
     try {
-      if (web3Wallets.includes(provider)) {
-        console.log('web3Wallets');
+      if (provider === ProviderType.WALLET_CONNECT) {
         const s = await walletService.start(provider);
         // @ts-ignore
         const uri = await s.unlock(
@@ -103,7 +104,7 @@ export function WalletProvider(props: Props) {
             await setConnectedWallet(w);
           },
         );
-        //@ts-ignore
+        // @ts-ignore
         setState(prevState => ({
           ...prevState,
           uri,
@@ -111,8 +112,16 @@ export function WalletProvider(props: Props) {
         return;
       }
 
+      if (web3Wallets.includes(provider)) {
+        const s = await walletService.start(provider);
+        // @ts-ignore
+        const w = await s.unlock(props.options?.chainId || props.chainId || 30);
+        // @ts-ignore
+        await setConnectedWallet(w);
+        return;
+      }
+
       if (hardwareWallets.includes(provider)) {
-        console.log('hardwareWallets');
         setState(prevState => ({
           ...prevState,
           step: ProviderDialogStep.HARDWARE_PATH_SELECTOR,
@@ -120,7 +129,7 @@ export function WalletProvider(props: Props) {
         return;
       }
 
-      console.log('prevState');
+      // If there is no wallet, reset state.
       setState(prevState => ({
         ...prevState,
         provider: (null as unknown) as ProviderType,
@@ -181,9 +190,9 @@ export function WalletProvider(props: Props) {
       context.state.address.set(value.getAddressString());
       context.state.connected.set(true);
       context.state.loading.set(false);
-      if ((props.options?.remember || props.remember) && value.getWalletType() !== ProviderType.WALLET_CONNECT) {
+      if (props.options?.remember || props.remember) {
         session.setItem(
-          '__sovryn_wallet',
+          REMEMBER_SESSION_KEY,
           base64Encode(
             JSON.stringify({
               provider: value.getWalletType(),
@@ -209,7 +218,7 @@ export function WalletProvider(props: Props) {
         provider: null as any,
         loading: false,
       }));
-      session.removeItem('__sovryn_wallet');
+      session.removeItem(REMEMBER_SESSION_KEY);
     });
     return () => {};
   }, []);
@@ -249,7 +258,7 @@ export function WalletProvider(props: Props) {
 
   useEffect(() => {
     try {
-      const data = session.getItem('__sovryn_wallet');
+      const data = session.getItem(REMEMBER_SESSION_KEY);
       if (data) {
         const wallet = base64Decode(data) as any;
         const parsed = JSON.parse(wallet) as {
@@ -257,8 +266,16 @@ export function WalletProvider(props: Props) {
           chainId: number;
           data: any;
         };
+
+        if (parsed.provider === ProviderType.WALLET_CONNECT) {
+          session.removeItem(REMEMBER_SESSION_KEY);
+          session.removeItem('walletconnect');
+          return;
+        }
+
         if (web3Wallets.includes(parsed.provider)) {
           onProviderChosen(parsed.provider);
+          return;
         }
 
         if (hardwareWallets.includes(parsed.provider)) {
@@ -270,10 +287,12 @@ export function WalletProvider(props: Props) {
             parsed.chainId,
           );
         }
+
+        session.removeItem(REMEMBER_SESSION_KEY);
       }
     } catch (e) {
       console.error(e);
-      session.removeItem('__sovryn_wallet');
+      session.removeItem(REMEMBER_SESSION_KEY);
     }
   }, []);
 

@@ -58,7 +58,7 @@ export function WalletConnectProviders(props: Props) {
               value={props.uri || ''}
               size={300}
               renderAs='svg'
-              includeMargin={true}
+              includeMargin
             />
           )}
         </QRWrapper>

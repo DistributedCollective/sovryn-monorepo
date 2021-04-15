@@ -63,10 +63,7 @@ export function ProviderDialog(props: Props) {
         />
       )}
       {props.step === ProviderDialogStep.PROVIDERS && (
-        <ProviderTypeSelector
-          onStep={props.onStep}
-          onProvider={props.onProviderChosen}
-        />
+        <ProviderTypeSelector onStep={props.onStep} />
       )}
       {props.step === ProviderDialogStep.BROWSER_PROVIDERS && (
         <BrowserWalletSelector onWalletSelected={props.onProviderChosen} />
@@ -89,11 +86,11 @@ export function ProviderDialog(props: Props) {
           chainCode={props.hwOptions.chainCode}
           publicKey={props.hwOptions.publicKey}
           onUnlock={props.onUnlockDeterministicWallet}
-          />
-          )}
+        />
+      )}
       {props.step === ProviderDialogStep.WALLET_CONNECT_PROVIDERS && (
         <WalletConnectProviders
-          onWalletSelected={props.onProviderChosen} 
+          onWalletSelected={props.onProviderChosen}
           uri={props.uri}
         />
       )}
