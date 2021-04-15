@@ -5,6 +5,7 @@
     "lerna:publish": "lerna publish --contents dist",
     "start:wallet": "cd packages/wallet && yarn start",
     "start:react-wallet": "cd packages/react-wallet && yarn start",
+    "start:react-wallet:example": "cd packages/react-wallet/example && yarn start",
     "changelog": "lerna-changelog"
   },
   "devDependencies": {

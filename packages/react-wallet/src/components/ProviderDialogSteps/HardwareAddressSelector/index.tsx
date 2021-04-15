@@ -173,6 +173,7 @@ const WalletItem = styled.button`
     overflow: hidden;
     text-overflow: ellipsis;
     text-align: left;
+    text-transform: none;
   }
 `;
 
