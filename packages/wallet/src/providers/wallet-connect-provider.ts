@@ -1,6 +1,6 @@
 import { toChecksumAddress } from 'ethereumjs-util';
 import WCProvider from '@walletconnect/web3-provider';
-import debug from '../utils/debug';
+import { debug } from '@sovryn/common';
 import { WalletConnectWallet } from '../wallets/non-deterministic';
 import { FullWallet, WalletProviderInterface } from '../interfaces';
 

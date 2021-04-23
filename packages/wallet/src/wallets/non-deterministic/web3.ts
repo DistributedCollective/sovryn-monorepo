@@ -2,7 +2,7 @@ import Web3 from 'web3';
 import { bufferToHex } from 'ethereumjs-util';
 import { TransactionConfig, provider } from 'web3-core';
 import { FullWallet } from '../../interfaces';
-import debug from '../../utils/debug';
+import { debug } from '@sovryn/common';
 import { RawTransactionData } from '../../interfaces/wallet.interface';
 import { ProviderType } from '../../constants';
 

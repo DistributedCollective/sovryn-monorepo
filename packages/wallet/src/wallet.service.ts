@@ -4,7 +4,7 @@ import {
   walletProviderMap,
   web3Wallets,
 } from './dictionaries';
-import debug from './utils/debug';
+import { debug } from '@sovryn/common';
 import { ProviderType } from './constants';
 import { EventBag } from './utils';
 import type { RawTransactionData } from './interfaces/wallet.interface';

@@ -5,7 +5,7 @@ import TransportU2F from '@ledgerhq/hw-transport-u2f';
 import TransportWebUSB from '@ledgerhq/hw-transport-webusb';
 // import { addHexPrefix, stripHexPrefix } from 'ethereumjs-util';
 // import { serializeTransaction, Signature, UnsignedTransaction } from 'ethers/utils';
-import debug from '../utils/debug';
+import { debug } from '@sovryn/common';
 import { ChainCodeResponse, LedgerWallet } from '../wallets';
 import { WalletProviderInterface } from '../interfaces';
 

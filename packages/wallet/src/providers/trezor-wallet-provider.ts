@@ -1,5 +1,5 @@
 import Trezor from 'trezor-connect';
-import debug from '../utils/debug';
+import { debug } from '@sovryn/common';
 import { ChainCodeResponse, TrezorWallet } from '../wallets';
 import { WalletProviderInterface } from '../interfaces';
 
