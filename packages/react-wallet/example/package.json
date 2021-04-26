@@ -11,7 +11,8 @@
   },
   "dependencies": {
     "@blueprintjs/core": "^3.42.0",
-    "@sovryn/react-wallet": "link:..",
+    "@sovryn/react-wallet": "link:../dist",
+    "@sovryn/wallet": "link:../../wallet/dist",
     "@testing-library/jest-dom": "link:../node_modules/@testing-library/jest-dom",
     "@testing-library/react": "link:../node_modules/@testing-library/react",
     "@testing-library/user-event": "link:../node_modules/@testing-library/user-event",

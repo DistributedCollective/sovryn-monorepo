@@ -1,6 +1,7 @@
 import * as React from 'react';
 import cn from 'classnames';
 import style from './index.module.css';
+import { isMobile } from '../../services/helpers';
 
 interface Props {
   image: string;
@@ -11,6 +12,7 @@ interface Props {
   disabled?: boolean;
   linkTitle?: string;
   linkHref?: string;
+  small?: boolean;
   href?: string;
 }
 
@@ -19,6 +21,7 @@ export function Item(props: Props) {
     <div
       className={cn(style.container, {
         [style.container_big]: props.linkHref && props.linkTitle,
+        [style.small]: props.small,
       })}
     >
       <button
@@ -55,6 +58,7 @@ export function ItemLink(props: Props) {
     <div
       className={cn(style.container, {
         [style.container_big]: props.linkHref && props.linkTitle,
+        [style.small]: props.small,
       })}
     >
       <a
@@ -83,6 +87,31 @@ export function ItemLink(props: Props) {
           {props.linkTitle}
         </a>
       )}
+    </div>
+  );
+}
+
+interface WalletItemProps extends Props {
+  ios?: string;
+  android?: string;
+  universal?: string;
+}
+
+export function WalletItem(props: WalletItemProps) {
+  const walletItemHref = () => {
+    if (isMobile.iOS()) return props.ios || props.universal;
+    if (isMobile.Android()) return props.android || props.universal;
+    return props.universal;
+  };
+
+  return (
+    <div>
+      <ItemLink
+        image={props.image}
+        title={props.title}
+        small={props.small}
+        href={walletItemHref()}
+      />
     </div>
   );
 }
