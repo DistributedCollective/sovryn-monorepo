@@ -71,6 +71,7 @@ const Container = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-around;
+  flex-wrap: wrap;
   margin-bottom: 35px;
 `;
 const LeftContainer = styled.div`
@@ -80,6 +81,7 @@ const LeftContainer = styled.div`
 const QRWrapper = styled.div`
   border-radius: 20px;
   overflow: hidden;
+  margin: 10px;
 `;
 const WalletButtons = styled.div`
   display: flex;

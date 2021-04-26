@@ -98,34 +98,21 @@ interface WalletItemProps extends Props {
 }
 
 export function WalletItem(props: WalletItemProps) {
+  const walletItemHref = () => {
+    if (!isMobile.iOS() && !isMobile.Android()) return props.universal;
+    if (isMobile.iOS()) return props.ios || props.universal;
+    if (isMobile.Android()) return props.android || props.universal;
+    return '';
+  };
+
   return (
     <div>
-      {!isMobile.iOS() && !isMobile.Android() && (
-        <ItemLink
-          image={props.image}
-          title={props.title}
-          small={props.small}
-          href={props.universal}
-        />
-      )}
-
-      {isMobile.iOS() && (
-        <ItemLink
-          image={props.image}
-          title={props.title}
-          small={props.small}
-          href={props.ios || props.universal}
-        />
-      )}
-
-      {isMobile.Android() && (
-        <ItemLink
-          image={props.image}
-          title={props.title}
-          small={props.small}
-          href={props.android || props.universal}
-        />
-      )}
+      <ItemLink
+        image={props.image}
+        title={props.title}
+        small={props.small}
+        href={walletItemHref()}
+      />
     </div>
   );
 }
