@@ -5,7 +5,7 @@ import { debug } from '@sovryn/common';
 import { PortisWallet } from '../wallets/non-deterministic';
 import { FullWallet, WalletProviderInterface } from '../interfaces';
 
-const { log, error } = debug('portis-wallet-provider');
+const { log, error } = debug('@sovryn/wallet:portis-wallet-provider');
 
 const chainIdToNetwork = {
   1: 'mainnet',

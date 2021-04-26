@@ -3,7 +3,7 @@ import { debug } from '@sovryn/common';
 import { ChainCodeResponse, TrezorWallet } from '../wallets';
 import { WalletProviderInterface } from '../interfaces';
 
-const { log, error } = debug('trezor-provider');
+const { log, error } = debug('@sovryn/wallet:trezor-provider');
 
 export function makeTrezorManifest() {
   Trezor.manifest({

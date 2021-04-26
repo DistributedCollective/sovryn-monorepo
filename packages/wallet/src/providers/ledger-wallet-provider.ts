@@ -9,7 +9,7 @@ import { debug } from '@sovryn/common';
 import { ChainCodeResponse, LedgerWallet } from '../wallets';
 import { WalletProviderInterface } from '../interfaces';
 
-const { log, error } = debug('ledger-provider');
+const { log, error } = debug('@sovryn/wallet:ledger-provider');
 
 function translateRaw(key: string) {
   return key;

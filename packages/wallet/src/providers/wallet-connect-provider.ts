@@ -4,7 +4,7 @@ import { debug } from '@sovryn/common';
 import { WalletConnectWallet } from '../wallets/non-deterministic';
 import { FullWallet, WalletProviderInterface } from '../interfaces';
 
-const { log, error } = debug('wallet-connect-provider');
+const { log, error } = debug('@sovryn/wallet:wallet-connect-provider');
 
 export class WalletConnectProvider implements WalletProviderInterface {
   provider: WCProvider;

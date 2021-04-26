@@ -6,7 +6,7 @@ import { debug } from '@sovryn/common';
 import { RawTransactionData } from '../../interfaces/wallet.interface';
 import { ProviderType } from '../../constants';
 
-const { log, error } = debug('web3-wallet');
+const { log, error } = debug('@sovryn/wallet:web3-wallet');
 
 export class Web3Wallet implements FullWallet {
   public chainId: number;

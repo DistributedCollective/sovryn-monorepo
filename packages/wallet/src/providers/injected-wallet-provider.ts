@@ -4,7 +4,7 @@ import { debug } from '@sovryn/common';
 import { Web3Wallet } from '../wallets/non-deterministic';
 import { WalletProviderInterface, FullWallet } from '../interfaces';
 
-const { log, error } = debug('injected-wallet');
+const { log, error } = debug('@sovryn/wallet:injected-wallet');
 
 export class InjectedWalletProvider implements WalletProviderInterface {
   provider: any;

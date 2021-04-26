@@ -9,7 +9,7 @@ import { ProviderType } from './constants';
 import { EventBag } from './utils';
 import type { RawTransactionData } from './interfaces/wallet.interface';
 
-const { log, error } = debug('wallet.service');
+const { log, error } = debug('@sovryn/wallet:wallet.service');
 
 type WalletServiceEvents =
   | 'connected'
