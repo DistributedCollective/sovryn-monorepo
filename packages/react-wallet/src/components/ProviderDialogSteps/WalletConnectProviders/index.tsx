@@ -36,7 +36,7 @@ export function WalletConnectProviders(props: Props) {
               small={true}
               ios={`defiantapp://wc?uri=${props.uri}`}
               android={props.uri}
-              universal='https://defiantapp.io/'
+              universal='https://defiantapp.tech/'
             />
           </WalletButtons>
         </LeftContainer>
