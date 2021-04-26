@@ -3,17 +3,18 @@ import WCProvider from '@walletconnect/web3-provider';
 import { debug } from '@sovryn/common';
 import { WalletConnectWallet } from '../wallets/non-deterministic';
 import { FullWallet, WalletProviderInterface } from '../interfaces';
+import type { WalletService } from '../wallet.service';
 
 const { log, error } = debug('@sovryn/wallet:wallet-connect-provider');
 
 export class WalletConnectProvider implements WalletProviderInterface {
   provider: WCProvider;
-  constructor() {
-    log('initialized WalletConnect');
+  constructor(private readonly service: WalletService) {
+    log('initialized WalletConnect', service);
   }
 
   // @ts-ignore
-  unlock(chainId: number): Promise<FullWallet> {
+  unlock(chainId: number, onConnect: (w: FullWallet) => void): Promise<string> {
     return new Promise(async (resolve, reject) => {
       try {
         log('connecting using WalletConnect');
@@ -24,19 +25,40 @@ export class WalletConnectProvider implements WalletProviderInterface {
             30: 'https://public-node.rsk.co',
             31: 'https://public-node.testnet.rsk.co',
           },
-          qrcodeModalOptions: {
-            mobileLinks: ['defiant', 'rwallet'],
-          },
+          qrcode: false,
         });
-        const accounts = await this.provider.enable();
-        log(accounts);
-        resolve(
-          new WalletConnectWallet(
-            toChecksumAddress(accounts[0], this.provider.chainId),
-            this.provider.chainId,
+        const wc = this.provider.wc;
+        const sessionRequestOpions = { chainId };
+
+        if (!wc.connected) {
+          await wc.createSession(sessionRequestOpions);
+        }
+
+        log('WC URI: ', wc.uri);
+        let wallet;
+
+        wc.on('connect', (err, payload) => {
+          if (err) return err;
+          const { params } = payload;
+          const { chainId, accounts } = params[0];
+          wallet = new WalletConnectWallet(
+            toChecksumAddress(accounts[0], chainId),
+            chainId,
             this.provider as any,
-          ),
-        );
+          );
+          onConnect(wallet);
+        });
+
+        wc.on('disconnect', () => {
+          log('disconnect event received', wallet);
+          this.service.disconnect();
+        });
+
+        wc.on('session_update', () => {
+          log('session updated.');
+        });
+
+        resolve(wc.uri);
       } catch (e) {
         error('WalletConnect login errored', e);
         reject(e);

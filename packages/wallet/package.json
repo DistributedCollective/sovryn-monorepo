@@ -1,6 +1,6 @@
 {
   "name": "@sovryn/wallet",
-  "version": "1.0.12",
+  "version": "1.0.16-alpha.0",
   "description": "Library for interacting with RSK and ETH wallets.",
   "author": "Rytis Grincevicius",
   "license": "MIT",
@@ -62,5 +62,5 @@
     "prettier": "^2.0.4",
     "typescript": "^3.7.5"
   },
-  "gitHead": "ae86d4184859d8b2ab8bc2830f62e75721400ccc"
+  "gitHead": "72b7095c24d501379e25a4938c756808d78b0e5a"
 }

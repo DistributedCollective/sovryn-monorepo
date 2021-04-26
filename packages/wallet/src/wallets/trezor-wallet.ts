@@ -32,7 +32,7 @@ export class TrezorWallet extends HardwareWallet {
       data: raw.data ? toHex(raw.data) : '0x',
     };
 
-    console.log('data to send', hexed);
+    log('data to send', hexed);
 
     const common = commonGenerator(raw);
 
@@ -89,8 +89,6 @@ export class TrezorWallet extends HardwareWallet {
         common,
       },
     );
-
-    console.log({ signedTx }, signedTx.serialize().toString('hex'));
 
     const signedChainId = calculateChainIdFromV(signedTx.v as any);
 
