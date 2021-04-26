@@ -1932,11 +1932,6 @@
   resolved "https://registry.yarnpkg.com/@metamask/safe-event-emitter/-/safe-event-emitter-2.0.0.tgz#af577b477c683fad17c619a78208cede06f9605c"
   integrity sha512-/kSXhY692qiV1MXu6EeOZvg5nECLclxNXcKCxJ3cXQgYuRymRHpdx/t7JXfsK+JLjwA1e1c1/SBrlQYpusC29Q==
 
-"@metamask/safe-event-emitter@^2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@metamask/safe-event-emitter/-/safe-event-emitter-2.0.0.tgz#af577b477c683fad17c619a78208cede06f9605c"
-  integrity sha512-/kSXhY692qiV1MXu6EeOZvg5nECLclxNXcKCxJ3cXQgYuRymRHpdx/t7JXfsK+JLjwA1e1c1/SBrlQYpusC29Q==
-
 "@mrmlnc/readdir-enhanced@^2.2.1":
   version "2.2.1"
   resolved "https://registry.yarnpkg.com/@mrmlnc/readdir-enhanced/-/readdir-enhanced-2.2.1.tgz#524af240d1a360527b730475ecfa1344aa540dde"
@@ -2035,10 +2030,10 @@
   resolved "https://registry.yarnpkg.com/@sindresorhus/is/-/is-0.14.0.tgz#9fb3a3cf3132328151f353de4632e01e52102bea"
   integrity sha512-9NET910DNaIPngYnLLPeg+Ogzqsi9uM4mSboU5y6p8S5DzMTVEsJZrawi+BoDNUVBa2DhJqQYUFvMDfgU062LQ==
 
-"@sovryn/wallet@^1.0.12":
-  version "1.0.12"
-  resolved "https://registry.yarnpkg.com/@sovryn/wallet/-/wallet-1.0.12.tgz#bc5f3c0edb823a928b4a50302f6277d726f7d23e"
-  integrity sha512-OuDAuhLTc0WZp/od8906iJ41MvNL2w7z7c3nXzy8fLLpobYj8AoouLwAQGa2mY6wxdslcyYdK8ggP7A6xqfWFA==
+"@sovryn/wallet@^1.0.16-alpha.0":
+  version "1.0.16-alpha.0"
+  resolved "https://registry.yarnpkg.com/@sovryn/wallet/-/wallet-1.0.16-alpha.0.tgz#218545ca4a897be334166cc943286ea45986b20f"
+  integrity sha512-WkDe6CSrWowBsgyo3FY1JUcbhOFT4YtB0CYvBKa+/GXGWoaJLCTGRE6am+ZUZcY9ePMvZGMgh5mo8jW5vwlDxA==
   dependencies:
     "@ledgerhq/hw-app-eth" "^5.46.0"
     "@ledgerhq/hw-transport" "^5.46.0"
