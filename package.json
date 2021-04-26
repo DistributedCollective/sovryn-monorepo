@@ -1,8 +1,9 @@
 {
   "name": "sovryn-monorepo",
-  "private": false,
+  "private": true,
   "scripts": {
-    "lerna:publish": "lerna publish --contents dist",
+    "lerna:bootstrap": "npx lerna bootstrap --contents dist --hoist --use-workspaces",
+    "lerna:publish": "npx lerna publish --contents dist",
     "start:wallet": "cd packages/wallet && yarn start",
     "start:react-wallet": "cd packages/react-wallet && yarn start",
     "start:react-wallet:example": "cd packages/react-wallet/example && yarn start",
@@ -25,6 +26,9 @@
       "prettier --write"
     ]
   },
+  "workspaces": [
+    "packages/*"
+  ],
   "changelog": {
     "repo": "DistributedCollective/sovryn-monorepo",
     "labels": {
@@ -35,5 +39,6 @@
       "internal": ":house: Internal"
     },
     "cacheDir": ".changelog"
-  }
+  },
+  "version": "0.0.0"
 }
