@@ -10,19 +10,14 @@ Monorepo for design system, react components and blockchain wallet implementatio
 
 ## Development
 
+Note: Please use yarn package manager for development.
+
 ```bash
-lerna bootstrap
+yarn lerna:bootstrap
 ```
 
-If it fails, run these:
+Try again if it fails, as there multiple packages that depend on each other one of them may be not build before another tries to use it.
 
-```
-cd packages/wallet && yarn build
-
-cd packages/wallet/dist && yarn link
-
-cd packages/react-wallet && yarn link @sovryn/wallet
-```
 
 If you want to use some of packages in another project when updating package, for example you are working with wallet package - then run these:
 

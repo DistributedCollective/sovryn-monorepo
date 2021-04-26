@@ -1,11 +1,11 @@
 import { toChecksumAddress } from 'ethereumjs-util';
 import Portis from '@portis/web3';
 import Web3 from 'web3';
-import debug from '../utils/debug';
+import { debug } from '@sovryn/common';
 import { PortisWallet } from '../wallets/non-deterministic';
 import { FullWallet, WalletProviderInterface } from '../interfaces';
 
-const { log, error } = debug('portis-wallet-provider');
+const { log, error } = debug('@sovryn/wallet:portis-wallet-provider');
 
 const chainIdToNetwork = {
   1: 'mainnet',

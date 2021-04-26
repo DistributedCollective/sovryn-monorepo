@@ -11,9 +11,9 @@ import {
 } from '../utils';
 import { RawTransactionData } from '../interfaces/wallet.interface';
 import { ProviderType } from '../constants';
-import debug from '../utils/debug';
+import { debug } from '@sovryn/common';
 
-const { log, error } = debug('trezor-wallet');
+const { log, error } = debug('@sovryn/wallet:trezor-wallet');
 
 export class TrezorWallet extends HardwareWallet {
   constructor(address: string, dPath: string, index: number, chainId?: number) {
