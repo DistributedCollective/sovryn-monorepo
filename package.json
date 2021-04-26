@@ -1,10 +1,13 @@
 {
   "name": "sovryn-monorepo",
-  "private": false,
+  "private": true,
   "scripts": {
-    "lerna:publish": "lerna publish --contents dist",
-    "start:wallet": "cd packages/wallet && yarn start",
-    "start:react-wallet": "cd packages/react-wallet && yarn start",
+    "lerna:bootstrap": "yarn build:common && yarn build:wallet && yarn build:react-wallet && npx lerna bootstrap --contents dist",
+    "lerna:publish": "npx lerna publish --contents dist",
+    "build:common": "cd packages/common && yarn && yarn build && cd dist && yarn link",
+    "build:wallet": "cd packages/wallet && yarn link @sovryn/common && yarn && yarn build && cd dist && yarn link",
+    "build:react-wallet": "yarn prepare-example && cd packages/react-wallet && yarn && yarn link @blueprintjs/core && yarn build",
+    "prepare-example": "cd packages/react-wallet/example && yarn && cd node_modules/@blueprintjs/core && yarn link",
     "changelog": "lerna-changelog"
   },
   "devDependencies": {
@@ -34,5 +37,6 @@
       "internal": ":house: Internal"
     },
     "cacheDir": ".changelog"
-  }
+  },
+  "version": "0.0.0"
 }

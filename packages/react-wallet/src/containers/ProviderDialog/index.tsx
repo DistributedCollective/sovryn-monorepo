@@ -53,6 +53,7 @@ export function ProviderDialog(props: Props) {
       {[
         ProviderDialogStep.BROWSER_PROVIDERS,
         ProviderDialogStep.HARDWARE_PROVIDERS,
+        ProviderDialogStep.HARDWARE_PATH_SELECTOR,
         ProviderDialogStep.WALLET_CONNECT_PROVIDERS,
       ].includes(props.step) && (
         <BackButton

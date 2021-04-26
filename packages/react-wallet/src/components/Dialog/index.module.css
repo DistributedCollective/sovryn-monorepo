@@ -1,5 +1,6 @@
 .dialog {
-  width: 100%;
+  all: initial;
+  width: 100%!important;
   min-height: 100vh;
   max-width: 1000px;
   background-color: #000000;
@@ -9,8 +10,12 @@
   position: relative;
   display: block;
   padding: 20px;
-  margin: 0;
-  border-radius: 0;
+  font-family: 'Montserrat', sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  margin: 0!important;
+  border-radius: 0!important;
+  border: 0!important;
 }
 
 .content {
@@ -32,6 +37,7 @@
   border: 2px solid #707070;
   border-radius: 21px;
   cursor: pointer;
+  padding: 0;
 }
 
 .close:hover {
@@ -41,8 +47,8 @@
 @media screen and (min-width: 768px) {
   .dialog {
     padding: 30px 30px 30px;
-    margin: 15px;
-    border-radius: 20px;
+    margin: 15px!important;
+    border-radius: 20px!important;
     min-height: 0;
   }
 
@@ -61,7 +67,7 @@
 @media screen and (min-width: 1280px) {
   .dialog {
     padding: 30px 70px 70px;
-    margin: 40px;
+    margin: 40px!important;
   }
 
   .dialog_normal {
@@ -91,6 +97,9 @@
   font-size: 23px;
   font-weight: bold;
   text-align: center;
+  text-transform: none;
+  margin-bottom: 35px;
+  margin-top: 15px;
 }
 
 .dialog, .dialog * {
@@ -100,8 +109,11 @@
 .dialog a {
   color: #FEC004;
   text-decoration: underline;
+  font-size: 12px;
+  font-weight: 500;
 }
 
 .dialog a:hover {
   text-decoration: none;
+  color: #FEC004;
 }

@@ -32,6 +32,7 @@ const ButtonItem = styled.button.attrs(() => ({
   font-weight: 900;
   text-transform: uppercase;
   cursor: pointer;
+  padding: 10px 15px;
   &:hover {
     background: rgba(254, 192, 4, 0.75);
   }

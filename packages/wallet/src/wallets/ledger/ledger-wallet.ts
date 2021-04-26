@@ -8,12 +8,12 @@ import {
   calculateChainIdFromV,
   commonGenerator,
   getBufferFromHex,
-  debug,
 } from '../../utils';
+import { debug } from '@sovryn/common';
 import { RawTransactionData } from '../../interfaces/wallet.interface';
 import { ProviderType } from '../../constants';
 
-const { error } = debug('ledger-wallet');
+const { error } = debug('@sovryn/wallet:ledger-wallet');
 
 export class LedgerWallet extends HardwareWallet {
   public async signRawTransaction(raw: RawTransactionData): Promise<string> {

@@ -1,7 +1,8 @@
 import * as React from 'react';
 import { ProviderType } from '@sovryn/wallet';
+import styled from 'styled-components/macro';
 import { ItemList } from '../../ItemList';
-import { Item } from '../../Item';
+import { Item, ItemLink } from '../../Item';
 import { images } from '../../../assets/images';
 import { BottomLinkContainer } from '../../BottomLinkContainer';
 
@@ -15,7 +16,20 @@ export function BrowserWalletSelector(props: Props) {
   return (
     <div>
       <h1>Select browser wallet type:</h1>
+      <P>
+        Make sure to disable other wallet browser extensions than the one you
+        want to use.
+      </P>
       <ItemList>
+        {wallet !== 'liquality' && (
+          <ItemLink
+            image={images.liqualityWallet}
+            title='Liquality'
+            href='https://liquality.io/atomic-swap-wallet.html'
+            linkHref='https://liquality.io/atomic-swap-wallet.html'
+            linkTitle='Download'
+          />
+        )}
         {wallet === 'liquality' && (
           <Item
             image={images.liqualityWallet}
@@ -25,21 +39,21 @@ export function BrowserWalletSelector(props: Props) {
             linkTitle='Download'
           />
         )}
-        {['metamask', 'unknown'].includes(wallet) && (
-          <Item
-            image={images.metamaskWallet}
-            title='MetaMask'
-            onClick={() => props.onWalletSelected(ProviderType.WEB3)}
-            linkHref='https://metamask.io/download.html'
-            linkTitle='Download'
-          />
-        )}
         {wallet === 'nifty' && (
           <Item
             image={images.niftyWallet}
             title='Nifty'
             onClick={() => props.onWalletSelected(ProviderType.WEB3)}
             linkHref='https://chrome.google.com/webstore/detail/nifty-wallet/jbdaocneiiinmjbjlgalhcelgbejmnid'
+            linkTitle='Download'
+          />
+        )}
+        {['metamask', 'unknown'].includes(wallet) && (
+          <Item
+            image={images.metamaskWallet}
+            title='MetaMask'
+            onClick={() => props.onWalletSelected(ProviderType.WEB3)}
+            linkHref='https://metamask.io/download.html'
             linkTitle='Download'
           />
         )}
@@ -69,8 +83,14 @@ function detectInjectableWallet() {
   if (ethereum) {
     ethereum.autoRefreshOnNetworkChange = false;
     if (ethereum.isLiquality) return 'liquality';
-    if (ethereum.isNifty) return 'nifty';
+    if (ethereum.isNiftyWallet) return 'nifty';
     if (ethereum.isMetaMask) return 'metamask';
+    return 'unknown';
   }
-  return 'unknown';
+  return 'none';
 }
+
+const P = styled.p`
+  margin: 0 auto;
+  text-align: center;
+`;

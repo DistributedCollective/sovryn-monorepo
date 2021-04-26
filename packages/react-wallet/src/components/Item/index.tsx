@@ -5,12 +5,13 @@ import style from './index.module.css';
 interface Props {
   image: string;
   title: string;
-  onClick: () => void;
+  onClick?: () => void;
   active?: boolean;
   faded?: boolean;
   disabled?: boolean;
   linkTitle?: string;
   linkHref?: string;
+  href?: string;
 }
 
 export function Item(props: Props) {
@@ -35,6 +36,43 @@ export function Item(props: Props) {
         />
         <div className={style.title}>{props.title}</div>
       </button>
+      {props.linkHref && props.linkTitle && (
+        <a
+          href={props.linkHref}
+          className={style.link}
+          target='_blank'
+          rel='noopener noreferrer'
+        >
+          {props.linkTitle}
+        </a>
+      )}
+    </div>
+  );
+}
+
+export function ItemLink(props: Props) {
+  return (
+    <div
+      className={cn(style.container, {
+        [style.container_big]: props.linkHref && props.linkTitle,
+      })}
+    >
+      <a
+        className={cn(style.button, {
+          [style.button_active]: props.active,
+          [style.button_faded]: props.faded,
+        })}
+        href={props.href}
+        target='_blank'
+        rel='noopener noreferrer'
+        onClick={props.onClick}
+      >
+        <div
+          className={style.image}
+          style={{ backgroundImage: `url(${props.image})` }}
+        />
+        <div className={style.title}>{props.title}</div>
+      </a>
       {props.linkHref && props.linkTitle && (
         <a
           href={props.linkHref}
