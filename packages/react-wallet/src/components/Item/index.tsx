@@ -1,6 +1,7 @@
 import * as React from 'react';
 import cn from 'classnames';
 import style from './index.module.css';
+import { isMobile } from '../../services/helpers';
 
 interface Props {
   image: string;
@@ -20,7 +21,7 @@ export function Item(props: Props) {
     <div
       className={cn(style.container, {
         [style.container_big]: props.linkHref && props.linkTitle,
-        [style.small]: props.small
+        [style.small]: props.small,
       })}
     >
       <button
@@ -57,6 +58,7 @@ export function ItemLink(props: Props) {
     <div
       className={cn(style.container, {
         [style.container_big]: props.linkHref && props.linkTitle,
+        [style.small]: props.small,
       })}
     >
       <a
@@ -84,6 +86,45 @@ export function ItemLink(props: Props) {
         >
           {props.linkTitle}
         </a>
+      )}
+    </div>
+  );
+}
+
+interface WalletItemProps extends Props {
+  ios?: string;
+  android?: string;
+  universal?: string;
+}
+
+export function WalletItem(props: WalletItemProps) {
+  return (
+    <div>
+      {!isMobile.iOS() && !isMobile.Android() && (
+        <ItemLink
+          image={props.image}
+          title={props.title}
+          small={props.small}
+          href={props.universal}
+        />
+      )}
+
+      {isMobile.iOS() && (
+        <ItemLink
+          image={props.image}
+          title={props.title}
+          small={props.small}
+          href={props.ios || props.universal}
+        />
+      )}
+
+      {isMobile.Android() && (
+        <ItemLink
+          image={props.image}
+          title={props.title}
+          small={props.small}
+          href={props.android || props.universal}
+        />
       )}
     </div>
   );

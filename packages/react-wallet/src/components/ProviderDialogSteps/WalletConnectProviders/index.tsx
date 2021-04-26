@@ -1,11 +1,10 @@
 import React, { useEffect } from 'react';
 import { ProviderType } from '@sovryn/wallet';
 import styled from 'styled-components/macro';
-import { Item } from '../../Item';
+import { WalletItem } from '../../Item';
 import { images } from '../../../assets/images';
 import { BottomLinkContainer } from '../../BottomLinkContainer';
 import QRCode from 'qrcode.react';
-import { isMobile } from '../../../services/helpers';
 
 interface Props {
   onWalletSelected: (value: ProviderType) => void;
@@ -22,34 +21,24 @@ export function WalletConnectProviders(props: Props) {
       <Container>
         <LeftContainer>
           <p>Compatible mobile wallets</p>
-          {!isMobile.iOS() && !isMobile.Android() && (
-            <Item
-              image={images.rskWallet}
+          <WalletButtons>
+            <WalletItem
+              image={images.rWallet}
               title='rwallet'
               small={true}
-              onClick={() => {}}
+              ios={`rwallet://wc?uri=${props.uri}`}
+              android={props.uri}
+              universal='https://www.rsk.co/'
             />
-          )}
-
-          {isMobile.iOS() && (
-            <Item
-              image={images.rskWallet}
-              title='rwallet'
+            <WalletItem
+              image={images.defiantWallet}
+              title='defiant'
               small={true}
-              linkHref={`rwallet://wc?uri=${props.uri}`}
-              onClick={() => {}}
+              ios={`defiantapp://wc?uri=${props.uri}`}
+              android={props.uri}
+              universal='https://defiantapp.io/'
             />
-          )}
-
-          {isMobile.Android() && (
-            <Item
-              image={images.rskWallet}
-              title='rwallet'
-              small={true}
-              linkHref={props.uri}
-              onClick={() => {}}
-            />
-          )}
+          </WalletButtons>
         </LeftContainer>
 
         <QRWrapper>
@@ -91,4 +80,8 @@ const LeftContainer = styled.div`
 const QRWrapper = styled.div`
   border-radius: 20px;
   overflow: hidden;
+`;
+const WalletButtons = styled.div`
+  display: flex;
+  align-items: center;
 `;
