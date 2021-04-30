@@ -1,5 +1,19 @@
 {
   "common": {
+    "confirm": "Confirm",
+    "close": "Close",
+    "cancel": "Cancel",
     "alert": "You are connected to wrong network."
+  },
+  "dialogs": {
+    "providerTypes": {
+      "title": "Select wallet type:",
+      "items": {
+        "hardware": "Hardware",
+        "mobile": "Mobile",
+        "browser": "Browser"
+      },
+      "instructions": "For instructions on how to connect to SOVRYN visit our Wiki"
+    }
   }
 }

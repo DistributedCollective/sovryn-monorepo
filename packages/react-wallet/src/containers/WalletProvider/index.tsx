@@ -1,4 +1,12 @@
-import { ChainCodeResponse, FullWallet, hardwareWallets, providerToWalletMap, ProviderType, Web3Wallet, web3Wallets } from '@sovryn/wallet';
+import {
+  ChainCodeResponse,
+  FullWallet,
+  hardwareWallets,
+  providerToWalletMap,
+  ProviderType,
+  Web3Wallet,
+  web3Wallets,
+} from '@sovryn/wallet';
 import { translations } from '../../locales/i18n';
 import * as React from 'react';
 import { useCallback, useEffect, useRef, useState } from 'react';
@@ -18,7 +26,7 @@ interface Options {
   // show ribbon with alert when user connects to wrong network, used together with chainId.
   showWrongNetworkRibbon?: boolean;
   // language
-  locale: string
+  locale?: string;
 }
 
 interface Props {
@@ -41,9 +49,11 @@ export function WalletProvider(props: Props) {
   useEffect(() => {
     context.state.wallet.set(wallet);
   }, [wallet]);
+
   useEffect(() => {
     i18next.changeLanguage(props.options?.locale || i18next.language);
- },[props.options?.locale]);
+  }, [props.options?.locale]);
+
   const [state, setState] = useState({
     step: ProviderDialogStep.NONE,
     chainId: props.options?.chainId || props.chainId || 30,

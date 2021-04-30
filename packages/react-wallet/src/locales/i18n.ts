@@ -5,7 +5,7 @@ import LanguageDetector from 'i18next-browser-languagedetector';
 
 import en from './en/translation.json';
 import es from './es/translation.json';
-import pt_br from './pt_br/translation.json';
+import ptBr from './pt_br/translation.json';
 import fr from './fr/translation.json';
 import { ConvertedToObjectType } from './types';
 
@@ -17,7 +17,7 @@ const translationsJson = {
     translation: es,
   },
   pt_br: {
-    translation: pt_br,
+    translation: ptBr,
   },
   fr: {
     translation: fr,
