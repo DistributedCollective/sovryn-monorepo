@@ -1,14 +1,9 @@
+import { ChainCodeResponse, FullWallet, hardwareWallets, providerToWalletMap, ProviderType, Web3Wallet, web3Wallets } from '@sovryn/wallet';
+import { translations } from '../../locales/i18n';
 import * as React from 'react';
 import { useCallback, useEffect, useRef, useState } from 'react';
-import {
-  ChainCodeResponse,
-  FullWallet,
-  hardwareWallets,
-  providerToWalletMap,
-  ProviderType,
-  Web3Wallet,
-  web3Wallets,
-} from '@sovryn/wallet';
+import { useTranslation } from 'react-i18next';
+import i18next from 'i18next';
 import { useWalletContext } from '../../hooks';
 import { session, walletService } from '../../services';
 import { base64Decode, base64Encode } from '../../services/helpers';
@@ -22,6 +17,8 @@ interface Options {
   remember?: boolean;
   // show ribbon with alert when user connects to wrong network, used together with chainId.
   showWrongNetworkRibbon?: boolean;
+  // language
+  locale: string
 }
 
 interface Props {
@@ -39,11 +36,14 @@ export function WalletProvider(props: Props) {
   const walletRef = useRef(walletService);
   const wallet = walletRef.current;
   const context = useWalletContext();
+  const { t } = useTranslation();
 
   useEffect(() => {
     context.state.wallet.set(wallet);
   }, [wallet]);
-
+  useEffect(() => {
+    i18next.changeLanguage(props.options?.locale || i18next.language);
+ },[props.options?.locale]);
   const [state, setState] = useState({
     step: ProviderDialogStep.NONE,
     chainId: props.options?.chainId || props.chainId || 30,
@@ -305,7 +305,7 @@ export function WalletProvider(props: Props) {
           ) && (
             <React.Fragment>
               {context.wallet.wallet?.chainId !== props.options.chainId &&
-                'You are connected to wrong network.'}
+                t(translations.common.alert)}
             </React.Fragment>
           )}
         </React.Fragment>
