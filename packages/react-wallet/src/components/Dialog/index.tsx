@@ -1,10 +1,11 @@
-import * as React from 'react';
-import { Overlay } from '@blueprintjs/core/lib/esm/components/overlay/overlay';
 import Classes from '@blueprintjs/core/lib/esm/common/classes';
+import { Overlay } from '@blueprintjs/core/lib/esm/components/overlay/overlay';
 import classNames from 'classnames';
+import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import styles from './index.module.css';
+
 import { translations } from '../../locales/i18n';
+import styles from './index.module.css';
 
 type DialogSize = 'normal' | 'large' | 'small';
 

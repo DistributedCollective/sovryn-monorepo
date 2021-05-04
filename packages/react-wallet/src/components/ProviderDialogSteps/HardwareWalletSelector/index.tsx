@@ -4,15 +4,17 @@ import { ItemList } from '../../ItemList';
 import { Item } from '../../Item';
 import { images } from '../../../assets/images';
 import { BottomLinkContainer } from '../../BottomLinkContainer';
-
+import { translations } from '../../../locales/i18n';
+import { useTranslation } from 'react-i18next';
 interface Props {
   onWalletSelected: (value: ProviderType) => void;
 }
 
 export function HardwareWalletSelector(props: Props) {
+  const { t } = useTranslation();
   return (
     <div>
-      <h1>Select hardware wallet:</h1>
+      <h1>{t(translations.dialogs.hardwareWallet.title)}:</h1>
       <ItemList>
         <Item
           image={images.ledgerWallet}
@@ -35,7 +37,7 @@ export function HardwareWalletSelector(props: Props) {
           target='_blank'
           rel='noreferrer noopener'
         >
-          For instructions on how to connect to SOVRYN visit our Wiki
+          {t(translations.dialogs.providerTypes.instructions)}
         </a>
       </BottomLinkContainer>
     </div>

@@ -1,10 +1,13 @@
-import * as React from 'react';
 import { ProviderType } from '@sovryn/wallet';
+import * as React from 'react';
+import { useTranslation } from 'react-i18next';
 import styled from 'styled-components/macro';
-import { ItemList } from '../../ItemList';
-import { Item, ItemLink } from '../../Item';
+
 import { images } from '../../../assets/images';
+import { translations } from '../../../locales/i18n';
 import { BottomLinkContainer } from '../../BottomLinkContainer';
+import { Item, ItemLink } from '../../Item';
+import { ItemList } from '../../ItemList';
 
 interface Props {
   onWalletSelected: (value: ProviderType) => void;
@@ -13,12 +16,13 @@ interface Props {
 const wallet = detectInjectableWallet();
 
 export function BrowserWalletSelector(props: Props) {
+  const { t } = useTranslation();
+  
   return (
     <div>
-      <h1>Select browser wallet type:</h1>
+      <h1>{t(translations.dialogs.browserSelector.title)}:</h1>
       <P>
-        Make sure to disable other wallet browser extensions than the one you
-        want to use.
+      {t(translations.dialogs.browserSelector.disable)}
       </P>
       <ItemList>
         {wallet !== 'liquality' && (
@@ -71,7 +75,7 @@ export function BrowserWalletSelector(props: Props) {
           target='_blank'
           rel='noreferrer noopener'
         >
-          For instructions on how to connect to SOVRYN visit our Wiki
+          {t(translations.dialogs.providerTypes.instructions)}
         </a>
       </BottomLinkContainer>
     </div>

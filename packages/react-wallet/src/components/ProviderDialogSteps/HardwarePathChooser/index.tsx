@@ -10,6 +10,8 @@ import { walletService } from '../../../services';
 import { images } from '../../../assets/images';
 import { Button } from '../../Button';
 import { Select } from '../../Select';
+import { translations } from '../../../locales/i18n';
+import { useTranslation } from 'react-i18next';
 
 interface Props {
   chainId?: number;
@@ -93,13 +95,14 @@ export function HardwarePathChooser(props: Props) {
       dPath: value,
     }));
   };
+  const { t } = useTranslation();
 
   return (
     <Container>
-      <h1>Connect {getTitle(props.provider)}</h1>
+      <h1>{t(translations.dialogs.hardwarePath.title, { name: getTitle(props.provider)})}</h1>
       <Image src={getLogo(props.provider)} />
       {props.provider === ProviderType.LEDGER && (
-        <P>Connect your ledger device via USB and open {networkName} app.</P>
+        <P>{t(translations.dialogs.hardwarePath.disable, { networkName: getTitle(props.provider)})}</P>
       )}
       {!props.chainId && (
         <Select
