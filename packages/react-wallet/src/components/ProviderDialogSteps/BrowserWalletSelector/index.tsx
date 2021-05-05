@@ -31,7 +31,7 @@ export function BrowserWalletSelector(props: Props) {
             title='Liquality'
             href='https://liquality.io/atomic-swap-wallet.html'
             linkHref='https://liquality.io/atomic-swap-wallet.html'
-            linkTitle='Download'
+            linkTitle={t(translations.dialogs.browserSelector.download)}
           />
         )}
         {wallet === 'liquality' && (
@@ -40,7 +40,7 @@ export function BrowserWalletSelector(props: Props) {
             title='Liquality'
             onClick={() => props.onWalletSelected(ProviderType.WEB3)}
             linkHref='https://liquality.io/atomic-swap-wallet.html'
-            linkTitle='Download'
+            linkTitle={t(translations.dialogs.browserSelector.download)}
           />
         )}
         {wallet === 'nifty' && (
@@ -49,7 +49,7 @@ export function BrowserWalletSelector(props: Props) {
             title='Nifty'
             onClick={() => props.onWalletSelected(ProviderType.WEB3)}
             linkHref='https://chrome.google.com/webstore/detail/nifty-wallet/jbdaocneiiinmjbjlgalhcelgbejmnid'
-            linkTitle='Download'
+            linkTitle={t(translations.dialogs.browserSelector.download)}
           />
         )}
         {['metamask', 'unknown'].includes(wallet) && (
@@ -58,7 +58,7 @@ export function BrowserWalletSelector(props: Props) {
             title='MetaMask'
             onClick={() => props.onWalletSelected(ProviderType.WEB3)}
             linkHref='https://metamask.io/download.html'
-            linkTitle='Download'
+            linkTitle={t(translations.dialogs.browserSelector.download)}
           />
         )}
         <Item
@@ -66,8 +66,8 @@ export function BrowserWalletSelector(props: Props) {
           title='Portis'
           onClick={() => props.onWalletSelected(ProviderType.PORTIS)}
           linkHref='https://www.portis.io'
-          linkTitle='Learn More'
-        />
+          linkTitle={t(translations.dialogs.browserSelector.learn)}
+          />
       </ItemList>
       <BottomLinkContainer>
         <a

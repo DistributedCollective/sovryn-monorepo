@@ -1,17 +1,13 @@
+import { ChainCodeResponse, LedgerWalletProvider, ProviderType, TrezorWalletProvider } from '@sovryn/wallet';
 import * as React from 'react';
-import {
-  ChainCodeResponse,
-  LedgerWalletProvider,
-  ProviderType,
-  TrezorWalletProvider,
-} from '@sovryn/wallet';
+import { useTranslation } from 'react-i18next';
 import styled from 'styled-components/macro';
-import { walletService } from '../../../services';
+
 import { images } from '../../../assets/images';
+import { translations } from '../../../locales/i18n';
+import { walletService } from '../../../services';
 import { Button } from '../../Button';
 import { Select } from '../../Select';
-import { translations } from '../../../locales/i18n';
-import { useTranslation } from 'react-i18next';
 
 interface Props {
   chainId?: number;
