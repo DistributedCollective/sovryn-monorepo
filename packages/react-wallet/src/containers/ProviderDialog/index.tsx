@@ -42,8 +42,9 @@ export function ProviderDialog(props: Props) {
       default:
         return 'large';
       case ProviderDialogStep.HARDWARE_PATH_SELECTOR:
-      case ProviderDialogStep.HARDWARE_ADDRESS_SELECTOR:
         return 'small';
+      case ProviderDialogStep.HARDWARE_ADDRESS_SELECTOR:
+        return 'large';
     }
   }, [props.step]);
   return (

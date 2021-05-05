@@ -71,7 +71,7 @@ export function HardwareAddressSelector(props: Props) {
 
   return (
     <div>
-      <h1>Choose Wallet</h1>
+      <h1>Select Wallet</h1>
       <WalletList>
         {state.wallets.map(item => (
           <WalletItem
