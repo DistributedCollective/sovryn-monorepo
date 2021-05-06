@@ -24,6 +24,7 @@
     "deploy": "gh-pages -d example/build"
   },
   "dependencies": {
+    "@blueprintjs/core": "^3.44.2",
     "@hookstate/core": "^3.0.6",
     "@sovryn/wallet": "^1.0.17",
     "@types/classnames": "^2.2.11",
@@ -31,6 +32,7 @@
     "detect-browser": "^5.2.0",
     "ethereumjs-util": "^7.0.9",
     "qrcode.react": "^1.0.1",
+    "react-copy-to-clipboard": "^5.0.3",
     "storage-factory": "^0.2.0",
     "styled-components": "^5.2.3"
   },

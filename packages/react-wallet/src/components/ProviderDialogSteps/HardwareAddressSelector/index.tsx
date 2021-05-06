@@ -71,7 +71,7 @@ export function HardwareAddressSelector(props: Props) {
 
   return (
     <div>
-      <h1>Select Wallet</h1>
+      <h1>Choose Wallet</h1>
       <WalletList>
         {state.wallets.map(item => (
           <WalletItem
@@ -124,8 +124,8 @@ const WalletList = styled.div`
   background: #222222;
   border: 1px solid #707070;
   border-radius: 5px;
-  max-width: 360px;
-  width: 100%;
+  max-width: 760px;
+  min-height: 350px;
   margin: 0 auto;
 `;
 
@@ -142,6 +142,7 @@ const WalletItem = styled.button`
   color: #e9eae9;
   font-size: 12px;
   font-weight: 500;
+  font-family: 'Montserrat';
   transition: background-color 0.3s, border-color 0.3s;
   will-change: background-color, border-color;
   border: 3px solid transparent;
