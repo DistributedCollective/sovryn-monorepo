@@ -5,22 +5,24 @@ import { WalletItem } from '../../Item';
 import { images } from '../../../assets/images';
 import { BottomLinkContainer } from '../../BottomLinkContainer';
 import QRCode from 'qrcode.react';
-
+import { useTranslation } from 'react-i18next';
+import { translations } from '../../../locales/i18n';
 interface Props {
   onWalletSelected: (value: ProviderType) => void;
   uri?: string;
 }
 
 export function WalletConnectProviders(props: Props) {
+  const { t } = useTranslation();
   useEffect(() => {
     props.onWalletSelected(ProviderType.WALLET_CONNECT);
   }, []);
   return (
     <div>
-      <h1>Scan QR to Connect Wallet</h1>
+      <h1>{t(translations.dialogs.walletConnect.title)}</h1>
       <Container>
         <LeftContainer>
-          <p>Compatible mobile wallets</p>
+          <p>{t(translations.dialogs.walletConnect.wallet)}</p>
           <WalletButtons>
             <WalletItem
               image={images.rWallet}
@@ -59,8 +61,7 @@ export function WalletConnectProviders(props: Props) {
           target='_blank'
           rel='noreferrer noopener'
         >
-          For instructions on how to connect mobile wallets to SOVRYN visit our
-          Wiki
+          {t(translations.dialogs.providerTypes.instructionsMobile)}
         </a>
       </BottomLinkContainer>
     </div>

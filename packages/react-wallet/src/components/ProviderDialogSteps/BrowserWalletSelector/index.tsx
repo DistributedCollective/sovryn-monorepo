@@ -1,10 +1,13 @@
-import * as React from 'react';
 import { ProviderType } from '@sovryn/wallet';
+import * as React from 'react';
+import { useTranslation } from 'react-i18next';
 import styled from 'styled-components/macro';
-import { ItemList } from '../../ItemList';
-import { Item, ItemLink } from '../../Item';
+
 import { images } from '../../../assets/images';
+import { translations } from '../../../locales/i18n';
 import { BottomLinkContainer } from '../../BottomLinkContainer';
+import { Item, ItemLink } from '../../Item';
+import { ItemList } from '../../ItemList';
 
 interface Props {
   onWalletSelected: (value: ProviderType) => void;
@@ -13,12 +16,13 @@ interface Props {
 const wallet = detectInjectableWallet();
 
 export function BrowserWalletSelector(props: Props) {
+  const { t } = useTranslation();
+  
   return (
     <div>
-      <h1>Select browser wallet type:</h1>
+      <h1>{t(translations.dialogs.browserSelector.title)}:</h1>
       <P>
-        Make sure to disable other wallet browser extensions than the one you
-        want to use.
+      {t(translations.dialogs.browserSelector.disable)}
       </P>
       <ItemList>
         {wallet !== 'liquality' && (
@@ -27,7 +31,7 @@ export function BrowserWalletSelector(props: Props) {
             title='Liquality'
             href='https://liquality.io/atomic-swap-wallet.html'
             linkHref='https://liquality.io/atomic-swap-wallet.html'
-            linkTitle='Download'
+            linkTitle={t(translations.dialogs.browserSelector.download)}
           />
         )}
         {wallet === 'liquality' && (
@@ -36,7 +40,7 @@ export function BrowserWalletSelector(props: Props) {
             title='Liquality'
             onClick={() => props.onWalletSelected(ProviderType.WEB3)}
             linkHref='https://liquality.io/atomic-swap-wallet.html'
-            linkTitle='Download'
+            linkTitle={t(translations.dialogs.browserSelector.download)}
           />
         )}
         {wallet === 'nifty' && (
@@ -45,7 +49,7 @@ export function BrowserWalletSelector(props: Props) {
             title='Nifty'
             onClick={() => props.onWalletSelected(ProviderType.WEB3)}
             linkHref='https://chrome.google.com/webstore/detail/nifty-wallet/jbdaocneiiinmjbjlgalhcelgbejmnid'
-            linkTitle='Download'
+            linkTitle={t(translations.dialogs.browserSelector.download)}
           />
         )}
         {['metamask', 'unknown'].includes(wallet) && (
@@ -54,7 +58,7 @@ export function BrowserWalletSelector(props: Props) {
             title='MetaMask'
             onClick={() => props.onWalletSelected(ProviderType.WEB3)}
             linkHref='https://metamask.io/download.html'
-            linkTitle='Download'
+            linkTitle={t(translations.dialogs.browserSelector.download)}
           />
         )}
         <Item
@@ -62,8 +66,8 @@ export function BrowserWalletSelector(props: Props) {
           title='Portis'
           onClick={() => props.onWalletSelected(ProviderType.PORTIS)}
           linkHref='https://www.portis.io'
-          linkTitle='Learn More'
-        />
+          linkTitle={t(translations.dialogs.browserSelector.learn)}
+          />
       </ItemList>
       <BottomLinkContainer>
         <a
@@ -71,7 +75,7 @@ export function BrowserWalletSelector(props: Props) {
           target='_blank'
           rel='noreferrer noopener'
         >
-          For instructions on how to connect to SOVRYN visit our Wiki
+          {t(translations.dialogs.providerTypes.instructions)}
         </a>
       </BottomLinkContainer>
     </div>

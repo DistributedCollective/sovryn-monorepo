@@ -7,6 +7,8 @@ import { toChecksumAddress } from 'ethereumjs-util';
 import styled, { css } from 'styled-components/macro';
 import { Button } from '../../Button';
 import { images } from '../../../assets/images';
+import { translations } from '../../../locales/i18n';
+import { useTranslation } from 'react-i18next';
 
 interface Props {
   chainId: number;
@@ -68,10 +70,11 @@ export function HardwareAddressSelector(props: Props) {
     },
     [state],
   );
+  const { t } = useTranslation();
 
   return (
     <div>
-      <h1>Choose Wallet</h1>
+      <h1>{t(translations.dialogs.hardwareSelector.title)}</h1>
       <WalletList>
         {state.wallets.map(item => (
           <WalletItem
@@ -86,8 +89,7 @@ export function HardwareAddressSelector(props: Props) {
         ))}
         {state.wallets.length === 0 && (
           <div>
-            No wallets in selected derivation path. Try changing path or app in
-            your wallet.
+            {t(translations.dialogs.hardwareSelector.noWallet)}
           </div>
         )}
       </WalletList>

@@ -1,7 +1,10 @@
-import * as React from 'react';
-import { Overlay } from '@blueprintjs/core/lib/esm/components/overlay/overlay';
 import Classes from '@blueprintjs/core/lib/esm/common/classes';
+import { Overlay } from '@blueprintjs/core/lib/esm/components/overlay/overlay';
 import classNames from 'classnames';
+import * as React from 'react';
+import { useTranslation } from 'react-i18next';
+
+import { translations } from '../../locales/i18n';
 import styles from './index.module.css';
 
 type DialogSize = 'normal' | 'large' | 'small';
@@ -17,6 +20,7 @@ interface Props {
 }
 
 export function Dialog(props: Props) {
+  const { t } = useTranslation();
   return (
     <Overlay
       {...props}
@@ -39,9 +43,11 @@ export function Dialog(props: Props) {
             className={styles.close}
             onClick={props.onClose}
             type='button'
-            title='Close'
+            title={t(translations.common.close)}
           >
-            <span className={styles.sr_only}>Close</span>
+            <span className={styles.sr_only}>
+              {t(translations.common.close)}
+            </span>
           </button>
           <div className={styles.content}>{props.children}</div>
         </article>
