@@ -31,8 +31,11 @@
     "classnames": "^2.2.6",
     "detect-browser": "^5.2.0",
     "ethereumjs-util": "^7.0.9",
+    "i18next": "^20.2.2",
+    "i18next-browser-languagedetector": "^6.1.0",
     "qrcode.react": "^1.0.1",
     "react-copy-to-clipboard": "^5.0.3",
+    "react-i18next": "^11.8.15",
     "storage-factory": "^0.2.0",
     "styled-components": "^5.2.3"
   },
