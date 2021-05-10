@@ -5,10 +5,12 @@ import {
 } from '@sovryn/wallet';
 import { toChecksumAddress } from 'ethereumjs-util';
 import styled, { css } from 'styled-components/macro';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { Button } from '../../Button';
 import { images } from '../../../assets/images';
 import { translations } from '../../../locales/i18n';
 import { useTranslation } from 'react-i18next';
+import { Icon } from '@blueprintjs/core';
 
 interface Props {
   chainId: number;
@@ -21,6 +23,7 @@ interface Props {
 }
 
 export function HardwareAddressSelector(props: Props) {
+  
   const [state, setState] = React.useState<{
     offset: number;
     wallets: DeterministicWalletData[];
@@ -71,7 +74,7 @@ export function HardwareAddressSelector(props: Props) {
     [state],
   );
   const { t } = useTranslation();
-
+  const step = state.offset/10 + 1;
   return (
     <div>
       <h1>{t(translations.dialogs.hardwareSelector.title)}</h1>
@@ -83,8 +86,18 @@ export function HardwareAddressSelector(props: Props) {
             active={state.selected?.address === item.address}
             title={item.address}
           >
-            <div className='key'>{item.index + 1}</div>
+            <CopyToClipboard text={item.address}>
+              <div className="copy">
+                <Icon icon="duplicate" />
+              </div>
+            </CopyToClipboard>
+            <div className='key'>{item.index + 1}.</div>
             <div className='value'>{item.address}</div>
+            <div className='divide'>-</div>
+            <div className='amount'>Balance:</div>
+            <div className='amountNum'>{item.index.toFixed(4)}</div>
+            <div className='asset'><small className="symbol">R</small>BTC</div>
+
           </WalletItem>
         ))}
         {state.wallets.length === 0 && (
@@ -100,6 +113,32 @@ export function HardwareAddressSelector(props: Props) {
             disabled={state.offset <= 0}
             left
           />
+            {step<8&&(
+              <div className='pagi'>
+                <div className={`pagiItem ${step==1&&('highlight')}`}>1</div>
+                <div className={`pagiItem ${step==2&&('highlight')}`}>2</div>
+                <div className={`pagiItem ${step==3&&('highlight')}`}>3</div>
+                <div className={`pagiItem ${step==4&&('highlight')}`}>4</div>
+                <div className={`pagiItem ${step==5&&('highlight')}`}>5</div>
+                <div className={`pagiItem ${step==6&&('highlight')}`}>6</div>
+                <div className={`pagiItem ${step==7&&('highlight')}`}>7</div>
+                <div className='pagiItem'>…</div>
+                <div className='pagiItem'>{props.limit}</div>
+              </div>
+            )}
+            {step>7&&(
+              <div className='pagi'>
+                <div className='pagiItem'>1</div>
+                <div className='pagiItem'>…</div>
+                <div className='pagiItem highlight'>{step}</div>
+                <div className='pagiItem'>{step+1}</div>
+                <div className='pagiItem'>{step+2}</div>
+                <div className='pagiItem'>{step+3}</div>
+                <div className='pagiItem'>{step+4}</div>
+                <div className='pagiItem'>…</div>
+                <div className='pagiItem'>{props.limit}</div>
+              </div>
+            )}
           <Arrow
             onClick={() => onChangeOffset(state.offset + (props.limit || 10))}
             right
@@ -142,9 +181,6 @@ const WalletItem = styled.button`
   display: flex;
   width: 100%;
   color: #e9eae9;
-  font-size: 12px;
-  font-weight: 500;
-  font-family: 'Montserrat';
   transition: background-color 0.3s, border-color 0.3s;
   will-change: background-color, border-color;
   border: 3px solid transparent;
@@ -159,7 +195,9 @@ const WalletItem = styled.button`
       background-color: #454545;
       border-color: #e9eae9;
     `}
-
+  & .copy {
+    margin-right: 30px; 
+  }
   & .key {
     margin-right: 5px;
     flex-grow: 0;
@@ -168,8 +206,11 @@ const WalletItem = styled.button`
     overflow: hidden;
     text-overflow: ellipsis;
     text-align: left;
-  }
+    font-size: 14px;
+    font-weight: 300;
+    font-family: 'Montserrat';
 
+  }
   & .value {
     flex-grow: 0;
     flex-shrink: 1;
@@ -177,16 +218,75 @@ const WalletItem = styled.button`
     text-overflow: ellipsis;
     text-align: left;
     text-transform: none;
+    font-size: 14px;
+    font-weight: 300;
+    font-family: 'Montserrat';
+    width: 370px;
+    flex: 'none';
+  }
+  & .divide {
+    font-size: 14px;
+    font-weight: 500;
+    font-family: 'Montserrat';
+    text-align: center;
+    width: 15px;
+  }
+   & .amount {
+    font-size: 14px;
+    font-weight: 500;
+    font-family: 'Montserrat';
+    text-align: center;
+    width: 70px;
+   }
+   & .amountNum {
+    font-size: 14px;
+    font-weight: 500;
+    font-family: 'Montserrat';
+    text-align: right;
+    width: 125px;
+   }
+   .symbol{
+    font-size: 0.75em;
+    opacity:0.5!important;
+   }
+   .asset{
+    font-size: 14px;
+    font-weight: 500;
+    font-family: 'Montserrat';
+    width: 50px;
   }
 `;
 
 const Paginator = styled.div`
   margin: 15px auto;
   width: 100%;
-  max-width: 320px;
+  max-width: 330px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  & .pagi {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    max-width: 270px;
+    max-height: 30px;
+    height: 100%;
+  }
+  & .highlight {
+    background-color: #2274A5;
+    border-radius: 50%;
+  }
+  & .pagiItem {
+    display: flex;
+    width: 30px;
+    font-size: 18px;
+    font-weight: 500;
+    font-family: 'Montserrat';
+    align-items: center;
+    justify-content: center;
+    height: 30px;
+  }
 `;
 
 interface ArrowProps {
