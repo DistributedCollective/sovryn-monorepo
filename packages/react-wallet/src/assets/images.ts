@@ -10,6 +10,7 @@ import trezorWallet from './wallets/trezor';
 import rWallet from './wallets/rwallet';
 import defiantWallet from './wallets/defiant';
 import { arrowDown, arrowRight } from './arrows';
+import { copyIcon, errorIcon } from './copy';
 
 export const images = {
   browserWallets,
@@ -28,4 +29,7 @@ export const images = {
 
   arrowRight,
   arrowDown,
+
+  copyIcon,
+  errorIcon
 };

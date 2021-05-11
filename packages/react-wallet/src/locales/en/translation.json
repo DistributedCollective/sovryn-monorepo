@@ -14,6 +14,7 @@
         "browser": "Browser"
       },
       "instructions": "For instructions on how to connect to SOVRYN visit our Wiki",
+      "ledgerInstructions": "Don't understand Derivation Paths? Read our wiki",
       "instructionsMobile":"For instructions on how to connect mobile wallets to SOVRYN visit our Wiki"
     },
     "browserSelector": {
@@ -32,11 +33,12 @@
       "wallet": "Compatible mobile wallets"
     },
     "hardwareWallet": {
-      "title":"Select hardware wallet"
+      "title":"Select hardware wallet",
+      "success":"Copied Successfully"
     },
     "hardwarePath": {
       "title": "Connect {{name}}",
-      "disable": "Connect your ledger device via USB and open {{networkName}} app."
+      "disable": "Connect your ledger device via USB and open RSK app."
     }
   }
 }

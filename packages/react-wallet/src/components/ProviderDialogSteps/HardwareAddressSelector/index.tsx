@@ -1,16 +1,14 @@
-import * as React from 'react';
-import {
-  getDeterministicWallets,
-  DeterministicWalletData,
-} from '@sovryn/wallet';
+import { DeterministicWalletData, getDeterministicWallets } from '@sovryn/wallet';
 import { toChecksumAddress } from 'ethereumjs-util';
-import styled, { css } from 'styled-components/macro';
+import * as React from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
-import { Button } from '../../Button';
+import { useTranslation } from 'react-i18next';
+import styled, { css } from 'styled-components/macro';
+
 import { images } from '../../../assets/images';
 import { translations } from '../../../locales/i18n';
-import { useTranslation } from 'react-i18next';
-import { Icon } from '@blueprintjs/core';
+import { toaster } from '../../../services/toaster';
+import { Button } from '../../Button';
 
 interface Props {
   chainId: number;
@@ -86,9 +84,20 @@ export function HardwareAddressSelector(props: Props) {
             active={state.selected?.address === item.address}
             title={item.address}
           >
-            <CopyToClipboard text={item.address}>
+            <CopyToClipboard 
+              text={item.address}
+              onCopy={() =>
+                toaster.show(
+                  {
+                    message: t(translations.dialogs.hardwareWallet.success),
+                    intent: 'success',
+                  },
+                  'btc-copy',
+                )
+              }
+            >
               <div className="copy">
-                <Icon icon="duplicate" />
+                <img src={images.copyIcon} />
               </div>
             </CopyToClipboard>
             <div className='key'>{item.index + 1}.</div>
@@ -123,7 +132,7 @@ export function HardwareAddressSelector(props: Props) {
                 <div className={`pagiItem ${step==6&&('highlight')}`}>6</div>
                 <div className={`pagiItem ${step==7&&('highlight')}`}>7</div>
                 <div className='pagiItem'>…</div>
-                <div className='pagiItem'>{props.limit}</div>
+                <div className='pagiItem'></div>
               </div>
             )}
             {step>7&&(
@@ -136,7 +145,7 @@ export function HardwareAddressSelector(props: Props) {
                 <div className='pagiItem'>{step+3}</div>
                 <div className='pagiItem'>{step+4}</div>
                 <div className='pagiItem'>…</div>
-                <div className='pagiItem'>{props.limit}</div>
+                <div className='pagiItem'></div>
               </div>
             )}
           <Arrow

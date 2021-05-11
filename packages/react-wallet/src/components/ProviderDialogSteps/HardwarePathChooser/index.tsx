@@ -6,6 +6,7 @@ import styled from 'styled-components/macro';
 import { images } from '../../../assets/images';
 import { translations } from '../../../locales/i18n';
 import { walletService } from '../../../services';
+import { BottomLinkContainer } from '../../BottomLinkContainer';
 import { Button } from '../../Button';
 import { Select } from '../../Select';
 
@@ -27,9 +28,9 @@ export function HardwarePathChooser(props: Props) {
     error: '',
   });
 
-  const networks = React.useMemo(() => {
-    return walletService.networkDictionary.list();
-  }, [props.chainId]);
+  // const networks = React.useMemo(() => {
+  //   return walletService.networkDictionary.list();
+  // }, [props.chainId]);
   const networkName = React.useMemo(() => {
     return walletService.networkDictionary.get(state.chainId)?.getName();
   }, [state.chainId]);
@@ -76,13 +77,13 @@ export function HardwarePathChooser(props: Props) {
     }
   }, [state, props.provider]);
 
-  const onChangeChain = (e: React.ChangeEvent<HTMLSelectElement>) => {
-    const value = e.currentTarget.value;
-    setState(prevState => ({
-      ...prevState,
-      chainId: Number(value),
-    }));
-  };
+  // const onChangeChain = (e: React.ChangeEvent<HTMLSelectElement>) => {
+  //   const value = e.currentTarget.value;
+  //   setState(prevState => ({
+  //     ...prevState,
+  //     chainId: Number(value),
+  //   }));
+  // };
 
   const onChangePath = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const value = e.currentTarget.value;
@@ -97,21 +98,10 @@ export function HardwarePathChooser(props: Props) {
     <Container>
       <h1>{t(translations.dialogs.hardwarePath.title, { name: getTitle(props.provider)})}</h1>
       <Image src={getLogo(props.provider)} />
-      {props.provider === ProviderType.LEDGER && (
-        <P>{t(translations.dialogs.hardwarePath.disable, { networkName: getTitle(props.provider)})}</P>
+      {props.provider === ProviderType.LEDGER && (state.error == '' ? (<P>{t(translations.dialogs.hardwarePath.disable)}</P>)
+        : (<div className='alert'><img src={images.errorIcon} className='alertImg'/><span className='alertText'>{state.error}</span></div>)
       )}
-      {!props.chainId && (
-        <Select
-          id='network'
-          label='Choose a network:'
-          value={String(state.chainId)}
-          options={networks.map(item => ({
-            value: item.getChainId().toString(),
-            label: item.getName(),
-          }))}
-          onChange={onChangeChain}
-        />
-      )}
+
       {paths?.length ? (
         <Select
           id='path'
@@ -129,12 +119,20 @@ export function HardwarePathChooser(props: Props) {
           {networkName || 'selected network'}
         </P>
       )}
-      {state.error && <div>{state.error}</div>}
       <Button
         onClick={onSubmit}
         disabled={!state.chainId || !state.dPath || state.loading}
         text='Continue'
       />
+      <BottomLinkContainer>
+        <a
+          href='https://wiki.sovryn.app'
+          target='_blank'
+          rel='noreferrer noopener'
+        >
+          {t(translations.dialogs.providerTypes.ledgerInstructions)}
+        </a>
+      </BottomLinkContainer>      
     </Container>
   );
 }
@@ -231,6 +229,9 @@ const Image = styled.div`
 const P = styled.p`
   margin: 0 auto 35px;
   max-width: 236px;
+  font-family: 'Montserrat';
+  font-size: 16px;
+  font-weight: 300;
 `;
 
 const Container = styled.div`
@@ -238,4 +239,16 @@ const Container = styled.div`
   width: 100%;
   margin: 0 auto;
   text-align: center;
+  .alert {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 40px;
+  }
+  .alertImg {
+    margin-right: 5px;
+  }
+  .alertText {
+    color: #A52222;
+  }
 `;
