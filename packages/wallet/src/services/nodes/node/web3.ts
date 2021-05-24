@@ -1,10 +1,6 @@
-import {
-  TransactionConfig,
-  TransactionReceipt,
-  Transaction,
-  BlockNumber,
-} from 'web3-core';
 import Web3 from 'web3';
+import { BlockNumber, Transaction, TransactionConfig, TransactionReceipt } from 'web3-core';
+
 import { NodeInterface } from '../../../interfaces';
 
 export class Web3Node implements NodeInterface {
@@ -32,6 +28,10 @@ export class Web3Node implements NodeInterface {
 
   getTransactionByHash(txhash: string): Promise<Transaction> {
     return this.provider.eth.getTransaction(txhash);
+  }
+
+  getAccounts(): Promise<Array<any>> {
+    return this.provider.eth.getAccounts();
   }
 
   getTransactionCount(address: string): Promise<number> {
