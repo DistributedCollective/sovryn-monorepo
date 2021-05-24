@@ -1,9 +1,11 @@
 import { DeterministicWalletData, getDeterministicWallets } from '@sovryn/wallet';
+// import { toChecksumAddress } from '@sovryn/wallet';
 import { toChecksumAddress } from 'ethereumjs-util';
 import * as React from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { useTranslation } from 'react-i18next';
 import styled, { css } from 'styled-components/macro';
+import Web3 from 'web3';
 
 import { images } from '../../../assets/images';
 import { translations } from '../../../locales/i18n';
@@ -21,7 +23,11 @@ interface Props {
 }
 
 export function HardwareAddressSelector(props: Props) {
-  
+  // const node = new Web3Node('https://public-node.testnet.rsk.co');
+  const provider = new Web3(new Web3.providers.HttpProvider("https://public-node.rsk.co"));
+  console.log("Web3 Node: ", provider.eth.getAccounts());
+  console.log("Chain Id", props.chainId);
+
   const [state, setState] = React.useState<{
     offset: number;
     wallets: DeterministicWalletData[];
