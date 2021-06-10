@@ -2283,13 +2283,6 @@
   dependencies:
     "@json-rpc-tools/types" "^1.6.1"
 
-"@ledgerhq/cryptoassets@^5.48.0":
-  version "5.48.0"
-  resolved "https://registry.yarnpkg.com/@ledgerhq/cryptoassets/-/cryptoassets-5.48.0.tgz#43785b64b5bc355f98e60fb0facfc8e3585d52d2"
-  integrity sha512-kIhZMK7DVRZ69yYXbe1ss/3DO/watVepHF3vO36/0FR+1tPRNlokq62B7B1lHia2VgZ6ysA1bysDLaLlTmKWtg==
-  dependencies:
-    invariant "2"
-
 "@ledgerhq/cryptoassets@^5.53.0":
   version "5.53.0"
   resolved "https://registry.yarnpkg.com/@ledgerhq/cryptoassets/-/cryptoassets-5.53.0.tgz#11dcc93211960c6fd6620392e4dd91896aaabe58"
@@ -2327,17 +2320,6 @@
   resolved "https://registry.yarnpkg.com/@ledgerhq/errors/-/errors-5.50.0.tgz#e3a6834cb8c19346efca214c1af84ed28e69dad9"
   integrity sha512-gu6aJ/BHuRlpU7kgVpy2vcYk6atjB4iauP2ymF7Gk0ez0Y/6VSMVSJvubeEQN+IV60+OBK0JgeIZG7OiHaw8ow==
 
-"@ledgerhq/hw-app-eth@^5.46.0":
-  version "5.48.0"
-  resolved "https://registry.yarnpkg.com/@ledgerhq/hw-app-eth/-/hw-app-eth-5.48.0.tgz#d2086f66978aebdcc8c1da443d24587571d2604b"
-  integrity sha512-HrILTZJSesi5JbdDwH3eoUs87JiZZFxK0Kyjz5bJR1cHqA8hN0ICN4t9fkwb3DOB+QwH9ch63v8tBWWwlcNIzQ==
-  dependencies:
-    "@ledgerhq/cryptoassets" "^5.48.0"
-    "@ledgerhq/errors" "^5.48.0"
-    "@ledgerhq/hw-transport" "^5.48.0"
-    bignumber.js "^9.0.1"
-    rlp "^2.2.6"
-
 "@ledgerhq/hw-app-eth@^5.53.0":
   version "5.53.0"
   resolved "https://registry.yarnpkg.com/@ledgerhq/hw-app-eth/-/hw-app-eth-5.53.0.tgz#5df2d7427db9f387099d0cc437e9730101d7c404"
@@ -2360,17 +2342,6 @@
     "@ledgerhq/logs" "^5.30.0"
     u2f-api "0.2.7"
 
-"@ledgerhq/hw-transport-web-ble@^5.46.0":
-  version "5.48.0"
-  resolved "https://registry.yarnpkg.com/@ledgerhq/hw-transport-web-ble/-/hw-transport-web-ble-5.48.0.tgz#41b29293c263d8ed4200037eb6da4db3bd4268a6"
-  integrity sha512-ezgssFvxc4/UbfwIxwg9jEn0/yiND8TW6bDkaE3kAqKCa8ZYYgFtms8iRqjTOJlqcbSYkudbNhP74jtY0NxfdA==
-  dependencies:
-    "@ledgerhq/devices" "^5.48.0"
-    "@ledgerhq/errors" "^5.48.0"
-    "@ledgerhq/hw-transport" "^5.48.0"
-    "@ledgerhq/logs" "^5.48.0"
-    rxjs "^6.6.7"
-
 "@ledgerhq/hw-transport-web-ble@^5.51.1":
   version "5.51.1"
   resolved "https://registry.yarnpkg.com/@ledgerhq/hw-transport-web-ble/-/hw-transport-web-ble-5.51.1.tgz#b8da62f09b82f79fa0969f74364e3b6b1bd0ee87"
@@ -2382,16 +2353,6 @@
     "@ledgerhq/logs" "^5.50.0"
     rxjs "6"
 
-"@ledgerhq/hw-transport-webusb@^5.46.0":
-  version "5.48.0"
-  resolved "https://registry.yarnpkg.com/@ledgerhq/hw-transport-webusb/-/hw-transport-webusb-5.48.0.tgz#62e5bffffba853d4e06103f7c8e9b6c87ca0f994"
-  integrity sha512-tO+p11aRQx9q9ifmi/NCbCBKQ738lp+PROy1BWSzjCJcUEz1sKTLeRTLE2Xze25KebhuM2YR1NgkX5LN1z4upA==
-  dependencies:
-    "@ledgerhq/devices" "^5.48.0"
-    "@ledgerhq/errors" "^5.48.0"
-    "@ledgerhq/hw-transport" "^5.48.0"
-    "@ledgerhq/logs" "^5.48.0"
-
 "@ledgerhq/hw-transport-webusb@^5.53.1":
   version "5.53.1"
   resolved "https://registry.yarnpkg.com/@ledgerhq/hw-transport-webusb/-/hw-transport-webusb-5.53.1.tgz#3df8c401417571e3bcacc378d8aca587214b05ae"
@@ -2402,7 +2363,7 @@
     "@ledgerhq/hw-transport" "^5.51.1"
     "@ledgerhq/logs" "^5.50.0"
 
-"@ledgerhq/hw-transport@^5.34.0", "@ledgerhq/hw-transport@^5.46.0", "@ledgerhq/hw-transport@^5.48.0":
+"@ledgerhq/hw-transport@^5.34.0":
   version "5.48.0"
   resolved "https://registry.yarnpkg.com/@ledgerhq/hw-transport/-/hw-transport-5.48.0.tgz#de6ac00074e85bd61bfb3647f5973b053aa28d48"
   integrity sha512-fyy55GDu/UU3fxWqltF7+1PabqMzKxyiWvd1Z89DB+8ZZuz3cq0iN7ey9p4zat2YpIFonVIxKJqyYZZelzsGQA==
@@ -2497,16 +2458,16 @@
   version "0.0.0"
   uid ""
 
-"@sovryn/wallet@^1.0.17":
-  version "1.0.17"
-  resolved "https://registry.yarnpkg.com/@sovryn/wallet/-/wallet-1.0.17.tgz#c43a8ff2c71de5ad944ae811c8182460596050f8"
-  integrity sha512-0tLYHy+YaX1bjGj8BDg9IRMi/rANiZ1VbYH2GpDmLeUgspTbdoUui8ePxXxHsqhfb/gpjh6GMhzR26g2xdS5VA==
+"@sovryn/wallet@^1.0.18-alpha.0":
+  version "1.0.18-alpha.0"
+  resolved "https://registry.yarnpkg.com/@sovryn/wallet/-/wallet-1.0.18-alpha.0.tgz#a0e987e387a0cb9e13a52afad9e04b696dc67f53"
+  integrity sha512-OrJs9s1+bzccakv8pl9tRgIA7H0eSLOwfuBio6dLiFvoc/putHUgJrLslzYA1Vs+e6mQMW7mv8gjSf+0N7BOzw==
   dependencies:
-    "@ledgerhq/hw-app-eth" "^5.46.0"
-    "@ledgerhq/hw-transport" "^5.46.0"
+    "@ledgerhq/hw-app-eth" "^5.53.0"
+    "@ledgerhq/hw-transport" "^5.51.1"
     "@ledgerhq/hw-transport-u2f" "^5.36.0-deprecated"
-    "@ledgerhq/hw-transport-web-ble" "^5.46.0"
-    "@ledgerhq/hw-transport-webusb" "^5.46.0"
+    "@ledgerhq/hw-transport-web-ble" "^5.51.1"
+    "@ledgerhq/hw-transport-webusb" "^5.53.1"
     "@portis/web3" "^3.0.8"
     "@sovryn/common" "^1.0.16"
     "@trezor/rollout" "^1.0.7"
@@ -12034,7 +11995,7 @@ ripemd160@^2.0.0, ripemd160@^2.0.1:
     hash-base "^3.0.0"
     inherits "^2.0.1"
 
-rlp@^2.0.0, rlp@^2.2.3, rlp@^2.2.4, rlp@^2.2.6:
+rlp@^2.0.0, rlp@^2.2.3, rlp@^2.2.4:
   version "2.2.6"
   resolved "https://registry.yarnpkg.com/rlp/-/rlp-2.2.6.tgz#c80ba6266ac7a483ef1e69e8e2f056656de2fb2c"
   integrity sha512-HAfAmL6SDYNWPUOJNrM500x4Thn4PZsEy5pijPh40U9WfNk0z15hUYzO9xVIMAdIHdFtD8CBDHd75Td1g36Mjg==

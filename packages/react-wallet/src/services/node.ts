@@ -9,17 +9,12 @@ export class Node {
     const node = this.get(chainId);
 
     if (!node) {
-      console.error('no node', node, chainId);
       return '0';
     }
 
     try {
-      return node.eth.getBalance(address.toLowerCase()).then(balance => {
-        console.log('balance', address, balance);
-        return balance;
-      });
+      return node.eth.getBalance(address.toLowerCase());
     } catch (e) {
-      console.error('crashed');
       return '0';
     }
   }
@@ -27,8 +22,6 @@ export class Node {
   public get(chainId: number) {
     if (!this.nodes.has(chainId)) {
       const network = walletService.networkDictionary.get(chainId);
-      console.log('network', network?.getName(), network?.getNodeUrl());
-      console.log(network);
 
       if (network && network.getNodeUrl()) {
         let provider: HttpProvider | WebsocketProvider;
@@ -41,9 +34,6 @@ export class Node {
         this.nodes.set(chainId, web3);
       }
     }
-
-    console.log('nodes', this.nodes);
-
     return this.nodes.get(chainId);
   }
 }

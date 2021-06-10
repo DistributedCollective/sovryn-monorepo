@@ -189,9 +189,7 @@ function WalletAddressRow({
       <div className='divide'>-</div>
       <div className='amount'>Balance:</div>
       <div className='amountNum'>
-        {value.loading
-          ? 'Loading...'
-          : (Number(value.balance) / 1e18).toFixed(4)}
+        {(Number(value.balance) / 1e18).toFixed(4)}
       </div>
       <div className='asset'>{value.asset}</div>
     </WalletItem>
