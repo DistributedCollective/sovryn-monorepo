@@ -1,14 +1,20 @@
-import * as React from 'react';
 import {
-  getDeterministicWallets,
   DeterministicWalletData,
+  getDeterministicWallets,
 } from '@sovryn/wallet';
 import { toChecksumAddress } from 'ethereumjs-util';
+import * as React from 'react';
+import { CopyToClipboard } from 'react-copy-to-clipboard';
+import { useTranslation } from 'react-i18next';
 import styled, { css } from 'styled-components/macro';
-import { Button } from '../../Button';
+
 import { images } from '../../../assets/images';
 import { translations } from '../../../locales/i18n';
-import { useTranslation } from 'react-i18next';
+import { toaster } from '../../../services/toaster';
+import { Button } from '../../Button';
+import { useEffect, useState } from 'react';
+import { walletService } from '../../../services';
+import { nodeService } from '../../../services/node';
 
 interface Props {
   chainId: number;
@@ -71,26 +77,21 @@ export function HardwareAddressSelector(props: Props) {
     [state],
   );
   const { t } = useTranslation();
-
   return (
     <div>
       <h1>{t(translations.dialogs.hardwareSelector.title)}</h1>
       <WalletList>
         {state.wallets.map(item => (
-          <WalletItem
+          <WalletAddressRow
             key={item.address}
-            onClick={() => onSelect(item)}
-            active={state.selected?.address === item.address}
-            title={item.address}
-          >
-            <div className='key'>{item.index + 1}</div>
-            <div className='value'>{item.address}</div>
-          </WalletItem>
+            chainId={props.chainId}
+            item={item}
+            state={state}
+            onSelect={onSelect}
+          />
         ))}
         {state.wallets.length === 0 && (
-          <div>
-            {t(translations.dialogs.hardwareSelector.noWallet)}
-          </div>
+          <div>{t(translations.dialogs.hardwareSelector.noWallet)}</div>
         )}
       </WalletList>
       <div>
@@ -121,13 +122,87 @@ HardwareAddressSelector.defaultProps = {
   limits: 10,
 };
 
+function useGetBalance(chainId: number, address: string) {
+  const [state, setState] = useState({
+    loading: false,
+    balance: '0',
+    asset: 'RBTC',
+  });
+
+  useEffect(() => {
+    const network = walletService.networkDictionary.get(chainId);
+    if (network) {
+      setState(prevState => ({
+        ...prevState,
+        asset: network.getCurrencyName(),
+        loading: true,
+      }));
+    }
+
+    nodeService.getBalance(chainId, address).then(balance => {
+      setState(prevState => ({ ...prevState, loading: false, balance }));
+    });
+  }, [chainId, address]);
+
+  return state;
+}
+
+interface WalletAddressRowProps {
+  item: DeterministicWalletData;
+  state: any;
+  chainId: number;
+  onSelect: (item: DeterministicWalletData) => void;
+}
+
+function WalletAddressRow({
+  item,
+  state,
+  chainId,
+  onSelect,
+}: WalletAddressRowProps) {
+  const { t } = useTranslation();
+  const value = useGetBalance(chainId, item.address);
+  return (
+    <WalletItem
+      onClick={() => onSelect(item)}
+      active={state.selected?.address === item.address}
+      title={item.address}
+    >
+      <CopyToClipboard
+        text={item.address}
+        onCopy={() =>
+          toaster.show(
+            {
+              message: t(translations.dialogs.hardwareWallet.success),
+              intent: 'success',
+            },
+            'btc-copy',
+          )
+        }
+      >
+        <div className='copy'>
+          <img src={images.copyIcon} alt='copy' />
+        </div>
+      </CopyToClipboard>
+      <div className='key'>{item.index + 1}.</div>
+      <div className='value'>{item.address}</div>
+      <div className='divide'>-</div>
+      <div className='amount'>Balance:</div>
+      <div className='amountNum'>
+        {(Number(value.balance) / 1e18).toFixed(4)}
+      </div>
+      <div className='asset'>{value.asset}</div>
+    </WalletItem>
+  );
+}
+
 const WalletList = styled.div`
   padding: 16px 0;
   background: #222222;
   border: 1px solid #707070;
   border-radius: 5px;
-  max-width: 360px;
-  width: 100%;
+  max-width: 760px;
+  min-height: 350px;
   margin: 0 auto;
 `;
 
@@ -142,8 +217,6 @@ const WalletItem = styled.button`
   display: flex;
   width: 100%;
   color: #e9eae9;
-  font-size: 12px;
-  font-weight: 500;
   transition: background-color 0.3s, border-color 0.3s;
   will-change: background-color, border-color;
   border: 3px solid transparent;
@@ -158,7 +231,9 @@ const WalletItem = styled.button`
       background-color: #454545;
       border-color: #e9eae9;
     `}
-
+  & .copy {
+    margin-right: 30px;
+  }
   & .key {
     margin-right: 5px;
     flex-grow: 0;
@@ -167,8 +242,10 @@ const WalletItem = styled.button`
     overflow: hidden;
     text-overflow: ellipsis;
     text-align: left;
+    font-size: 14px;
+    font-weight: 300;
+    font-family: 'Montserrat';
   }
-
   & .value {
     flex-grow: 0;
     flex-shrink: 1;
@@ -176,16 +253,75 @@ const WalletItem = styled.button`
     text-overflow: ellipsis;
     text-align: left;
     text-transform: none;
+    font-size: 14px;
+    font-weight: 300;
+    font-family: 'Montserrat';
+    width: 370px;
+    flex: 'none';
+  }
+  & .divide {
+    font-size: 14px;
+    font-weight: 500;
+    font-family: 'Montserrat';
+    text-align: center;
+    width: 15px;
+  }
+  & .amount {
+    font-size: 14px;
+    font-weight: 500;
+    font-family: 'Montserrat';
+    text-align: center;
+    width: 70px;
+  }
+  & .amountNum {
+    font-size: 14px;
+    font-weight: 500;
+    font-family: 'Montserrat';
+    text-align: right;
+    width: 125px;
+  }
+  .symbol {
+    font-size: 0.75em;
+    opacity: 0.5 !important;
+  }
+  .asset {
+    font-size: 14px;
+    font-weight: 500;
+    font-family: 'Montserrat';
+    width: 50px;
   }
 `;
 
 const Paginator = styled.div`
   margin: 15px auto;
   width: 100%;
-  max-width: 320px;
+  max-width: 330px;
   display: flex;
   justify-content: space-between;
   align-items: center;
+  & .pagi {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: center;
+    max-width: 270px;
+    max-height: 30px;
+    height: 100%;
+  }
+  & .highlight {
+    background-color: #2274a5;
+    border-radius: 50%;
+  }
+  & .pagiItem {
+    display: flex;
+    width: 30px;
+    font-size: 18px;
+    font-weight: 500;
+    font-family: 'Montserrat';
+    align-items: center;
+    justify-content: center;
+    height: 30px;
+  }
 `;
 
 interface ArrowProps {

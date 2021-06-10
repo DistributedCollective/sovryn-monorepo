@@ -1,10 +1,11 @@
+import Web3 from 'web3';
 import {
+  BlockNumber,
+  Transaction,
   TransactionConfig,
   TransactionReceipt,
-  Transaction,
-  BlockNumber,
 } from 'web3-core';
-import Web3 from 'web3';
+
 import { NodeInterface } from '../../../interfaces';
 
 export class Web3Node implements NodeInterface {

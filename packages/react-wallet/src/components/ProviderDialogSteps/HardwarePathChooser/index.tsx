@@ -1,4 +1,9 @@
-import { ChainCodeResponse, LedgerWalletProvider, ProviderType, TrezorWalletProvider } from '@sovryn/wallet';
+import {
+  ChainCodeResponse,
+  LedgerWalletProvider,
+  ProviderType,
+  TrezorWalletProvider,
+} from '@sovryn/wallet';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components/macro';
@@ -6,6 +11,7 @@ import styled from 'styled-components/macro';
 import { images } from '../../../assets/images';
 import { translations } from '../../../locales/i18n';
 import { walletService } from '../../../services';
+import { BottomLinkContainer } from '../../BottomLinkContainer';
 import { Button } from '../../Button';
 import { Select } from '../../Select';
 
@@ -95,11 +101,25 @@ export function HardwarePathChooser(props: Props) {
 
   return (
     <Container>
-      <h1>{t(translations.dialogs.hardwarePath.title, { name: getTitle(props.provider)})}</h1>
+      <h1>
+        {t(translations.dialogs.hardwarePath.title, {
+          name: getTitle(props.provider),
+        })}
+      </h1>
       <Image src={getLogo(props.provider)} />
-      {props.provider === ProviderType.LEDGER && (
-        <P>{t(translations.dialogs.hardwarePath.disable, { networkName: getTitle(props.provider)})}</P>
-      )}
+      {props.provider === ProviderType.LEDGER &&
+        (state.error === '' ? (
+          <P>
+            {t(translations.dialogs.hardwarePath.disable, {
+              networkName,
+            })}
+          </P>
+        ) : (
+          <div className='alert'>
+            <img src={images.errorIcon} className='alertImg' alt='error' />
+            <span className='alertText'>{state.error}</span>
+          </div>
+        ))}
       {!props.chainId && (
         <Select
           id='network'
@@ -129,12 +149,20 @@ export function HardwarePathChooser(props: Props) {
           {networkName || 'selected network'}
         </P>
       )}
-      {state.error && <div>{state.error}</div>}
       <Button
         onClick={onSubmit}
         disabled={!state.chainId || !state.dPath || state.loading}
         text='Continue'
       />
+      <BottomLinkContainer>
+        <a
+          href='https://wiki.sovryn.app'
+          target='_blank'
+          rel='noreferrer noopener'
+        >
+          {t(translations.dialogs.providerTypes.ledgerInstructions)}
+        </a>
+      </BottomLinkContainer>
     </Container>
   );
 }
@@ -231,6 +259,9 @@ const Image = styled.div`
 const P = styled.p`
   margin: 0 auto 35px;
   max-width: 236px;
+  font-family: 'Montserrat';
+  font-size: 16px;
+  font-weight: 300;
 `;
 
 const Container = styled.div`
@@ -238,4 +269,16 @@ const Container = styled.div`
   width: 100%;
   margin: 0 auto;
   text-align: center;
+  .alert {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 40px;
+  }
+  .alertImg {
+    margin-right: 5px;
+  }
+  .alertText {
+    color: #a52222;
+  }
 `;

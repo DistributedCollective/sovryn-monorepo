@@ -1,6 +1,6 @@
 {
   "name": "@sovryn/wallet",
-  "version": "1.0.17",
+  "version": "1.0.18-alpha.0",
   "description": "Library for interacting with RSK and ETH wallets.",
   "author": "Rytis Grincevicius",
   "license": "MIT",
@@ -22,11 +22,11 @@
     "test:lint": "eslint ."
   },
   "dependencies": {
-    "@ledgerhq/hw-app-eth": "^5.46.0",
-    "@ledgerhq/hw-transport": "^5.46.0",
+    "@ledgerhq/hw-app-eth": "^5.53.0",
+    "@ledgerhq/hw-transport": "^5.51.1",
     "@ledgerhq/hw-transport-u2f": "^5.36.0-deprecated",
-    "@ledgerhq/hw-transport-web-ble": "^5.46.0",
-    "@ledgerhq/hw-transport-webusb": "^5.46.0",
+    "@ledgerhq/hw-transport-web-ble": "^5.51.1",
+    "@ledgerhq/hw-transport-webusb": "^5.53.1",
     "@portis/web3": "^3.0.8",
     "@sovryn/common": "^1.0.16",
     "@trezor/rollout": "^1.0.7",

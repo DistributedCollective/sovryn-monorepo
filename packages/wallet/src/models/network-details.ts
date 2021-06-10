@@ -3,7 +3,6 @@ import type { DPath } from '../wallets/bip44/paths';
 
 export class NetworkDetails {
   private _logo: string;
-  private _nodeUrl: string;
   private _explorerTx: string;
   private _explorerAdr: string;
   private _networkId: number;
@@ -18,6 +17,7 @@ export class NetworkDetails {
     private _name: string,
     private _networkType: ConnectionType = ConnectionType.MAINNET,
     private _currencyName: string,
+    private _nodeUrl: string,
   ) {}
 
   public setNodeUrl(value: string) {
