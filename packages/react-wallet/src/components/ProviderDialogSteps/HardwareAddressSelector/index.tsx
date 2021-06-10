@@ -1,16 +1,20 @@
-import { DeterministicWalletData, getDeterministicWallets } from '@sovryn/wallet';
-// import { toChecksumAddress } from '@sovryn/wallet';
+import {
+  DeterministicWalletData,
+  getDeterministicWallets,
+} from '@sovryn/wallet';
 import { toChecksumAddress } from 'ethereumjs-util';
 import * as React from 'react';
 import { CopyToClipboard } from 'react-copy-to-clipboard';
 import { useTranslation } from 'react-i18next';
 import styled, { css } from 'styled-components/macro';
-import Web3 from 'web3';
 
 import { images } from '../../../assets/images';
 import { translations } from '../../../locales/i18n';
 import { toaster } from '../../../services/toaster';
 import { Button } from '../../Button';
+import { useEffect, useState } from 'react';
+import { walletService } from '../../../services';
+import { nodeService } from '../../../services/node';
 
 interface Props {
   chainId: number;
@@ -23,11 +27,6 @@ interface Props {
 }
 
 export function HardwareAddressSelector(props: Props) {
-  // const node = new Web3Node('https://public-node.testnet.rsk.co');
-  const provider = new Web3(new Web3.providers.HttpProvider("https://public-node.rsk.co"));
-  console.log("Web3 Node: ", provider.eth.getAccounts());
-  console.log("Chain Id", props.chainId);
-
   const [state, setState] = React.useState<{
     offset: number;
     wallets: DeterministicWalletData[];
@@ -78,47 +77,21 @@ export function HardwareAddressSelector(props: Props) {
     [state],
   );
   const { t } = useTranslation();
-  const step = state.offset/10 + 1;
   return (
     <div>
       <h1>{t(translations.dialogs.hardwareSelector.title)}</h1>
       <WalletList>
         {state.wallets.map(item => (
-          <WalletItem
+          <WalletAddressRow
             key={item.address}
-            onClick={() => onSelect(item)}
-            active={state.selected?.address === item.address}
-            title={item.address}
-          >
-            <CopyToClipboard 
-              text={item.address}
-              onCopy={() =>
-                toaster.show(
-                  {
-                    message: t(translations.dialogs.hardwareWallet.success),
-                    intent: 'success',
-                  },
-                  'btc-copy',
-                )
-              }
-            >
-              <div className="copy">
-                <img src={images.copyIcon} />
-              </div>
-            </CopyToClipboard>
-            <div className='key'>{item.index + 1}.</div>
-            <div className='value'>{item.address}</div>
-            <div className='divide'>-</div>
-            <div className='amount'>Balance:</div>
-            <div className='amountNum'>{item.index.toFixed(4)}</div>
-            <div className='asset'><small className="symbol">R</small>BTC</div>
-
-          </WalletItem>
+            chainId={props.chainId}
+            item={item}
+            state={state}
+            onSelect={onSelect}
+          />
         ))}
         {state.wallets.length === 0 && (
-          <div>
-            {t(translations.dialogs.hardwareSelector.noWallet)}
-          </div>
+          <div>{t(translations.dialogs.hardwareSelector.noWallet)}</div>
         )}
       </WalletList>
       <div>
@@ -128,32 +101,6 @@ export function HardwareAddressSelector(props: Props) {
             disabled={state.offset <= 0}
             left
           />
-            {step<8&&(
-              <div className='pagi'>
-                <div className={`pagiItem ${step==1&&('highlight')}`}>1</div>
-                <div className={`pagiItem ${step==2&&('highlight')}`}>2</div>
-                <div className={`pagiItem ${step==3&&('highlight')}`}>3</div>
-                <div className={`pagiItem ${step==4&&('highlight')}`}>4</div>
-                <div className={`pagiItem ${step==5&&('highlight')}`}>5</div>
-                <div className={`pagiItem ${step==6&&('highlight')}`}>6</div>
-                <div className={`pagiItem ${step==7&&('highlight')}`}>7</div>
-                <div className='pagiItem'>…</div>
-                <div className='pagiItem'></div>
-              </div>
-            )}
-            {step>7&&(
-              <div className='pagi'>
-                <div className='pagiItem'>1</div>
-                <div className='pagiItem'>…</div>
-                <div className='pagiItem highlight'>{step}</div>
-                <div className='pagiItem'>{step+1}</div>
-                <div className='pagiItem'>{step+2}</div>
-                <div className='pagiItem'>{step+3}</div>
-                <div className='pagiItem'>{step+4}</div>
-                <div className='pagiItem'>…</div>
-                <div className='pagiItem'></div>
-              </div>
-            )}
           <Arrow
             onClick={() => onChangeOffset(state.offset + (props.limit || 10))}
             right
@@ -174,6 +121,82 @@ export function HardwareAddressSelector(props: Props) {
 HardwareAddressSelector.defaultProps = {
   limits: 10,
 };
+
+function useGetBalance(chainId: number, address: string) {
+  const [state, setState] = useState({
+    loading: false,
+    balance: '0',
+    asset: 'RBTC',
+  });
+
+  useEffect(() => {
+    const network = walletService.networkDictionary.get(chainId);
+    if (network) {
+      setState(prevState => ({
+        ...prevState,
+        asset: network.getCurrencyName(),
+        loading: true,
+      }));
+    }
+
+    nodeService.getBalance(chainId, address).then(balance => {
+      setState(prevState => ({ ...prevState, loading: false, balance }));
+    });
+  }, [chainId, address]);
+
+  return state;
+}
+
+interface WalletAddressRowProps {
+  item: DeterministicWalletData;
+  state: any;
+  chainId: number;
+  onSelect: (item: DeterministicWalletData) => void;
+}
+
+function WalletAddressRow({
+  item,
+  state,
+  chainId,
+  onSelect,
+}: WalletAddressRowProps) {
+  const { t } = useTranslation();
+  const value = useGetBalance(chainId, item.address);
+  return (
+    <WalletItem
+      onClick={() => onSelect(item)}
+      active={state.selected?.address === item.address}
+      title={item.address}
+    >
+      <CopyToClipboard
+        text={item.address}
+        onCopy={() =>
+          toaster.show(
+            {
+              message: t(translations.dialogs.hardwareWallet.success),
+              intent: 'success',
+            },
+            'btc-copy',
+          )
+        }
+      >
+        <div className='copy'>
+          <img src={images.copyIcon} alt='copy' />
+        </div>
+      </CopyToClipboard>
+      <div className='key'>{item.index + 1}.</div>
+      <div className='value'>{item.address}</div>
+      <div className='divide'>-</div>
+      <div className='amount'>Balance:</div>
+      <div className='amountNum'>
+        {value.loading
+          ? 'Loading...'
+          : (Number(value.balance) / 1e18).toFixed(4)}
+      </div>
+      <div className='asset'>{value.asset}</div>
+    </WalletItem>
+  );
+}
 
 const WalletList = styled.div`
   padding: 16px 0;
@@ -211,7 +234,7 @@ const WalletItem = styled.button`
       border-color: #e9eae9;
     `}
   & .copy {
-    margin-right: 30px; 
+    margin-right: 30px;
   }
   & .key {
     margin-right: 5px;
@@ -224,7 +247,6 @@ const WalletItem = styled.button`
     font-size: 14px;
     font-weight: 300;
     font-family: 'Montserrat';
-
   }
   & .value {
     flex-grow: 0;
@@ -246,25 +268,25 @@ const WalletItem = styled.button`
     text-align: center;
     width: 15px;
   }
-   & .amount {
+  & .amount {
     font-size: 14px;
     font-weight: 500;
     font-family: 'Montserrat';
     text-align: center;
     width: 70px;
-   }
-   & .amountNum {
+  }
+  & .amountNum {
     font-size: 14px;
     font-weight: 500;
     font-family: 'Montserrat';
     text-align: right;
     width: 125px;
-   }
-   .symbol{
+  }
+  .symbol {
     font-size: 0.75em;
-    opacity:0.5!important;
-   }
-   .asset{
+    opacity: 0.5 !important;
+  }
+  .asset {
     font-size: 14px;
     font-weight: 500;
     font-family: 'Montserrat';
@@ -289,7 +311,7 @@ const Paginator = styled.div`
     height: 100%;
   }
   & .highlight {
-    background-color: #2274A5;
+    background-color: #2274a5;
     border-radius: 50%;
   }
   & .pagiItem {

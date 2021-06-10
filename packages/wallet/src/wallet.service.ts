@@ -28,7 +28,7 @@ export class WalletService {
   constructor() {
     this.events = new EventBag<WalletServiceEvents>();
     this.networkDictionary = new NetworkDictionary();
-    log('initialized');
+    log('initialized', this.networkDictionary);
   }
 
   public async start(provider: ProviderType) {

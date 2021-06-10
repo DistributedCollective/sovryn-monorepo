@@ -1,4 +1,9 @@
-import { ChainCodeResponse, LedgerWalletProvider, ProviderType, TrezorWalletProvider } from '@sovryn/wallet';
+import {
+  ChainCodeResponse,
+  LedgerWalletProvider,
+  ProviderType,
+  TrezorWalletProvider,
+} from '@sovryn/wallet';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components/macro';
@@ -28,9 +33,9 @@ export function HardwarePathChooser(props: Props) {
     error: '',
   });
 
-  // const networks = React.useMemo(() => {
-  //   return walletService.networkDictionary.list();
-  // }, [props.chainId]);
+  const networks = React.useMemo(() => {
+    return walletService.networkDictionary.list();
+  }, [props.chainId]);
   const networkName = React.useMemo(() => {
     return walletService.networkDictionary.get(state.chainId)?.getName();
   }, [state.chainId]);
@@ -77,13 +82,13 @@ export function HardwarePathChooser(props: Props) {
     }
   }, [state, props.provider]);
 
-  // const onChangeChain = (e: React.ChangeEvent<HTMLSelectElement>) => {
-  //   const value = e.currentTarget.value;
-  //   setState(prevState => ({
-  //     ...prevState,
-  //     chainId: Number(value),
-  //   }));
-  // };
+  const onChangeChain = (e: React.ChangeEvent<HTMLSelectElement>) => {
+    const value = e.currentTarget.value;
+    setState(prevState => ({
+      ...prevState,
+      chainId: Number(value),
+    }));
+  };
 
   const onChangePath = (e: React.ChangeEvent<HTMLSelectElement>) => {
     const value = e.currentTarget.value;
@@ -96,12 +101,37 @@ export function HardwarePathChooser(props: Props) {
 
   return (
     <Container>
-      <h1>{t(translations.dialogs.hardwarePath.title, { name: getTitle(props.provider)})}</h1>
+      <h1>
+        {t(translations.dialogs.hardwarePath.title, {
+          name: getTitle(props.provider),
+        })}
+      </h1>
       <Image src={getLogo(props.provider)} />
-      {props.provider === ProviderType.LEDGER && (state.error == '' ? (<P>{t(translations.dialogs.hardwarePath.disable)}</P>)
-        : (<div className='alert'><img src={images.errorIcon} className='alertImg'/><span className='alertText'>{state.error}</span></div>)
+      {props.provider === ProviderType.LEDGER &&
+        (state.error === '' ? (
+          <P>
+            {t(translations.dialogs.hardwarePath.disable, {
+              networkName,
+            })}
+          </P>
+        ) : (
+          <div className='alert'>
+            <img src={images.errorIcon} className='alertImg' alt='error' />
+            <span className='alertText'>{state.error}</span>
+          </div>
+        ))}
+      {!props.chainId && (
+        <Select
+          id='network'
+          label='Choose a network:'
+          value={String(state.chainId)}
+          options={networks.map(item => ({
+            value: item.getChainId().toString(),
+            label: item.getName(),
+          }))}
+          onChange={onChangeChain}
+        />
       )}
-
       {paths?.length ? (
         <Select
           id='path'
@@ -132,7 +162,7 @@ export function HardwarePathChooser(props: Props) {
         >
           {t(translations.dialogs.providerTypes.ledgerInstructions)}
         </a>
-      </BottomLinkContainer>      
+      </BottomLinkContainer>
     </Container>
   );
 }
@@ -249,6 +279,6 @@ const Container = styled.div`
     margin-right: 5px;
   }
   .alertText {
-    color: #A52222;
+    color: #a52222;
   }
 `;

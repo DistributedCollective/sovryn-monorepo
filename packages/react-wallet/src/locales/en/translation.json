@@ -38,7 +38,7 @@
     },
     "hardwarePath": {
       "title": "Connect {{name}}",
-      "disable": "Connect your ledger device via USB and open RSK app."
+      "disable": "Connect your ledger device via USB and open {{networkName}} app."
     }
   }
 }
