@@ -31,7 +31,6 @@ export class TrezorWalletProvider implements WalletProviderInterface {
     };
   }
 
-  // @ts-ignore
   async unlock(
     dPath: string,
     address: string,

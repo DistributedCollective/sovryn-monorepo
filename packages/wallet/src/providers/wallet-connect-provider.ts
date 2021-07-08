@@ -13,8 +13,7 @@ export class WalletConnectProvider implements WalletProviderInterface {
     log('initialized WalletConnect', service);
   }
 
-  // @ts-ignore
-  unlock(chainId: number, onConnect: (w: FullWallet) => void): Promise<string> {
+  unlock(chainId: number): Promise<FullWallet> {
     return new Promise(async (resolve, reject) => {
       try {
         log('connecting using WalletConnect');
@@ -45,8 +44,9 @@ export class WalletConnectProvider implements WalletProviderInterface {
             toChecksumAddress(accounts[0], chainId),
             chainId,
             this.provider as any,
+            wc.uri
           );
-          onConnect(wallet);
+          resolve(wallet);
         });
 
         wc.on('disconnect', () => {
@@ -58,7 +58,6 @@ export class WalletConnectProvider implements WalletProviderInterface {
           log('session updated.');
         });
 
-        resolve(wc.uri);
       } catch (e) {
         error('WalletConnect login errored', e);
         reject(e);

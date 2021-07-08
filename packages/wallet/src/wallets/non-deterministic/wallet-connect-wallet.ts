@@ -1,4 +1,5 @@
 import { bufferToHex } from 'ethereumjs-util';
+import { provider } from 'web3-core';
 import type WCProvider from '@walletconnect/web3-provider';
 import { RawTransactionData } from '../../interfaces/wallet.interface';
 import { ProviderType } from '../../constants';
@@ -7,6 +8,13 @@ import { Web3Wallet } from './web3';
 export class WalletConnectWallet extends Web3Wallet {
   // @ts-ignore
   readonly provider: WCProvider;
+  readonly uri: string | undefined;
+
+  constructor(address: string, chainId: number, provider: provider, uri?: string) {
+    super(address, chainId, provider);
+    this.uri = uri;
+  }
+
   // disconnect if the user is is out
   public getWalletType(): string {
     return ProviderType.WALLET_CONNECT;
