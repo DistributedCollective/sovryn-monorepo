@@ -156,7 +156,7 @@ export function HardwarePathChooser(props: Props) {
       />
       <BottomLinkContainer>
         <a
-          href='https://wiki.sovryn.app/e/en/technical-documents/wallet-derivation-paths'
+          href='https://wiki.sovryn.app/en/technical-documents/wallet-derivation-paths'
           target='_blank'
           rel='noreferrer noopener'
         >
