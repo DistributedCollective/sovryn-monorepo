@@ -1,1 +1,0 @@
-export { useWalletContext } from './useWalletContext';
