@@ -127,12 +127,16 @@ export function WalletProvider(props: Props) {
       if (provider && isWeb3Wallet(provider)) {
         const ProviderClass = walletProviderMap[provider];
         const providerInstance = new ProviderClass(walletService);
-        const wallet = await providerInstance.unlock(chainId);
+        const wallet = await providerInstance.unlock(chainId, (uri: string) => {
+          if (uri === undefined || typeof uri === 'string') {
+            setState(state => ({...state, uri}));
+          }
+        });
         return await setConnectedWallet(wallet);
       }
       return false;
     },
-    [setConnectedWallet],
+    [setState, setConnectedWallet],
   );
 
   const reconnect: WalletContextFunctionsType['reconnect'] = useCallback(async () => {
@@ -195,7 +199,6 @@ export function WalletProvider(props: Props) {
         address: value.getAddressString(),
         chainId: value.chainId,
         provider: value.getWalletType() as ProviderType,
-        uri: value instanceof WalletConnectWallet ? value.uri : undefined,
         connected: true,
         connecting: false,
       });

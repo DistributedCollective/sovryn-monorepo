@@ -18,7 +18,7 @@ import { HardwareWalletSelector } from '../../components/ProviderDialogSteps/Har
 import { HardwarePathChooser } from '../../components/ProviderDialogSteps/HardwarePathChooser';
 import { HardwareAddressSelector } from '../../components/ProviderDialogSteps/HardwareAddressSelector';
 import { WalletConnectProviders } from '../../components/ProviderDialogSteps/WalletConnectProviders';
-import { DEFAULT_CHAIN_ID, WalletContext } from '../../contexts/WalletContext';
+import { WalletContext } from '../../contexts/WalletContext';
 
 export type WalletConnectionViewHwOptions = {
   chainId: number;
@@ -37,7 +37,6 @@ type WalletConnectionViewState = {
   step: WalletConnectionStep;
   showProviderList: boolean;
   showWalletList: boolean;
-  uri?: string;
   provider?: ProviderType;
   hwOptions?: WalletConnectionViewHwOptions;
 };
@@ -154,13 +153,13 @@ export const WalletConnectionView: React.FC<WalletConnectionViewProps> = (props)
       {state.step === WalletConnectionStep.HARDWARE_PATH_SELECTOR && (
         <HardwarePathChooser
           provider={state.provider as ProviderType}
-          chainId={state.hwOptions?.chainId}
+          chainId={state.hwOptions?.chainId || context.expectedChainId}
           onComplete={onChainCodeChanged}
         />
       )}
       {state.step === WalletConnectionStep.HARDWARE_ADDRESS_SELECTOR && (
         <HardwareAddressSelector
-          chainId={state.hwOptions?.chainId || DEFAULT_CHAIN_ID}
+          chainId={state.hwOptions?.chainId || context.expectedChainId}
           dPath={state.hwOptions?.dPath || ''}
           seed={state.hwOptions?.seed}
           chainCode={state.hwOptions?.chainCode}
@@ -171,7 +170,7 @@ export const WalletConnectionView: React.FC<WalletConnectionViewProps> = (props)
       {state.step === WalletConnectionStep.WALLET_CONNECT_PROVIDERS && (
         <WalletConnectProviders
           onWalletSelected={onProviderChosen}
-          uri={state.uri}
+          uri={context.uri}
         />
       )}
     </div>
