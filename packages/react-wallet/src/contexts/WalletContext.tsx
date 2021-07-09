@@ -1,12 +1,15 @@
 import React from 'react';
 import { FullWallet, ProviderType, WalletService } from '../../../wallet/dist';
 
+export const DEFAULT_CHAIN_ID = 30;
+
 export type WalletContextStateType = {
   walletService?: WalletService;
   wallet?: FullWallet;
-  expectedChainId?: number;
+  expectedChainId: number;
   chainId?: number;
   address?: string;
+  hwIndex?: number;
   provider?: ProviderType;
   dPath?: string;
   seed?: string;
@@ -22,6 +25,7 @@ export type WalletContextFunctionsType = {
   startConnectionDialog: () => void;
   disconnect: () => void;
   setConnectedWallet: (wallet: FullWallet) => Promise<boolean>;
+  reconnect: () => Promise<boolean>;
   unlockDeterministicWallet: (
     address: string,
     index: number,
@@ -39,6 +43,7 @@ export type WalletContextType = WalletContextStateType &
   WalletContextFunctionsType;
 
 const defaultValue: WalletContextType = {
+  expectedChainId: DEFAULT_CHAIN_ID,
   walletService: undefined,
   connected: false,
   connecting: false,
@@ -47,6 +52,9 @@ const defaultValue: WalletContextType = {
   },
   disconnect: () => {
     throw new Error('disconnect() has not been set!');
+  },
+  reconnect: () => {
+    throw new Error('set() has not been set!');
   },
   startConnectionDialog: () => {
     throw new Error('startConnectionDialog() has not been set!');

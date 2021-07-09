@@ -7,15 +7,12 @@ import React, {
 } from 'react';
 import { useTranslation } from 'react-i18next';
 import { WalletConnectionStep } from './types';
-import { walletService } from '../../services';
 import {
   ChainCodeResponse,
-  FullWallet,
   hardwareWallets,
+  isHardwareWallet,
   isWeb3Wallet,
   ProviderType,
-  Web3Wallet,
-  web3Wallets,
 } from '@sovryn/wallet';
 import { ProviderTypeSelector } from '../../components/ProviderDialogSteps/ProviderTypeSelector';
 import { BrowserWalletSelector } from '../../components/ProviderDialogSteps/BrowserWalletSelector';
@@ -36,18 +33,26 @@ export type WalletConnectionViewHwOptions = {
 
 type WalletConnectionViewProps = {
   onStep: (value: WalletConnectionStep) => void;
-  hwOptions: WalletConnectionViewHwOptions;
+  onCompleted: (result: boolean) => void;
+};
+
+type WalletConnectionViewState = {
+  step: WalletConnectionStep,
+  showProviderList: boolean,
+  showWalletList: boolean,
+  provider?: ProviderType,
+  hwOptions?: WalletConnectionViewHwOptions,
 };
 
 export const WalletConnectionView: React.FC<WalletConnectionViewProps> = (props) => {
   const context = useContext(WalletContext);
   const { t } = useTranslation();
 
-  const [state, setState] = useState({
+  const [state, setState] = useState<WalletConnectionViewState>({
     step: WalletConnectionStep.NONE,
     showProviderList: false,
     showWalletList: false,
-    loading: false,
+    provider: undefined,
   });
 
   useEffect(() => {
@@ -66,20 +71,14 @@ export const WalletConnectionView: React.FC<WalletConnectionViewProps> = (props)
 
 
   const onProviderChosen = React.useCallback(async (provider: ProviderType) => {
-    setState(prevState => ({ ...prevState, provider, loading: true }));
-    context.state.loading.set(true);
+    setState(prevState => ({ ...prevState, provider}));
     try {
       if (isWeb3Wallet(provider)) {
-        context.unlockWeb3Wallet(provider, context.expectedChainId);
-        const s = await walletService.start(provider);
-        // @ts-ignore
-        const w = await s.unlock(props.options?.chainId || props.chainId || 30);
-        // @ts-ignore
-        await setConnectedWallet(w);
+        await context.unlockWeb3Wallet(provider, context.expectedChainId);
         return;
       }
 
-      if (hardwareWallets.includes(provider)) {
+      if (isHardwareWallet(provider)) {
         setState(prevState => ({
           ...prevState,
           step: WalletConnectionStep.HARDWARE_PATH_SELECTOR,
@@ -90,17 +89,13 @@ export const WalletConnectionView: React.FC<WalletConnectionViewProps> = (props)
       // If there is no wallet, reset state.
       setState(prevState => ({
         ...prevState,
-        provider: (null as unknown) as ProviderType,
-        loading: false,
+        provider: undefined,
       }));
-      context.state.loading.set(false);
     } catch (e) {
-      setState(prevState => ({ ...prevState, loading: false }));
-      context.state.loading.set(false);
+      console.error(e);
     }
   }, []);
 
-  // @ts-ignore
   const onChainCodeChanged = React.useCallback(
     (
       { chainCode, publicKey }: ChainCodeResponse,

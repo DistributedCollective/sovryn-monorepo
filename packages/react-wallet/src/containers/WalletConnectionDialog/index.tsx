@@ -6,8 +6,6 @@ import { WalletConnectionView, WalletConnectionViewHwOptions } from '../WalletCo
 
 type WalletConnectionDialogProps = {
   onClose: () => void;
-  onUnlockDeterministicWallet: (address: string, index: number) => void;
-  hwOptions: WalletConnectionViewHwOptions;
 };
 
 export function WalletConnectionDialog(props: WalletConnectionDialogProps) {
