@@ -18,7 +18,7 @@ import { HardwareWalletSelector } from '../../components/ProviderDialogSteps/Har
 import { HardwarePathChooser } from '../../components/ProviderDialogSteps/HardwarePathChooser';
 import { HardwareAddressSelector } from '../../components/ProviderDialogSteps/HardwareAddressSelector';
 import { WalletConnectProviders } from '../../components/ProviderDialogSteps/WalletConnectProviders';
-import { WalletContext } from '../../contexts/WalletContext';
+import { DEFAULT_CHAIN_ID, WalletContext } from '../../contexts/WalletContext';
 
 export type WalletConnectionViewHwOptions = {
   chainId: number;
@@ -159,7 +159,7 @@ export const WalletConnectionView: React.FC<WalletConnectionViewProps> = (props)
       )}
       {state.step === WalletConnectionStep.HARDWARE_ADDRESS_SELECTOR && (
         <HardwareAddressSelector
-          chainId={state.hwOptions?.chainId || context.expectedChainId}
+          chainId={state.hwOptions?.chainId || context.expectedChainId || DEFAULT_CHAIN_ID}
           dPath={state.hwOptions?.dPath || ''}
           seed={state.hwOptions?.seed}
           chainCode={state.hwOptions?.chainCode}

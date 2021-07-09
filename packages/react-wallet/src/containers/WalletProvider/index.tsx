@@ -19,7 +19,6 @@ import {
   WalletContextStateType,
   WalletContext,
   WalletContextType,
-  DEFAULT_CHAIN_ID,
 } from '../../contexts/WalletContext';
 import { WalletConnectionDialog } from '../WalletConnectionDialog';
 import { useTranslation } from 'react-i18next';
@@ -48,7 +47,7 @@ const REMEMBER_SESSION_KEY = '__sovryn_wallet';
 export function WalletProvider(props: Props) {
   const { t } = useTranslation();
 
-  const { chainId: expectedChainId = DEFAULT_CHAIN_ID } = props.options || {};
+  const { chainId: expectedChainId } = props.options || {};
 
   const [state, setState] = useState<WalletContextStateType>({
     walletService: walletService,

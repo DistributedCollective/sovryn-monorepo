@@ -6,7 +6,7 @@ export const DEFAULT_CHAIN_ID = 30;
 export type WalletContextStateType = {
   walletService?: WalletService;
   wallet?: FullWallet;
-  expectedChainId: number;
+  expectedChainId?: number;
   chainId?: number;
   address?: string;
   hwIndex?: number;
@@ -35,7 +35,7 @@ export type WalletContextFunctionsType = {
   ) => Promise<boolean>;
   unlockWeb3Wallet: (
     provider: ProviderType,
-    chainId: number,
+    chainId?: number,
   ) => Promise<boolean>;
 };
 
@@ -43,7 +43,7 @@ export type WalletContextType = WalletContextStateType &
   WalletContextFunctionsType;
 
 const defaultValue: WalletContextType = {
-  expectedChainId: DEFAULT_CHAIN_ID,
+  expectedChainId: undefined,
   walletService: undefined,
   connected: false,
   connecting: false,
