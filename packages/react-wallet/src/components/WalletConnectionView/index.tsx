@@ -11,13 +11,13 @@ import {
   isWeb3Wallet,
   ProviderType,
 } from '@sovryn/wallet';
-import { ProviderTypeSelector } from '../../components/ProviderDialogSteps/ProviderTypeSelector';
-import { BrowserWalletSelector } from '../../components/ProviderDialogSteps/BrowserWalletSelector';
-import { BackButton } from '../../components/BackButton';
-import { HardwareWalletSelector } from '../../components/ProviderDialogSteps/HardwareWalletSelector';
-import { HardwarePathChooser } from '../../components/ProviderDialogSteps/HardwarePathChooser';
-import { HardwareAddressSelector } from '../../components/ProviderDialogSteps/HardwareAddressSelector';
-import { WalletConnectProviders } from '../../components/ProviderDialogSteps/WalletConnectProviders';
+import { ProviderTypeSelector } from '../WalletConnectionSteps/ProviderTypeSelector';
+import { BrowserWalletSelector } from '../WalletConnectionSteps/BrowserWalletSelector';
+import { BackButton } from '../BackButton';
+import { HardwareWalletSelector } from '../WalletConnectionSteps/HardwareWalletSelector';
+import { HardwarePathChooser } from '../WalletConnectionSteps/HardwarePathChooser';
+import { HardwareAddressSelector } from '../WalletConnectionSteps/HardwareAddressSelector';
+import { WalletConnectProviders } from '../WalletConnectionSteps/WalletConnectProviders';
 import { DEFAULT_CHAIN_ID, WalletContext } from '../../contexts/WalletContext';
 
 export type WalletConnectionViewHwOptions = {

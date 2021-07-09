@@ -20,7 +20,7 @@ import {
   WalletContext,
   WalletContextType,
 } from '../../contexts/WalletContext';
-import { WalletConnectionDialog } from '../WalletConnectionDialog';
+import { WalletConnectionDialog } from '../../components/WalletConnectionDialog';
 import { useTranslation } from 'react-i18next';
 import Portal from '../../components/Portal';
 import i18next from 'i18next';
@@ -377,9 +377,7 @@ export function WalletProvider(props: Props) {
       {showWrongNetworkAlert && (
         <React.Fragment>{t(translations.common.alert)}</React.Fragment>
       )}
-
       <React.Fragment>{props.children}</React.Fragment>
-
       {connectionDialog}
     </WalletContext.Provider>
   );

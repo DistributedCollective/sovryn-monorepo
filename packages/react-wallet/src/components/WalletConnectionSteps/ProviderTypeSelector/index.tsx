@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 import { ItemList } from '../../ItemList';
 import { Item } from '../../Item';
 import { images } from '../../../assets/images';
-import { WalletConnectionStep } from '../../../containers/WalletConnectionView/types';
+import { WalletConnectionStep } from '../../WalletConnectionView/types';
 import { BottomLinkContainer } from '../../BottomLinkContainer';
 import { translations } from '../../../locales/i18n';
 
