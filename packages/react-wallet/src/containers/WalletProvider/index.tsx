@@ -245,7 +245,7 @@ export function WalletProvider(props: Props) {
   // handle walletProvider events
   useEffect(() => {
     const wallet = walletService.wallet;
-    const providerType = wallet.getWalletType() as ProviderType;
+    const providerType = wallet && wallet.getWalletType() as ProviderType;
 
     if (
       wallet &&

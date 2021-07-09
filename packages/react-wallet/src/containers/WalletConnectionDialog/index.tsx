@@ -1,16 +1,19 @@
-import * as React from 'react';
+import React, { useState } from 'react';
 import { useMemo } from 'react';
 import { Dialog } from '../../components/Dialog';
 import { WalletConnectionStep } from '../WalletConnectionView/types';
-import { WalletConnectionView, WalletConnectionViewHwOptions } from '../WalletConnectionView';
+import {
+  WalletConnectionView,
+} from '../WalletConnectionView';
 
 type WalletConnectionDialogProps = {
   onClose: () => void;
 };
 
-export function WalletConnectionDialog(props: WalletConnectionDialogProps) {
+export function WalletConnectionDialog({onClose}: WalletConnectionDialogProps) {
+  const [step, setStep] = useState<WalletConnectionStep>(WalletConnectionStep.NONE);
   const size = useMemo(() => {
-    switch (props.step) {
+    switch (step) {
       default:
         return 'large';
       case WalletConnectionStep.HARDWARE_PATH_SELECTOR:
@@ -18,14 +21,15 @@ export function WalletConnectionDialog(props: WalletConnectionDialogProps) {
       case WalletConnectionStep.HARDWARE_ADDRESS_SELECTOR:
         return 'large';
     }
-  }, [props.step]);
+  }, [step]);
+
   return (
     <Dialog
-      onClose={props.onClose}
-      isOpen={props.step !== WalletConnectionStep.NONE}
+      onClose={onClose}
       size={size}
+      isOpen
     >
-      <WalletConnectionView />
+      <WalletConnectionView onStep={setStep} onCompleted={onClose}/>
     </Dialog>
   );
 }

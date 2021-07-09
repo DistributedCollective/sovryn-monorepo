@@ -1,15 +1,12 @@
 import React, {
   useEffect,
-  useRef,
   useState,
   useCallback,
   useContext,
 } from 'react';
-import { useTranslation } from 'react-i18next';
 import { WalletConnectionStep } from './types';
 import {
   ChainCodeResponse,
-  hardwareWallets,
   isHardwareWallet,
   isWeb3Wallet,
   ProviderType,
@@ -21,7 +18,7 @@ import { HardwareWalletSelector } from '../../components/ProviderDialogSteps/Har
 import { HardwarePathChooser } from '../../components/ProviderDialogSteps/HardwarePathChooser';
 import { HardwareAddressSelector } from '../../components/ProviderDialogSteps/HardwareAddressSelector';
 import { WalletConnectProviders } from '../../components/ProviderDialogSteps/WalletConnectProviders';
-import { WalletContext } from '../../contexts/WalletContext';
+import { DEFAULT_CHAIN_ID, WalletContext } from '../../contexts/WalletContext';
 
 export type WalletConnectionViewHwOptions = {
   chainId: number;
@@ -37,60 +34,49 @@ type WalletConnectionViewProps = {
 };
 
 type WalletConnectionViewState = {
-  step: WalletConnectionStep,
-  showProviderList: boolean,
-  showWalletList: boolean,
-  provider?: ProviderType,
-  hwOptions?: WalletConnectionViewHwOptions,
+  step: WalletConnectionStep;
+  showProviderList: boolean;
+  showWalletList: boolean;
+  uri?: string;
+  provider?: ProviderType;
+  hwOptions?: WalletConnectionViewHwOptions;
 };
 
 export const WalletConnectionView: React.FC<WalletConnectionViewProps> = (props) => {
   const context = useContext(WalletContext);
-  const { t } = useTranslation();
 
   const [state, setState] = useState<WalletConnectionViewState>({
     step: WalletConnectionStep.NONE,
-    showProviderList: false,
+    showProviderList: true,
     showWalletList: false,
     provider: undefined,
   });
 
   useEffect(() => {
     if (state.showProviderList && state.step === WalletConnectionStep.NONE) {
-      setState(prevState => ({
-        ...prevState,
-        step: WalletConnectionStep.PROVIDERS,
-      }));
+      onStepChange(WalletConnectionStep.PROVIDERS);
     }
-  }, [context.connecting]);
-
-  const onDismiss = React.useCallback(() => {
-    setState(prevState => ({ ...prevState, step: WalletConnectionStep.NONE }));
-    context.disconnect();
-  }, [context]);
+  }, [state.showProviderList, state.step]);
 
 
   const onProviderChosen = React.useCallback(async (provider: ProviderType) => {
-    setState(prevState => ({ ...prevState, provider}));
+    setState(prevState => ({ ...prevState, provider }));
+    
     try {
       if (isWeb3Wallet(provider)) {
-        await context.unlockWeb3Wallet(provider, context.expectedChainId);
+        let result = await context.unlockWeb3Wallet(provider, context.expectedChainId);
+        if (props.onCompleted) {
+          props.onCompleted(result);
+        }
         return;
-      }
-
-      if (isHardwareWallet(provider)) {
+      } else if (isHardwareWallet(provider)) {
+        onStepChange(WalletConnectionStep.HARDWARE_PATH_SELECTOR);
+      } else {
         setState(prevState => ({
           ...prevState,
-          step: WalletConnectionStep.HARDWARE_PATH_SELECTOR,
+          provider: undefined,
         }));
-        return;
       }
-
-      // If there is no wallet, reset state.
-      setState(prevState => ({
-        ...prevState,
-        provider: undefined,
-      }));
     } catch (e) {
       console.error(e);
     }
@@ -104,19 +90,47 @@ export const WalletConnectionView: React.FC<WalletConnectionViewProps> = (props)
     ) => {
       setState(prevState => ({
         ...prevState,
-        dPath,
-        chainId,
-        chainCode,
-        publicKey,
-        step: WalletConnectionStep.HARDWARE_ADDRESS_SELECTOR,
+        hwOptions: {
+          dPath,
+          chainId,
+          chainCode,
+          publicKey,
+        },
       }));
+      onStepChange(WalletConnectionStep.HARDWARE_ADDRESS_SELECTOR);
     },
     [context],
   );
 
   const onStepChange = useCallback((value: WalletConnectionStep) => {
     setState(prevState => ({ ...prevState, step: value }));
+    if (props.onStep) {
+      props.onStep(value);
+    }
   }, []);
+
+  const onUnlockDeterministicWallet = useCallback(
+    async (address: string, index: number) => {
+      if (state.provider && context.unlockDeterministicWallet) {
+        let result = false;
+        try {
+          result = await context.unlockDeterministicWallet(
+            address,
+            index,
+            state.provider,
+            state.hwOptions?.dPath,
+            state.hwOptions?.chainId,
+          );
+        } catch (e) {
+          console.error(e);
+        }
+        if (props.onCompleted) {
+          props.onCompleted(result);
+        }
+      }
+    },
+    [context.unlockDeterministicWallet],
+  );
 
   return (
     <div>
@@ -125,40 +139,38 @@ export const WalletConnectionView: React.FC<WalletConnectionViewProps> = (props)
         WalletConnectionStep.HARDWARE_PROVIDERS,
         WalletConnectionStep.HARDWARE_PATH_SELECTOR,
         WalletConnectionStep.WALLET_CONNECT_PROVIDERS,
-      ].includes(props.step) && (
-        <BackButton
-          onClick={() => props.onStep(WalletConnectionStep.PROVIDERS)}
-        />
+      ].includes(state.step) && (
+        <BackButton onClick={() => onStepChange(WalletConnectionStep.PROVIDERS)} />
       )}
-      {props.step === WalletConnectionStep.PROVIDERS && (
-        <ProviderTypeSelector onStep={props.onStep} />
+      {state.step === WalletConnectionStep.PROVIDERS && (
+        <ProviderTypeSelector onStep={onStepChange} />
       )}
-      {props.step === WalletConnectionStep.BROWSER_PROVIDERS && (
-        <BrowserWalletSelector onWalletSelected={props.onProviderChosen} />
+      {state.step === WalletConnectionStep.BROWSER_PROVIDERS && (
+        <BrowserWalletSelector onWalletSelected={onProviderChosen} />
       )}
-      {props.step === WalletConnectionStep.HARDWARE_PROVIDERS && (
-        <HardwareWalletSelector onWalletSelected={props.onProviderChosen} />
+      {state.step === WalletConnectionStep.HARDWARE_PROVIDERS && (
+        <HardwareWalletSelector onWalletSelected={onProviderChosen} />
       )}
-      {props.step === WalletConnectionStep.HARDWARE_PATH_SELECTOR && (
+      {state.step === WalletConnectionStep.HARDWARE_PATH_SELECTOR && (
         <HardwarePathChooser
-          provider={props.provider as ProviderType}
-          chainId={props.chainId}
-          onComplete={props.onChainCodeChanged}
+          provider={state.provider as ProviderType}
+          chainId={state.hwOptions?.chainId}
+          onComplete={onChainCodeChanged}
         />
       )}
-      {props.step === WalletConnectionStep.HARDWARE_ADDRESS_SELECTOR && (
+      {state.step === WalletConnectionStep.HARDWARE_ADDRESS_SELECTOR && (
         <HardwareAddressSelector
-          chainId={props.hwOptions.chainId}
-          dPath={props.hwOptions.dPath}
-          seed={props.hwOptions.seed}
-          chainCode={props.hwOptions.chainCode}
-          publicKey={props.hwOptions.publicKey}
-          onUnlock={props.onUnlockDeterministicWallet}
+          chainId={state.hwOptions?.chainId || DEFAULT_CHAIN_ID}
+          dPath={state.hwOptions?.dPath || ''}
+          seed={state.hwOptions?.seed}
+          chainCode={state.hwOptions?.chainCode}
+          publicKey={state.hwOptions?.publicKey}
+          onUnlock={onUnlockDeterministicWallet}
         />
       )}
-      {props.step === WalletConnectionStep.WALLET_CONNECT_PROVIDERS && (
+      {state.step === WalletConnectionStep.WALLET_CONNECT_PROVIDERS && (
         <WalletConnectProviders
-          onWalletSelected={props.onProviderChosen}
+          onWalletSelected={onProviderChosen}
           uri={state.uri}
         />
       )}
