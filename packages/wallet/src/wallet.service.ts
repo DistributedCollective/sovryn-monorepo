@@ -22,8 +22,8 @@ export class WalletService {
   public readonly events: EventBag<WalletServiceEvents>;
   readonly networkDictionary: NetworkDictionary;
 
-  private _wallet: FullWallet;
-  private _providerType: ProviderType;
+  private _wallet?: FullWallet;
+  private _providerType?: ProviderType;
 
   constructor() {
     this.events = new EventBag<WalletServiceEvents>();
@@ -35,7 +35,6 @@ export class WalletService {
     log(`get provider ${provider}`);
     const Provider = walletProviderMap[provider];
     if (Provider) {
-      // @ts-ignore
       return new Provider(this);
     } else {
       error('provider not found.');
@@ -54,10 +53,8 @@ export class WalletService {
     if (this.wallet) {
       await this.wallet.disconnect();
     }
-    // @ts-ignore
-    this._wallet = null;
-    // @ts-ignore
-    this._providerType = null;
+    this._wallet = undefined;
+    this._providerType = undefined;
     this.events.trigger('disconnected');
     log('disconnected');
     return true;
@@ -84,7 +81,7 @@ export class WalletService {
   /**
    * @deprecated use wallet prop instead.
    */
-  public getWallet(): FullWallet {
+  public getWallet() {
     return this._wallet;
   }
 
