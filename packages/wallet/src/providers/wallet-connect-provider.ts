@@ -13,7 +13,7 @@ export class WalletConnectProvider implements WalletProviderInterface {
     log('initialized WalletConnect', service);
   }
 
-  unlock(chainId: number): Promise<FullWallet> {
+  unlock(chainId: number, uriCallback: (uri: string) => void): Promise<FullWallet> {
     return new Promise(async (resolve, reject) => {
       try {
         log('connecting using WalletConnect');
@@ -36,6 +36,8 @@ export class WalletConnectProvider implements WalletProviderInterface {
         log('WC URI: ', wc.uri);
         let wallet;
 
+        uriCallback(wc.uri);
+
         wc.on('connect', (err, payload) => {
           if (err) return err;
           const { params } = payload;
@@ -44,7 +46,6 @@ export class WalletConnectProvider implements WalletProviderInterface {
             toChecksumAddress(accounts[0], chainId),
             chainId,
             this.provider as any,
-            wc.uri
           );
           resolve(wallet);
         });

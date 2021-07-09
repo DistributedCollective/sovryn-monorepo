@@ -8,11 +8,9 @@ import { Web3Wallet } from './web3';
 export class WalletConnectWallet extends Web3Wallet {
   // @ts-ignore
   readonly provider: WCProvider;
-  readonly uri: string | undefined;
 
-  constructor(address: string, chainId: number, provider: provider, uri?: string) {
+  constructor(address: string, chainId: number, provider: provider) {
     super(address, chainId, provider);
-    this.uri = uri;
   }
 
   // disconnect if the user is is out
