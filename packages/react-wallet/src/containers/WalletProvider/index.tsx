@@ -22,7 +22,6 @@ import {
 } from '../../contexts/WalletContext';
 import { WalletConnectionDialog } from '../../components/WalletConnectionDialog';
 import { useTranslation } from 'react-i18next';
-import Portal from '../Portal';
 import i18next from 'i18next';
 
 interface Options {
@@ -128,7 +127,7 @@ export function WalletProvider(props: Props) {
         const providerInstance = new ProviderClass(walletService);
         const wallet = await providerInstance.unlock(chainId, (uri: string) => {
           if (uri === undefined || typeof uri === 'string') {
-            setState(state => ({...state, uri}));
+            setState(state => ({ ...state, uri }));
           }
         });
         return await setConnectedWallet(wallet);
@@ -247,7 +246,7 @@ export function WalletProvider(props: Props) {
   // handle walletProvider events
   useEffect(() => {
     const wallet = walletService.wallet;
-    const providerType = wallet && wallet.getWalletType() as ProviderType;
+    const providerType = wallet && (wallet.getWalletType() as ProviderType);
 
     if (
       wallet &&
@@ -356,29 +355,18 @@ export function WalletProvider(props: Props) {
     ],
   );
 
-  let connectionDialog = null;
-  if (showConnectionDialog) {
-    let dialog = (
-      <WalletConnectionDialog
-        onClose={onCloseConnectionDialog}
-      />
-    );
-    if (props.portalTargetId) {
-      connectionDialog = (
-        <Portal parentId={props.portalTargetId}>{dialog}</Portal>
-      );
-    } else {
-      connectionDialog = dialog;
-    }
-  }
-
   return (
     <WalletContext.Provider value={contextValue}>
       {showWrongNetworkAlert && (
         <React.Fragment>{t(translations.common.alert)}</React.Fragment>
       )}
       <React.Fragment>{props.children}</React.Fragment>
-      {connectionDialog}
+      {showConnectionDialog && (
+        <WalletConnectionDialog
+          portalTargetId={props.portalTargetId}
+          onClose={onCloseConnectionDialog}
+        />
+      )}
     </WalletContext.Provider>
   );
 }

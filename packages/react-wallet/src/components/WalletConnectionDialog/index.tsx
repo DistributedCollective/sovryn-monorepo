@@ -7,10 +7,11 @@ import {
 } from '../WalletConnectionView';
 
 type WalletConnectionDialogProps = {
+  portalTargetId?: string;
   onClose: () => void;
 };
 
-export function WalletConnectionDialog({onClose}: WalletConnectionDialogProps) {
+export function WalletConnectionDialog({portalTargetId, onClose}: WalletConnectionDialogProps) {
   const [step, setStep] = useState<WalletConnectionStep>(WalletConnectionStep.NONE);
   const size = useMemo(() => {
     switch (step) {
@@ -28,6 +29,7 @@ export function WalletConnectionDialog({onClose}: WalletConnectionDialogProps) {
       onClose={onClose}
       size={size}
       isOpen
+      portalTargetId={portalTargetId}
     >
       <WalletConnectionView onStep={setStep} onCompleted={onClose}/>
     </Dialog>
