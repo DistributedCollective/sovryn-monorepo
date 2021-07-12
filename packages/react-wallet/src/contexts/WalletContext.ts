@@ -1,11 +1,11 @@
 import React from 'react';
 import { FullWallet, ProviderType, WalletService } from '../../../wallet/dist';
+import { walletService } from '../services';
 
 export const DEFAULT_CHAIN_ID = 30;
 
 export type WalletContextStateType = {
-  walletService?: WalletService;
-  wallet?: FullWallet;
+  wallet: WalletService;
   expectedChainId?: number;
   chainId?: number;
   address?: string;
@@ -64,8 +64,8 @@ export type WalletContextType = WalletContextStateType &
   WalletContextFunctionsType;
 
 const defaultValue: WalletContextType = {
+  wallet: walletService,
   expectedChainId: undefined,
-  walletService: undefined,
   connected: false,
   connecting: false,
   set: () => {

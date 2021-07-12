@@ -49,7 +49,7 @@ export function WalletProvider(props: Props) {
   const { chainId: expectedChainId } = props.options || {};
 
   const [state, setState] = useState<WalletContextStateType>({
-    walletService: walletService,
+    wallet: walletService,
     expectedChainId: expectedChainId,
     chainId: undefined,
     address: undefined,
@@ -176,7 +176,7 @@ export function WalletProvider(props: Props) {
   useEffect(() => {
     setState({
       ...state,
-      walletService: walletService,
+      wallet: walletService,
     });
   }, [walletService, setState]);
 
