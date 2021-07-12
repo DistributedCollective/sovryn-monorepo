@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import { useMemo } from 'react';
-import { Dialog } from '../Dialog';
+import { Dialog } from '../../containers/Dialog';
 import { WalletConnectionStep } from '../WalletConnectionView/types';
 import {
   WalletConnectionView,

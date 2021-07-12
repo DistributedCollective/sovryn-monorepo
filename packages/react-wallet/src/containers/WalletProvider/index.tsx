@@ -22,7 +22,7 @@ import {
 } from '../../contexts/WalletContext';
 import { WalletConnectionDialog } from '../../components/WalletConnectionDialog';
 import { useTranslation } from 'react-i18next';
-import Portal from '../../components/Portal';
+import Portal from '../Portal';
 import i18next from 'i18next';
 
 interface Options {
