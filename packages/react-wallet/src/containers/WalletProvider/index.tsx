@@ -67,7 +67,7 @@ export function WalletProvider(props: Props) {
 
   const [showConnectionDialog, setShowConnectionDialog] = useState(false);
 
-  const startConnectionDialog = useCallback(() => {
+  const connect = useCallback(() => {
     setShowConnectionDialog(true);
     setState(state => ({ ...state, connecting: true }));
     walletService.events.trigger('connect');
@@ -337,9 +337,9 @@ export function WalletProvider(props: Props) {
     () => ({
       ...state,
       set: setState,
+      connect,
       disconnect,
       reconnect,
-      startConnectionDialog,
       setConnectedWallet,
       unlockDeterministicWallet,
       unlockWeb3Wallet,
@@ -347,9 +347,9 @@ export function WalletProvider(props: Props) {
     [
       state,
       setState,
+      connect,
       reconnect,
       disconnect,
-      startConnectionDialog,
       setConnectedWallet,
       unlockDeterministicWallet,
       unlockWeb3Wallet,

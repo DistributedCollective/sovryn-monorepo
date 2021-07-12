@@ -21,11 +21,29 @@ export type WalletContextStateType = {
 };
 
 export type WalletContextFunctionsType = {
+  /**
+   * Updates the context values
+   */
   set: (newState: WalletContextStateType) => void;
-  startConnectionDialog: () => void;
+  /**
+   * Opens the WalletConnectionDialog
+   */
+  connect: () => void;
+  /**
+   * Disconnect from wallet, and reset context values
+   */
   disconnect: () => void;
+  /**
+   * Registers the passed wallet with the WalletService 
+   */
   setConnectedWallet: (wallet: FullWallet) => Promise<boolean>;
+  /**
+   * Tries to reconnect to the current active wallet.
+   */
   reconnect: () => Promise<boolean>;
+  /**
+   * Creates a new wallet instance, tries to unlock it and registers it with the WalletService.
+   */
   unlockDeterministicWallet: (
     address: string,
     index: number,
@@ -33,6 +51,9 @@ export type WalletContextFunctionsType = {
     path?: string,
     chainId?: number,
   ) => Promise<boolean>;
+  /**
+   * Creates a new wallet instance, tries to unlock it and registers it with the WalletService.
+   */
   unlockWeb3Wallet: (
     provider: ProviderType,
     chainId?: number,
@@ -56,8 +77,8 @@ const defaultValue: WalletContextType = {
   reconnect: () => {
     throw new Error('set() has not been set!');
   },
-  startConnectionDialog: () => {
-    throw new Error('startConnectionDialog() has not been set!');
+  connect: () => {
+    throw new Error('connect() has not been set!');
   },
   setConnectedWallet: () => {
     throw new Error('setConnectedWallet() has not been set!');
