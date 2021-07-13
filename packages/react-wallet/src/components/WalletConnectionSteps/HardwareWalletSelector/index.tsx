@@ -8,6 +8,7 @@ import { translations } from '../../../locales/i18n';
 import { useTranslation } from 'react-i18next';
 interface Props {
   onWalletSelected: (value: ProviderType) => void;
+  hideInstructionLink?: boolean;
 }
 
 export function HardwareWalletSelector(props: Props) {
@@ -31,15 +32,17 @@ export function HardwareWalletSelector(props: Props) {
           linkTitle='Buy Now'
         />
       </ItemList>
-      <BottomLinkContainer>
-        <a
-          href='https://wiki.sovryn.app'
-          target='_blank'
-          rel='noreferrer noopener'
-        >
-          {t(translations.dialogs.providerTypes.instructions)}
-        </a>
-      </BottomLinkContainer>
+      {!props.hideInstructionLink && (
+        <BottomLinkContainer>
+          <a
+            href='https://wiki.sovryn.app'
+            target='_blank'
+            rel='noreferrer noopener'
+          >
+            {t(translations.dialogs.providerTypes.instructions)}
+          </a>
+        </BottomLinkContainer>
+      )}
     </div>
   );
 }

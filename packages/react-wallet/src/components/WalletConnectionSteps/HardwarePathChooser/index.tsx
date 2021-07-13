@@ -23,6 +23,7 @@ interface Props {
     chainId: number,
     dPath: string,
   ) => void;
+  hideInstructionLink?: boolean;
 }
 
 export function HardwarePathChooser(props: Props) {
@@ -154,15 +155,17 @@ export function HardwarePathChooser(props: Props) {
         disabled={!state.chainId || !state.dPath || state.loading}
         text='Continue'
       />
-      <BottomLinkContainer>
-        <a
-          href='https://wiki.sovryn.app/en/technical-documents/wallet-derivation-paths'
-          target='_blank'
-          rel='noreferrer noopener'
-        >
-          {t(translations.dialogs.providerTypes.ledgerInstructions)}
-        </a>
-      </BottomLinkContainer>
+      {!props.hideInstructionLink && (
+        <BottomLinkContainer>
+          <a
+            href='https://wiki.sovryn.app/en/technical-documents/wallet-derivation-paths'
+            target='_blank'
+            rel='noreferrer noopener'
+          >
+            {t(translations.dialogs.providerTypes.ledgerInstructions)}
+          </a>
+        </BottomLinkContainer>
+      )}
     </Container>
   );
 }

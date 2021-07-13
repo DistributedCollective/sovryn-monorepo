@@ -9,6 +9,7 @@ import { translations } from '../../../locales/i18n';
 
 interface Props {
   onStep: (value: WalletConnectionStep) => void;
+  hideInstructionLink?: boolean;
 }
 
 export function ProviderTypeSelector(props: Props) {
@@ -35,15 +36,17 @@ export function ProviderTypeSelector(props: Props) {
           onClick={() => props.onStep(WalletConnectionStep.BROWSER_PROVIDERS)}
         />
       </ItemList>
-      <BottomLinkContainer>
-        <a
-          href='https://wiki.sovryn.app'
-          target='_blank'
-          rel='noreferrer noopener'
-        >
-          {t(translations.dialogs.providerTypes.instructions)}
-        </a>
-      </BottomLinkContainer>
+      {!props.hideInstructionLink && (
+        <BottomLinkContainer>
+          <a
+            href='https://wiki.sovryn.app'
+            target='_blank'
+            rel='noreferrer noopener'
+          >
+            {t(translations.dialogs.providerTypes.instructions)}
+          </a>
+        </BottomLinkContainer>
+      )}
     </div>
   );
 }
