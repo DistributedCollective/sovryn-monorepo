@@ -1,5 +1,5 @@
 import React from 'react';
-import { FullWallet, ProviderType, WalletService } from '../../../wallet/dist';
+import { FullWallet, ProviderType, WalletService } from '@sovryn/wallet';
 import { walletService } from '../services';
 
 export const DEFAULT_CHAIN_ID = 30;
