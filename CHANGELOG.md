@@ -1,3 +1,13 @@
+## Unreleased (2021-07-22)
+
+#### :rocket: Enhancement
+* `react-wallet`
+  * [#19](https://github.com/DistributedCollective/sovryn-monorepo/pull/19) Adds the full link to the Derivation Path page on the Wiki ([@bitnym](https://github.com/bitnym))
+
+#### Committers: 1
+- ฿ITNYM ([@bitnym](https://github.com/bitnym))
+
+
 ## v1.0.16 (2021-04-26)
 
 #### :rocket: Enhancement
@@ -15,4 +25,3 @@
 #### Committers: 2
 - Rick ([@rick23p](https://github.com/rick23p))
 - Victor Creed ([@creed-victor](https://github.com/creed-victor))
-
