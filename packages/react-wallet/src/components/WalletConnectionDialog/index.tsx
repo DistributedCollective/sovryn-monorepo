@@ -2,17 +2,22 @@ import React, { useState } from 'react';
 import { useMemo } from 'react';
 import { Dialog } from '../../containers/Dialog';
 import { WalletConnectionStep } from '../WalletConnectionView/types';
-import {
-  WalletConnectionView,
-} from '../WalletConnectionView';
+import { WalletConnectionView } from '../WalletConnectionView';
 
 type WalletConnectionDialogProps = {
   portalTargetId?: string;
+  isOpen: boolean;
   onClose: () => void;
 };
 
-export function WalletConnectionDialog({portalTargetId, onClose}: WalletConnectionDialogProps) {
-  const [step, setStep] = useState<WalletConnectionStep>(WalletConnectionStep.NONE);
+export function WalletConnectionDialog({
+  portalTargetId,
+  isOpen,
+  onClose,
+}: WalletConnectionDialogProps) {
+  const [step, setStep] = useState<WalletConnectionStep>(
+    WalletConnectionStep.NONE,
+  );
   const size = useMemo(() => {
     switch (step) {
       default:
@@ -28,10 +33,10 @@ export function WalletConnectionDialog({portalTargetId, onClose}: WalletConnecti
     <Dialog
       onClose={onClose}
       size={size}
-      isOpen
+      isOpen={isOpen}
       portalTargetId={portalTargetId}
     >
-      <WalletConnectionView onStep={setStep} onCompleted={onClose}/>
+      <WalletConnectionView onStep={setStep} onCompleted={onClose} />
     </Dialog>
   );
 }

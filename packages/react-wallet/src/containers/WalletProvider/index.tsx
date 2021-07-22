@@ -364,6 +364,7 @@ export function WalletProvider(props: Props) {
       {showConnectionDialog && (
         <WalletConnectionDialog
           portalTargetId={props.portalTargetId}
+          isOpen={showConnectionDialog}
           onClose={onCloseConnectionDialog}
         />
       )}

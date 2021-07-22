@@ -1,5 +1,5 @@
 import Classes from '@blueprintjs/core/lib/esm/common/classes';
-import { Overlay } from '@blueprintjs/core/lib/esm/components/overlay/overlay';
+import { Overlay, OverlayProps } from '@blueprintjs/core/lib/esm/components/overlay/overlay';
 import classNames from 'classnames';
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -30,13 +30,23 @@ export function Dialog(props: Props) {
     return undefined;
   }, [props.portalTargetId]);
 
+  const overlayProps: OverlayProps = {
+    onClose: props.onClose,
+    onClosed: props.onClosed,
+    onClosing: props.onClosing,
+    isOpen: props.isOpen,
+  };
+
+  if (portalTargetElement) {
+    overlayProps.usePortal = !!portalTargetElement;
+    overlayProps.portalContainer = portalTargetElement;
+  }
+
   return (
     <Overlay
-      {...props}
+      {...overlayProps}
       className={Classes.OVERLAY_SCROLL_CONTAINER}
       hasBackdrop
-      usePortal={!!portalTargetElement}
-      portalContainer={portalTargetElement}
     >
       <div className={Classes.DIALOG_CONTAINER}>
         <article
