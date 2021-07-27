@@ -1,10 +1,15 @@
-## Unreleased (2021-07-22)
+## v2.0.0 (2021-07-27)
+
+#### :boom: Breaking Change
+* `react-wallet`, `wallet`
+  * [#20](https://github.com/DistributedCollective/sovryn-monorepo/pull/20) Feat/usage rework ([@rick23p](https://github.com/rick23p))
 
 #### :rocket: Enhancement
 * `react-wallet`
   * [#19](https://github.com/DistributedCollective/sovryn-monorepo/pull/19) Adds the full link to the Derivation Path page on the Wiki ([@bitnym](https://github.com/bitnym))
 
-#### Committers: 1
+#### Committers: 2
+- Rick ([@rick23p](https://github.com/rick23p))
 - ฿ITNYM ([@bitnym](https://github.com/bitnym))
 
 
@@ -25,3 +30,4 @@
 #### Committers: 2
 - Rick ([@rick23p](https://github.com/rick23p))
 - Victor Creed ([@creed-victor](https://github.com/creed-victor))
+✨  Done in 1.02s.
