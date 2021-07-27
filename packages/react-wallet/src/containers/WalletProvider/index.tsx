@@ -1,22 +1,28 @@
 import {
-  ChainCodeResponse,
   FullWallet,
   hardwareWallets,
+  isHardwareWallet,
+  isWeb3Wallet,
   providerToWalletMap,
   ProviderType,
+  WalletConnectWallet,
+  walletProviderMap,
   Web3Wallet,
-  web3Wallets,
 } from '@sovryn/wallet';
 import { translations } from '../../locales/i18n';
 import * as React from 'react';
-import { useCallback, useEffect, useRef, useState } from 'react';
-import { useTranslation } from 'react-i18next';
-import i18next from 'i18next';
-import { useWalletContext } from '../../hooks';
+import { useCallback, useEffect, useState, useMemo } from 'react';
 import { session, walletService } from '../../services';
 import { base64Decode, base64Encode } from '../../services/helpers';
-import { ProviderDialog } from '../ProviderDialog';
-import { ProviderDialogStep } from '../ProviderDialog/types';
+import {
+  WalletContextFunctionsType,
+  WalletContextStateType,
+  WalletContext,
+  WalletContextType,
+} from '../../contexts/WalletContext';
+import { WalletConnectionDialog } from '../../components/WalletConnectionDialog';
+import { useTranslation } from 'react-i18next';
+import i18next from 'i18next';
 
 interface Options {
   // allow connection only to this chain id.
@@ -30,177 +36,172 @@ interface Options {
 }
 
 interface Props {
-  /** @deprecated use options instead */
-  chainId?: number;
-  /** @deprecated use options instead */
-  remember?: boolean;
   options?: Options;
+  portalTargetId?: string;
   children: React.ReactNode;
 }
 
 const REMEMBER_SESSION_KEY = '__sovryn_wallet';
 
 export function WalletProvider(props: Props) {
-  const walletRef = useRef(walletService);
-  const wallet = walletRef.current;
-  const context = useWalletContext();
   const { t } = useTranslation();
 
-  useEffect(() => {
-    context.state.wallet.set(wallet);
-  }, [wallet]);
+  const { chainId: expectedChainId } = props.options || {};
+
+  const [state, setState] = useState<WalletContextStateType>({
+    wallet: walletService,
+    expectedChainId: expectedChainId,
+    chainId: undefined,
+    address: undefined,
+    hwIndex: undefined,
+    provider: undefined,
+    dPath: undefined,
+    seed: undefined,
+    chainCode: undefined,
+    publicKey: undefined,
+    uri: undefined,
+    connected: false,
+    connecting: false,
+  });
+
+  const [showConnectionDialog, setShowConnectionDialog] = useState(false);
+
+  const connect = useCallback(() => {
+    setShowConnectionDialog(true);
+    setState(state => ({ ...state, connecting: true }));
+    walletService.events.trigger('connect');
+  }, [setState]);
+
+  const onCloseConnectionDialog = useCallback(() => {
+    setShowConnectionDialog(false);
+    setState(state => ({ ...state, connecting: false }));
+  }, [setShowConnectionDialog, setState]);
+
+  const disconnect = useCallback(() => {
+    setState(state => ({
+      ...state,
+      address: undefined,
+      provider: undefined,
+      dPath: undefined,
+      seed: undefined,
+      chainCode: undefined,
+      publicKey: undefined,
+      uri: undefined,
+      connected: false,
+      connecting: false,
+    }));
+    walletService.disconnect();
+  }, [setState, walletService]);
+
+  const setConnectedWallet = useCallback(
+    async (wallet: FullWallet) => {
+      await walletService.connect(wallet);
+      return true;
+    },
+    [walletService],
+  );
+
+  const unlockDeterministicWallet: WalletContextFunctionsType['unlockDeterministicWallet'] = useCallback(
+    async (
+      address: string,
+      index: number,
+      provider: ProviderType,
+      path?: string,
+      chainId?: number,
+    ) => {
+      if (provider && isHardwareWallet(provider)) {
+        const Wallet = providerToWalletMap[provider];
+        return await setConnectedWallet(
+          new Wallet(address, path || '', index, chainId),
+        );
+      }
+      return false;
+    },
+    [setConnectedWallet],
+  );
+
+  const unlockWeb3Wallet: WalletContextFunctionsType['unlockWeb3Wallet'] = useCallback(
+    async (provider: ProviderType, chainId: number) => {
+      if (provider && isWeb3Wallet(provider)) {
+        const ProviderClass = walletProviderMap[provider];
+        const providerInstance = new ProviderClass(walletService);
+        const wallet = await providerInstance.unlock(chainId, (uri: string) => {
+          if (uri === undefined || typeof uri === 'string') {
+            setState(state => ({ ...state, uri }));
+          }
+        });
+        return await setConnectedWallet(wallet);
+      }
+      return false;
+    },
+    [setState, setConnectedWallet],
+  );
+
+  const reconnect: WalletContextFunctionsType['reconnect'] = useCallback(async () => {
+    const {
+      provider,
+      chainId,
+      expectedChainId,
+      address,
+      hwIndex,
+      dPath,
+    } = state;
+    if (provider) {
+      if (isWeb3Wallet(provider)) {
+        const activeChainId = chainId || expectedChainId;
+        return await unlockWeb3Wallet(provider, activeChainId);
+      } else if (
+        address != null &&
+        hwIndex != null &&
+        isHardwareWallet(provider)
+      ) {
+        const {} = state;
+        const activeChainId = chainId || expectedChainId;
+        return await unlockDeterministicWallet(
+          address,
+          hwIndex,
+          provider,
+          dPath,
+          activeChainId,
+        );
+      }
+    }
+    return false;
+  }, [state, unlockDeterministicWallet, unlockWeb3Wallet]);
 
   useEffect(() => {
     i18next.changeLanguage(props.options?.locale || i18next.language);
   }, [props.options?.locale]);
 
-  const [state, setState] = useState({
-    step: ProviderDialogStep.NONE,
-    chainId: props.options?.chainId || props.chainId || 30,
-    provider: (null as unknown) as ProviderType,
-    dPath: '',
-    seed: '',
-    chainCode: '',
-    publicKey: '',
-    uri: '',
-    loading: false,
-  });
+  useEffect(() => {
+    setState({
+      ...state,
+      wallet: walletService,
+    });
+  }, [walletService, setState]);
 
   useEffect(() => {
-    if (props.options?.chainId || props.chainId) {
-      context.state.chainId.set(props.options?.chainId || props.chainId);
+    if (state.expectedChainId !== expectedChainId) {
+      setState(state => ({
+        ...state,
+        expectedChainId: expectedChainId,
+      }));
     }
-  }, [props.options?.chainId, props.chainId, state.chainId]);
+  }, [state?.expectedChainId, expectedChainId, setState]);
 
+  // handle walletService events
   useEffect(() => {
-    if (
-      context.state.showProviderList.value &&
-      state.step === ProviderDialogStep.NONE
-    ) {
-      setState(prevState => ({
-        ...prevState,
-        step: ProviderDialogStep.PROVIDERS,
-      }));
-    }
-  }, [context.loading]);
+    const onConnect = (value: FullWallet) => {
+      setState({
+        ...state,
+        address: value.getAddressString(),
+        chainId: value.chainId,
+        provider: value.getWalletType() as ProviderType,
+        connected: true,
+        connecting: false,
+      });
 
-  const onDismiss = React.useCallback(() => {
-    setState(prevState => ({ ...prevState, step: ProviderDialogStep.NONE }));
-    context.disconnect();
-  }, [context]);
-
-  const setConnectedWallet = React.useCallback(
-    async (wallet: FullWallet) => {
-      await walletService.connect(wallet);
-      setState(prevState => ({
-        ...prevState,
-        step: ProviderDialogStep.NONE,
-        loading: false,
-      }));
-    },
-    [context, props.options?.remember, props.remember, state],
-  );
-
-  const onProviderChosen = React.useCallback(async (provider: ProviderType) => {
-    setState(prevState => ({ ...prevState, provider, loading: true }));
-    context.state.loading.set(true);
-    try {
-      if (provider === ProviderType.WALLET_CONNECT) {
-        const s = await walletService.start(provider);
-        // @ts-ignore
-        const uri = await s.unlock(
-          props.options?.chainId || props.chainId || 30,
-          async w => {
-            await setConnectedWallet(w);
-          },
-        );
-        // @ts-ignore
-        setState(prevState => ({
-          ...prevState,
-          uri,
-        }));
-        return;
-      }
-
-      if (web3Wallets.includes(provider)) {
-        const s = await walletService.start(provider);
-        // @ts-ignore
-        const w = await s.unlock(props.options?.chainId || props.chainId || 30);
-        // @ts-ignore
-        await setConnectedWallet(w);
-        return;
-      }
-
-      if (hardwareWallets.includes(provider)) {
-        setState(prevState => ({
-          ...prevState,
-          step: ProviderDialogStep.HARDWARE_PATH_SELECTOR,
-        }));
-        return;
-      }
-
-      // If there is no wallet, reset state.
-      setState(prevState => ({
-        ...prevState,
-        provider: (null as unknown) as ProviderType,
-        loading: false,
-      }));
-      context.state.loading.set(false);
-    } catch (e) {
-      setState(prevState => ({ ...prevState, loading: false }));
-      context.state.loading.set(false);
-    }
-  }, []);
-
-  // @ts-ignore
-  const onChainCodeChanged = React.useCallback(
-    (
-      { chainCode, publicKey }: ChainCodeResponse,
-      chainId: number,
-      dPath: string,
-    ) => {
-      setState(prevState => ({
-        ...prevState,
-        dPath,
-        chainId,
-        chainCode,
-        publicKey,
-        step: ProviderDialogStep.HARDWARE_ADDRESS_SELECTOR,
-      }));
-    },
-    [context],
-  );
-
-  const onUnlockDeterministicWallet = useCallback(
-    async (
-      address: string,
-      index: number,
-      providerType?: ProviderType,
-      path?: string,
-      chainId?: number,
-    ) => {
-      const provider = providerType || state.provider;
-      const dPath = path || state.dPath;
-      const chainID = chainId || state.chainId;
-      if (hardwareWallets.includes(provider)) {
-        const Wallet = providerToWalletMap[provider];
-        // @ts-ignore
-        await setConnectedWallet(new Wallet(address, dPath, index, chainID));
-      }
-    },
-    [state],
-  );
-
-  const onStepChange = useCallback((value: ProviderDialogStep) => {
-    setState(prevState => ({ ...prevState, step: value }));
-  }, []);
-
-  useEffect(() => {
-    walletService.events.on('connected', (value: FullWallet) => {
-      context.state.address.set(value.getAddressString());
-      context.state.connected.set(true);
-      context.state.loading.set(false);
-      if (props.options?.remember || props.remember) {
+      if (props.options?.remember) {
         session.setItem(
           REMEMBER_SESSION_KEY,
           base64Encode(
@@ -217,54 +218,70 @@ export function WalletProvider(props: Props) {
           ),
         );
       }
-    });
+    };
+    walletService.events.on('connected', onConnect);
 
-    walletService.events.on('disconnected', () => {
-      context.state.address.set('');
-      context.state.connected.set(false);
-      context.state.loading.set(false);
-      setState(prevState => ({
-        ...prevState,
-        provider: null as any,
-        loading: false,
-      }));
+    const onDisconnect = () => {
+      setState({
+        ...state,
+        address: undefined,
+        provider: undefined,
+        dPath: undefined,
+        seed: undefined,
+        chainCode: undefined,
+        publicKey: undefined,
+        uri: undefined,
+        connected: false,
+        connecting: false,
+      });
       session.removeItem(REMEMBER_SESSION_KEY);
-    });
-    return () => {};
-  }, []);
+    };
+    walletService.events.on('disconnected', onDisconnect);
+    return () => {
+      walletService.events.off('connect', onConnect);
+      walletService.events.off('disconnected', onDisconnect);
+    };
+  }, [state, setState]);
 
+  // handle walletProvider events
   useEffect(() => {
-    const wallet = walletService.wallet as Web3Wallet;
+    const wallet = walletService.wallet;
+    const providerType = wallet && (wallet.getWalletType() as ProviderType);
 
     if (
       wallet &&
-      wallet?.provider &&
-      [ProviderType.WEB3, ProviderType.WALLET_CONNECT].includes(
-        wallet.getWalletType() as ProviderType,
-      )
+      providerType &&
+      [ProviderType.WEB3, ProviderType.WALLET_CONNECT].includes(providerType)
     ) {
-      const p = wallet.provider;
-      const providerType = wallet.getWalletType() as ProviderType;
+      const p = (wallet as Web3Wallet | WalletConnectWallet).provider;
+      if (p && typeof p === 'object' && 'on' in p) {
+        const onDisconnect = (...args: any[]) => {
+          console.log('disconnect web3', args);
+        };
 
-      // @ts-ignore
-      p.on('disconnect', value => {
-        console.log('disconnect web3', value);
-      });
+        const onAccountChanged = async (...args: any[]) => {
+          console.log('account changed', args);
+          await reconnect();
+        };
 
-      // @ts-ignore
-      p.on('accountsChanged', async value => {
-        console.log('account changed', value);
-        await onProviderChosen(providerType);
-      });
+        const onChainChanged = async (...args: any[]) => {
+          console.log('chain changed', Number(args[0]), args);
+          await reconnect();
+        };
 
-      // @ts-ignore
-      p.on('chainChanged', async value => {
-        await onProviderChosen(providerType);
-        console.log('chain changed', Number(value));
-      });
+        p.on('disconnect', onDisconnect);
+        p.on('accountsChanged', onAccountChanged);
+        p.on('chainChanged', onChainChanged);
+
+        return () => {
+          p.removeListener('disconnect', onDisconnect);
+          p.removeListener('accountsChanged', onAccountChanged);
+          p.removeListener('chainChanged', onChainChanged);
+        };
+      }
     }
     return () => {};
-  }, [context.wallet.wallet?.getWalletType()]);
+  }, [walletService.wallet?.getWalletType()]);
 
   useEffect(() => {
     try {
@@ -283,19 +300,20 @@ export function WalletProvider(props: Props) {
           return;
         }
 
-        if (web3Wallets.includes(parsed.provider)) {
-          onProviderChosen(parsed.provider);
+        if (isWeb3Wallet(parsed.provider)) {
+          unlockWeb3Wallet(parsed.provider, parsed.chainId);
           return;
         }
 
-        if (hardwareWallets.includes(parsed.provider)) {
-          onUnlockDeterministicWallet(
+        if (isHardwareWallet(parsed.provider)) {
+          unlockDeterministicWallet(
             parsed.data.address,
             parsed.data.index,
             parsed.provider,
             parsed.data.dPath,
             parsed.chainId,
           );
+          return;
         }
 
         session.removeItem(REMEMBER_SESSION_KEY);
@@ -306,43 +324,50 @@ export function WalletProvider(props: Props) {
     }
   }, []);
 
+  const showWrongNetworkAlert =
+    props.options?.showWrongNetworkRibbon &&
+    state.connected &&
+    props.options.chainId &&
+    props.options.chainId !== state.chainId &&
+    state.provider &&
+    [ProviderType.WALLET_CONNECT, ProviderType.WEB3].includes(state.provider);
+
+  const contextValue: WalletContextType = useMemo(
+    () => ({
+      ...state,
+      set: setState,
+      connect,
+      disconnect,
+      reconnect,
+      setConnectedWallet,
+      unlockDeterministicWallet,
+      unlockWeb3Wallet,
+    }),
+    [
+      state,
+      setState,
+      connect,
+      reconnect,
+      disconnect,
+      setConnectedWallet,
+      unlockDeterministicWallet,
+      unlockWeb3Wallet,
+    ],
+  );
+
   return (
-    <React.Fragment>
-      {props.options?.showWrongNetworkRibbon && props.options.chainId && (
-        <React.Fragment>
-          {[ProviderType.WALLET_CONNECT, ProviderType.WEB3].includes(
-            context.wallet.providerType,
-          ) && (
-            <React.Fragment>
-              {context.wallet.wallet?.chainId !== props.options.chainId &&
-                t(translations.common.alert)}
-            </React.Fragment>
-          )}
-        </React.Fragment>
+    <WalletContext.Provider value={contextValue}>
+      {showWrongNetworkAlert && (
+        <React.Fragment>{t(translations.common.alert)}</React.Fragment>
       )}
-
       <React.Fragment>{props.children}</React.Fragment>
-
-      <React.Fragment>
-        <ProviderDialog
-          step={state.step}
-          onClose={onDismiss}
-          onStep={onStepChange}
-          provider={state.provider}
-          uri={state.uri}
-          chainId={props.options?.chainId || props.chainId}
-          onProviderChosen={onProviderChosen}
-          onChainCodeChanged={onChainCodeChanged}
-          onUnlockDeterministicWallet={onUnlockDeterministicWallet}
-          hwOptions={{
-            chainId: state.chainId,
-            dPath: state.dPath,
-            seed: state.seed,
-            chainCode: state.chainCode,
-            publicKey: state.publicKey,
-          }}
+      {showConnectionDialog && (
+        <WalletConnectionDialog
+          portalTargetId={props.portalTargetId}
+          isOpen={showConnectionDialog}
+          onClose={onCloseConnectionDialog}
         />
-      </React.Fragment>
-    </React.Fragment>
+      )}
+    </WalletContext.Provider>
   );
 }

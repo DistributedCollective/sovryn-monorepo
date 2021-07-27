@@ -7,6 +7,7 @@ Monorepo for design system, react components and blockchain wallet implementatio
 
 - [![npm](https://img.shields.io/npm/v/@sovryn/wallet.svg)](https://www.npmjs.com/package/@sovryn/wallet) [@sovryn/wallet](https://github.com/DistributedCollective/sovryn-monorepo/tree/master/packages/wallet)
 - [![npm](https://img.shields.io/npm/v/@sovryn/react-wallet.svg)](https://www.npmjs.com/package/@sovryn/react-wallet) [@sovryn/react-wallet](https://github.com/DistributedCollective/sovryn-monorepo/tree/master/packages/react-wallet)
+- [![npm](https://img.shields.io/npm/v/@sovryn/common.svg)](https://www.npmjs.com/package/@sovryn/common) [@sovryn/common](https://github.com/DistributedCollective/sovryn-monorepo/tree/master/packages/common)
 
 ## Development
 

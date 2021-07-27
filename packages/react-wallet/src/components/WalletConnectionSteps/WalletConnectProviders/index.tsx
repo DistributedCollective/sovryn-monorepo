@@ -10,6 +10,7 @@ import { translations } from '../../../locales/i18n';
 interface Props {
   onWalletSelected: (value: ProviderType) => void;
   uri?: string;
+  hideInstructionLink?: boolean;
 }
 
 export function WalletConnectProviders(props: Props) {
@@ -55,15 +56,17 @@ export function WalletConnectProviders(props: Props) {
         </QRWrapper>
       </Container>
 
-      <BottomLinkContainer>
-        <a
-          href='https://wiki.sovryn.app'
-          target='_blank'
-          rel='noreferrer noopener'
-        >
-          {t(translations.dialogs.providerTypes.instructionsMobile)}
-        </a>
-      </BottomLinkContainer>
+      {!props.hideInstructionLink && (
+        <BottomLinkContainer>
+          <a
+            href='https://wiki.sovryn.app'
+            target='_blank'
+            rel='noreferrer noopener'
+          >
+            {t(translations.dialogs.providerTypes.instructionsMobile)}
+          </a>
+        </BottomLinkContainer>
+      )}
     </div>
   );
 }

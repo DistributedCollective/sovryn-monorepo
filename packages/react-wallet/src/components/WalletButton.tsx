@@ -1,14 +1,14 @@
 import * as React from 'react';
-import { useWalletContext } from '../hooks';
+import { WalletContext } from '../contexts';
 
 export function WalletButton() {
-  const context = useWalletContext();
+  const context = React.useContext(WalletContext);
   return (
     <button
       onClick={() => context.connect()}
-      disabled={context.state.loading.value}
+      disabled={context.connecting}
     >
-      {context.state.loading.value ? 'Connecting' : 'Connect'}
+      {context.connecting ? 'Connecting' : 'Connect'}
     </button>
   );
 }

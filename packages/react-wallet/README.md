@@ -10,20 +10,23 @@ npm install --save @sovryn/react-wallet
 
 ## Usage
 
-```tsx
-import React, { Component } from 'react';
+Wrap your app with the WalletProvider and use `React.useContext(WalletContext)` to get the current wallet connection state and useful functions.
+Then either you use the WalletButton component to connect, call the connect function or the unlock functions from the WalletContext.
 
-import { WalletProvider, WalletButton, useWalletContext } from '@sovryn/react-wallet';
+```tsx
+import React, { Component, useContext } from 'react';
+
+import { WalletProvider, WalletButton, WalletContext } from '@sovryn/react-wallet';
 import '@sovryn/react-wallet/index.css'
 
 class App extends Component {
   render() {
-    return <WalletProvider chainId={30} remember><Home /></WalletProvider>
+    return <WalletProvider options={chainId:30, remember: true}><Home /></WalletProvider>
   }
 }
 
 class Home extends Component {
-  const { address } = useWalletContext();
+  const { address } = useContext(WalletContext);
   render() {
     return <>{!address ? <WalletButton /> : <p>Connected with {address}</p>)}</>
   }

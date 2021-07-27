@@ -11,19 +11,18 @@ import { ItemList } from '../../ItemList';
 
 interface Props {
   onWalletSelected: (value: ProviderType) => void;
+  hideInstructionLink?: boolean;
 }
 
 const wallet = detectInjectableWallet();
 
 export function BrowserWalletSelector(props: Props) {
   const { t } = useTranslation();
-  
+
   return (
     <div>
       <h1>{t(translations.dialogs.browserSelector.title)}:</h1>
-      <P>
-      {t(translations.dialogs.browserSelector.disable)}
-      </P>
+      <P>{t(translations.dialogs.browserSelector.disable)}</P>
       <ItemList>
         {wallet !== 'liquality' && (
           <ItemLink
@@ -67,17 +66,19 @@ export function BrowserWalletSelector(props: Props) {
           onClick={() => props.onWalletSelected(ProviderType.PORTIS)}
           linkHref='https://www.portis.io'
           linkTitle={t(translations.dialogs.browserSelector.learn)}
-          />
+        />
       </ItemList>
-      <BottomLinkContainer>
-        <a
-          href='https://wiki.sovryn.app'
-          target='_blank'
-          rel='noreferrer noopener'
-        >
-          {t(translations.dialogs.providerTypes.instructions)}
-        </a>
-      </BottomLinkContainer>
+      {!props.hideInstructionLink && (
+        <BottomLinkContainer>
+          <a
+            href='https://wiki.sovryn.app'
+            target='_blank'
+            rel='noreferrer noopener'
+          >
+            {t(translations.dialogs.providerTypes.instructions)}
+          </a>
+        </BottomLinkContainer>
+      )}
     </div>
   );
 }

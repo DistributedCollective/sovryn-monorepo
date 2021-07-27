@@ -56,7 +56,6 @@ export class LedgerWalletProvider implements WalletProviderInterface {
       });
   }
 
-  // @ts-ignore
   async unlock(
     dPath: string,
     address: string,

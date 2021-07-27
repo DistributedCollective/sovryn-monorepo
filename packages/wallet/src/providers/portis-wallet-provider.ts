@@ -17,7 +17,6 @@ const chainIdToNetwork = {
 export class PortisWalletProvider implements WalletProviderInterface {
   provider: any;
 
-  // @ts-ignore
   unlock(chainId: number): Promise<FullWallet> {
     log('connecting using injectable wallet');
     const portis = new Portis(

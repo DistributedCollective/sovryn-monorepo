@@ -29,6 +29,18 @@ export const web3Wallets = [
   ProviderType.WALLET_CONNECT,
 ];
 
+export function isHardwareWallet(
+  x: ProviderType,
+): x is ProviderType.LEDGER | ProviderType.TREZOR {
+  return hardwareWallets.includes(x);
+}
+
+export function isWeb3Wallet(
+  x: ProviderType,
+): x is ProviderType.WEB3 | ProviderType.PORTIS | ProviderType.WALLET_CONNECT {
+  return web3Wallets.includes(x);
+}
+
 export const providerToWalletMap = {
   [ProviderType.WEB3]: Web3Wallet,
   [ProviderType.LEDGER]: LedgerWallet,

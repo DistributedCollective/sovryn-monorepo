@@ -1,1 +1,1 @@
-export { useWalletContext } from './useWalletContext';
+export * from './useWalletContext';

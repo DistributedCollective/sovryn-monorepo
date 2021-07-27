@@ -1,4 +1,4 @@
-export enum ProviderDialogStep {
+export enum WalletConnectionStep {
   NONE,
   PROVIDERS,
   BROWSER_PROVIDERS,

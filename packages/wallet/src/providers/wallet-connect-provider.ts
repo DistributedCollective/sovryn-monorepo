@@ -13,8 +13,7 @@ export class WalletConnectProvider implements WalletProviderInterface {
     log('initialized WalletConnect', service);
   }
 
-  // @ts-ignore
-  unlock(chainId: number, onConnect: (w: FullWallet) => void): Promise<string> {
+  unlock(chainId: number, uriCallback: (uri: string) => void): Promise<FullWallet> {
     return new Promise(async (resolve, reject) => {
       try {
         log('connecting using WalletConnect');
@@ -37,6 +36,8 @@ export class WalletConnectProvider implements WalletProviderInterface {
         log('WC URI: ', wc.uri);
         let wallet;
 
+        uriCallback(wc.uri);
+
         wc.on('connect', (err, payload) => {
           if (err) return err;
           const { params } = payload;
@@ -46,7 +47,7 @@ export class WalletConnectProvider implements WalletProviderInterface {
             chainId,
             this.provider as any,
           );
-          onConnect(wallet);
+          resolve(wallet);
         });
 
         wc.on('disconnect', () => {
@@ -58,7 +59,6 @@ export class WalletConnectProvider implements WalletProviderInterface {
           log('session updated.');
         });
 
-        resolve(wc.uri);
       } catch (e) {
         error('WalletConnect login errored', e);
         reject(e);
