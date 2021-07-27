@@ -2524,10 +2524,10 @@
   version "0.0.0"
   uid ""
 
-"@sovryn/wallet@^1.0.18":
-  version "1.0.18"
-  resolved "https://registry.yarnpkg.com/@sovryn/wallet/-/wallet-1.0.18.tgz#ed81a6b2f436f3aaa47706c286456900be4151db"
-  integrity sha512-ojJ4+J2xbe3SB1A71dreoh/cX64b0iP2rTvIm3tK7j5iNK5HDFVwW6xZV4zml0NLPtzs7ryylcUS9LYK5WgGdw==
+"@sovryn/wallet@^2.0.0-alpha.0":
+  version "2.0.0-alpha.0"
+  resolved "https://registry.yarnpkg.com/@sovryn/wallet/-/wallet-2.0.0-alpha.0.tgz#54273ab099bb9ad84ae7d083057d90d59f2bf82c"
+  integrity sha512-bHCaVI5/iSY3kb2G136A98RhuNtNCCLGFLdAYFA4c006JTsUL9xxp/OKHeUlUVsZikGQG/BarSDyG3jj/a7zzg==
   dependencies:
     "@ledgerhq/hw-app-eth" "^5.53.0"
     "@ledgerhq/hw-transport" "^5.51.1"

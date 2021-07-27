@@ -1,5 +1,8 @@
 import Classes from '@blueprintjs/core/lib/esm/common/classes';
-import { Overlay, OverlayProps } from '@blueprintjs/core/lib/esm/components/overlay/overlay';
+import {
+  Overlay,
+  IOverlayProps,
+} from '@blueprintjs/core/lib/esm/components/overlay/overlay';
 import classNames from 'classnames';
 import React, { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -30,7 +33,7 @@ export function Dialog(props: Props) {
     return undefined;
   }, [props.portalTargetId]);
 
-  const overlayProps: OverlayProps = {
+  const overlayProps: IOverlayProps = {
     onClose: props.onClose,
     onClosed: props.onClosed,
     onClosing: props.onClosing,
