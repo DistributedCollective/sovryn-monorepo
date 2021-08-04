@@ -34,7 +34,7 @@ export type WalletContextFunctionsType = {
    */
   disconnect: () => void;
   /**
-   * Registers the passed wallet with the WalletService 
+   * Registers the passed wallet with the WalletService
    */
   setConnectedWallet: (wallet: FullWallet) => Promise<boolean>;
   /**
@@ -57,6 +57,13 @@ export type WalletContextFunctionsType = {
   unlockWeb3Wallet: (
     provider: ProviderType,
     chainId?: number,
+  ) => Promise<boolean>;
+  /**
+   * Creates a new wallet instance, tries to unlock it and registers it with the WalletService.
+   */
+  unlockSoftwareWallet: (
+    provider: ProviderType,
+    entropy: string,
   ) => Promise<boolean>;
 };
 
@@ -88,6 +95,9 @@ const defaultValue: WalletContextType = {
   },
   unlockWeb3Wallet: () => {
     throw new Error('unlockWeb3Wallet() has not been set!');
+  },
+  unlockSoftwareWallet: () => {
+    throw new Error('unlockSoftwareWallet() has not been set!');
   },
 };
 

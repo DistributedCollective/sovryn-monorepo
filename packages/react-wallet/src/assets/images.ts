@@ -9,6 +9,7 @@ import ledgerWallet from './wallets/ledger';
 import trezorWallet from './wallets/trezor';
 import rWallet from './wallets/rwallet';
 import defiantWallet from './wallets/defiant';
+import softwareWallets from './wallets/software';
 import { arrowDown, arrowRight } from './arrows';
 import { copyIcon, errorIcon } from './copy';
 
@@ -16,6 +17,7 @@ export const images = {
   browserWallets,
   mobileWallets,
   hardwareWallets,
+  softwareWallets,
 
   metamaskWallet,
   niftyWallet,
@@ -31,5 +33,5 @@ export const images = {
   arrowDown,
 
   copyIcon,
-  errorIcon
+  errorIcon,
 };

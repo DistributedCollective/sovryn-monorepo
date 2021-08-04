@@ -3,6 +3,7 @@ import {
   hardwareWallets,
   isHardwareWallet,
   isWeb3Wallet,
+  isSoftwareWallet,
   providerToWalletMap,
   ProviderType,
   WalletConnectWallet,
@@ -19,7 +20,7 @@ import {
   WalletContextStateType,
   WalletContext,
   WalletContextType,
-} from '../../contexts/WalletContext';
+} from '../../contexts';
 import { WalletConnectionDialog } from '../../components/WalletConnectionDialog';
 import { useTranslation } from 'react-i18next';
 import i18next from 'i18next';
@@ -137,6 +138,17 @@ export function WalletProvider(props: Props) {
     [setState, setConnectedWallet],
   );
 
+  const unlockSoftwareWallet: WalletContextFunctionsType['unlockSoftwareWallet'] = useCallback(
+    async (provider: ProviderType, secret: string) => {
+      if (provider && isSoftwareWallet(provider)) {
+        const Wallet = providerToWalletMap[provider];
+        return await setConnectedWallet(new Wallet(provider, secret));
+      }
+      return false;
+    },
+    [setState, setConnectedWallet],
+  );
+
   const reconnect: WalletContextFunctionsType['reconnect'] = useCallback(async () => {
     const {
       provider,
@@ -155,7 +167,6 @@ export function WalletProvider(props: Props) {
         hwIndex != null &&
         isHardwareWallet(provider)
       ) {
-        const {} = state;
         const activeChainId = chainId || expectedChainId;
         return await unlockDeterministicWallet(
           address,
@@ -342,6 +353,7 @@ export function WalletProvider(props: Props) {
       setConnectedWallet,
       unlockDeterministicWallet,
       unlockWeb3Wallet,
+      unlockSoftwareWallet,
     }),
     [
       state,

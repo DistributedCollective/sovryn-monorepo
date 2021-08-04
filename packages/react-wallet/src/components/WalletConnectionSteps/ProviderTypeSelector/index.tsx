@@ -14,6 +14,7 @@ interface Props {
 
 export function ProviderTypeSelector(props: Props) {
   const { t } = useTranslation();
+  console.log(process.env);
   return (
     <div>
       <h1>{t(translations.dialogs.providerTypes.title)}</h1>
@@ -35,6 +36,15 @@ export function ProviderTypeSelector(props: Props) {
           title={t(translations.dialogs.providerTypes.items.browser)}
           onClick={() => props.onStep(WalletConnectionStep.BROWSER_PROVIDERS)}
         />
+        {process.env.NODE_ENV === 'test' && (
+          <Item
+            image={images.softwareWallets}
+            title={t(translations.dialogs.providerTypes.items.software)}
+            onClick={() =>
+              props.onStep(WalletConnectionStep.SOFTWARE_PROVIDERS)
+            }
+          />
+        )}
       </ItemList>
       {!props.hideInstructionLink && (
         <BottomLinkContainer>
