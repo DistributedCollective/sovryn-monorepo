@@ -10,6 +10,7 @@ import { translations } from '../../../locales/i18n';
 interface Props {
   onStep: (value: WalletConnectionStep) => void;
   hideInstructionLink?: boolean;
+  enableSoftwareWallet?: boolean;
 }
 
 export function ProviderTypeSelector(props: Props) {
@@ -35,7 +36,7 @@ export function ProviderTypeSelector(props: Props) {
           title={t(translations.dialogs.providerTypes.items.browser)}
           onClick={() => props.onStep(WalletConnectionStep.BROWSER_PROVIDERS)}
         />
-        {process.env.NODE_ENV === 'test' && (
+        {props.enableSoftwareWallet && (
           <Item
             image={images.softwareWallets}
             title={t(translations.dialogs.providerTypes.items.software)}

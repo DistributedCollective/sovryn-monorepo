@@ -1,3 +1,4 @@
+import React, { useCallback, useEffect, useState, useMemo } from 'react';
 import {
   FullWallet,
   hardwareWallets,
@@ -10,9 +11,9 @@ import {
   walletProviderMap,
   Web3Wallet,
 } from '@sovryn/wallet';
+import { useTranslation } from 'react-i18next';
+import i18next from 'i18next';
 import { translations } from '../../locales/i18n';
-import * as React from 'react';
-import { useCallback, useEffect, useState, useMemo } from 'react';
 import { session, walletService } from '../../services';
 import { base64Decode, base64Encode } from '../../services/helpers';
 import {
@@ -22,8 +23,6 @@ import {
   WalletContextType,
 } from '../../contexts';
 import { WalletConnectionDialog } from '../../components/WalletConnectionDialog';
-import { useTranslation } from 'react-i18next';
-import i18next from 'i18next';
 
 interface Options {
   // allow connection only to this chain id.
@@ -34,6 +33,8 @@ interface Options {
   showWrongNetworkRibbon?: boolean;
   // language
   locale?: string;
+  // allows users to connect wallet using private key (not recommended, use for testing only.)
+  enableSoftwareWallet?: boolean;
 }
 
 interface Props {
@@ -376,6 +377,7 @@ export function WalletProvider(props: Props) {
       {showConnectionDialog && (
         <WalletConnectionDialog
           portalTargetId={props.portalTargetId}
+          enableSoftwareWallet={props.options?.enableSoftwareWallet}
           isOpen={showConnectionDialog}
           onClose={onCloseConnectionDialog}
         />

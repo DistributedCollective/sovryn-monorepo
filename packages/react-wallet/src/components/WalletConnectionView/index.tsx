@@ -28,6 +28,7 @@ type WalletConnectionViewProps = {
   onStep: (value: WalletConnectionStep) => void;
   onCompleted: (result: boolean) => void;
   hideInstructionLink?: boolean;
+  enableSoftwareWallet?: boolean;
 };
 
 type WalletConnectionViewState = {
@@ -165,6 +166,7 @@ export const WalletConnectionView: React.FC<WalletConnectionViewProps> = props =
         <ProviderTypeSelector
           onStep={onStepChange}
           hideInstructionLink={props.hideInstructionLink}
+          enableSoftwareWallet={props.enableSoftwareWallet}
         />
       )}
       {state.step === WalletConnectionStep.BROWSER_PROVIDERS && (

@@ -21,7 +21,10 @@ export function SoftwareWalletSelector(props: Props) {
   const [error, setError] = useState<string>();
 
   const handleSubmit = useCallback(() => {
-    if (provider === ProviderType.SOFTWARE_PK && stripHexPrefix(value).length / 2 !== 32) {
+    if (
+      provider === ProviderType.SOFTWARE_PK &&
+      stripHexPrefix(value).length / 2 !== 32
+    ) {
       setError('Value is not valid private key.');
     } else {
       setError(undefined);
@@ -33,16 +36,14 @@ export function SoftwareWalletSelector(props: Props) {
     <div>
       <h1>{t(translations.dialogs.softwareSelector.title)}:</h1>
       <P>{t(translations.dialogs.softwareSelector.pk)}</P>
-      <div>
-        <input
-          value={value}
-          onChange={event => setValue(event.currentTarget.value)}
-        />
-        <button type='button' onClick={handleSubmit}>
-          {t(translations.dialogs.softwareSelector.submit)}
-        </button>
-        {error && <p>{error}</p>}
-      </div>
+      <Input
+        value={value}
+        onChange={event => setValue(event.currentTarget.value)}
+      />
+      {error && <ErrorP>{error}</ErrorP>}
+      <Button type='button' onClick={handleSubmit}>
+        {t(translations.dialogs.softwareSelector.submit)}
+      </Button>
       {!props.hideInstructionLink && (
         <BottomLinkContainer>
           <a
@@ -61,4 +62,39 @@ export function SoftwareWalletSelector(props: Props) {
 const P = styled.p`
   margin: 0 auto;
   text-align: center;
+`;
+
+const ErrorP = styled.p`
+  margin: -15px auto 15px;
+  text-align: center;
+  font-size: 13px;
+  color: #cd4e4e;
+`;
+
+const Input = styled.input`
+  margin: 25px auto;
+  border: 1px solid #dee2e6;
+  border-radius: 5px;
+  padding: 4px 8px;
+  background: #e9eae9;
+  color: #000;
+  font-weight: 500;
+  width: 100%;
+  max-width: 320px;
+  display: block;
+`;
+
+const Button = styled.button`
+  display: block;
+  margin: 0 auto 25px;
+  border: 1px solid #fec004;
+  border-radius: 5px;
+  padding: 8px 26px;
+  color: #fec004;
+  background-color: rgba(254, 192, 4, 0.25);
+  cursor: pointer;
+  transition: 0.3s background-color;
+  &:hover {
+    background-color: rgba(254, 192, 4, 0.2);
+  }
 `;
