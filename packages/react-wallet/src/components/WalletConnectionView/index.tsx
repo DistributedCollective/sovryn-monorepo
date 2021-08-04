@@ -133,12 +133,10 @@ export const WalletConnectionView: React.FC<WalletConnectionViewProps> = props =
   const onUnlockSoftwareWallet = useCallback(
     async (provider: ProviderType, entropy: string) => {
       setState(prevState => ({ ...prevState, provider }));
-      console.log('on unlock', provider, entropy);
       if (provider && context.unlockSoftwareWallet) {
         let result = false;
         try {
           result = await context.unlockSoftwareWallet(provider, entropy);
-          console.log({ result });
         } catch (e) {
           console.error(e);
         }

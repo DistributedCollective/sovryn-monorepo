@@ -14,7 +14,6 @@ interface Props {
 
 export function ProviderTypeSelector(props: Props) {
   const { t } = useTranslation();
-  console.log(process.env);
   return (
     <div>
       <h1>{t(translations.dialogs.providerTypes.title)}</h1>
