@@ -55,31 +55,33 @@ export const WalletConnectionView: React.FC<WalletConnectionViewProps> = props =
     }
   }, [state.showProviderList, state.step]);
 
-  const onProviderChosen = React.useCallback(async (provider: ProviderType) => {
-    setState(prevState => ({ ...prevState, provider }));
-
-    try {
-      if (isWeb3Wallet(provider)) {
-        const result = await context.unlockWeb3Wallet(
-          provider,
-          context.expectedChainId,
-        );
-        if (props.onCompleted) {
-          props.onCompleted(result);
+  const onProviderChosen = React.useCallback(
+    async (provider: ProviderType) => {
+      setState(prevState => ({ ...prevState, provider }));
+      try {
+        if (isWeb3Wallet(provider)) {
+          const result = await context.unlockWeb3Wallet(
+            provider,
+            context.expectedChainId,
+          );
+          if (props.onCompleted) {
+            props.onCompleted(result);
+          }
+          return;
+        } else if (isHardwareWallet(provider)) {
+          onStepChange(WalletConnectionStep.HARDWARE_PATH_SELECTOR);
+        } else {
+          setState(prevState => ({
+            ...prevState,
+            provider: undefined,
+          }));
         }
-        return;
-      } else if (isHardwareWallet(provider)) {
-        onStepChange(WalletConnectionStep.HARDWARE_PATH_SELECTOR);
-      } else {
-        setState(prevState => ({
-          ...prevState,
-          provider: undefined,
-        }));
+      } catch (e) {
+        console.error(e);
       }
-    } catch (e) {
-      console.error(e);
-    }
-  }, []);
+    },
+    [context],
+  );
 
   const onChainCodeChanged = React.useCallback(
     (
@@ -128,16 +130,16 @@ export const WalletConnectionView: React.FC<WalletConnectionViewProps> = props =
         }
       }
     },
-    [context.unlockDeterministicWallet],
+    [state, context.unlockDeterministicWallet],
   );
 
   const onUnlockSoftwareWallet = useCallback(
-    async (provider: ProviderType, entropy: string) => {
+    async (provider: ProviderType, secret: string) => {
       setState(prevState => ({ ...prevState, provider }));
       if (provider && context.unlockSoftwareWallet) {
         let result = false;
         try {
-          result = await context.unlockSoftwareWallet(provider, entropy);
+          result = await context.unlockSoftwareWallet(provider, secret);
         } catch (e) {
           console.error(e);
         }
