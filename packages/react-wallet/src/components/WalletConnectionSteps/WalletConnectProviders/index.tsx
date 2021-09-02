@@ -26,6 +26,20 @@ export function WalletConnectProviders(props: Props) {
           <p>{t(translations.dialogs.walletConnect.wallet)}</p>
           <WalletButtons>
             <WalletItem
+              image={images.dcentWallet}
+              title='D’cent'
+              small={true}
+              android={props.uri}
+              universal='https://dcentwallet.com/MobileApp'
+            />
+            <WalletItem
+              image={images.mathWallet}
+              title='Math'
+              small={true}
+              android={props.uri}
+              universal='https://mathwallet.org/en-us/'
+            />
+            <WalletItem
               image={images.rWallet}
               title='rwallet'
               small={true}

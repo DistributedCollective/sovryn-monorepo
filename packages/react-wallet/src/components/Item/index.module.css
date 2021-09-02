@@ -21,30 +21,22 @@
   padding: 15px;
   transition: opacity 0.5s, border-color 0.5s;
   cursor: pointer;
-  border: 1px solid #E9EAE9;
+  border: 1px solid #e9eae9;
   border-radius: 20px;
   background: transparent;
-  color: #E9EAE9!important;
-  font-size: 14px!important;
+  color: #e9eae9 !important;
+  font-size: 14px !important;
   text-align: center;
   display: flex;
   flex-direction: column;
   justify-content: center;
   align-items: center;
   text-transform: none;
-  text-decoration: none!important;
+  text-decoration: none !important;
 }
 
 .button:hover {
   opacity: 0.5;
-}
-
-.button_active {
-
-}
-
-.button_faded {
-
 }
 
 .button[disabled] {
@@ -69,20 +61,19 @@
   outline: none;
 }
 
-
 .container .link {
-  margin-top: 15px!important;
-  font-size: 13px!important;
-  color: #E9EAE9!important;
-  text-decoration: none!important;
-  transition: opacity!important;
-  will-change: opacity!important;
-  font-weight: 500!important;
+  margin-top: 15px !important;
+  font-size: 13px !important;
+  color: #e9eae9 !important;
+  text-decoration: none !important;
+  transition: opacity !important;
+  will-change: opacity !important;
+  font-weight: 500 !important;
 }
 
 .container .link:hover {
   opacity: 0.7;
-  text-decoration: underline!important;
+  text-decoration: underline !important;
 }
 
 @media screen and (min-width: 768px) {
@@ -106,7 +97,17 @@
     width: 100px;
     height: 100px;
   }
-  .container.small .image{
+
+  .container.small .button,
+  .container.small {
+    width: 120px;
+    height: 120px;
+  }
+  .container.small {
+    margin: 15px 10px;
+  }
+
+  .container.small .image {
     width: 80px;
     height: 80px;
   }
