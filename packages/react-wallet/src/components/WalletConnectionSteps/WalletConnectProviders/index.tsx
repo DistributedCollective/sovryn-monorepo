@@ -37,7 +37,7 @@ export function WalletConnectProviders(props: Props) {
               title='Math'
               small={true}
               android={props.uri}
-              universal='https://mathwallet.org/en-us/ '
+              universal='https://mathwallet.org/en-us/'
             />
             <WalletItem
               image={images.rWallet}
