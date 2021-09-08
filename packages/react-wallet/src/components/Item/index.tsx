@@ -14,6 +14,7 @@ interface Props {
   linkHref?: string;
   small?: boolean;
   href?: string;
+  dataAttribute?: string;
 }
 
 export function Item(props: Props) {
@@ -23,6 +24,7 @@ export function Item(props: Props) {
         [style.container_big]: props.linkHref && props.linkTitle,
         [style.small]: props.small,
       })}
+      data-action-id={props.dataAttribute}
     >
       <button
         type='button'
