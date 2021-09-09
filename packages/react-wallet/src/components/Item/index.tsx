@@ -98,6 +98,7 @@ interface WalletItemProps extends Props {
   ios?: string;
   android?: string;
   universal?: string;
+  dataAttribute?: string;
 }
 
 export function WalletItem(props: WalletItemProps) {
@@ -108,13 +109,12 @@ export function WalletItem(props: WalletItemProps) {
   };
 
   return (
-    <div>
-      <ItemLink
-        image={props.image}
-        title={props.title}
-        small={props.small}
-        href={walletItemHref()}
-      />
-    </div>
+    <ItemLink
+      image={props.image}
+      title={props.title}
+      small={props.small}
+      href={walletItemHref()}
+      dataAttribute={props.dataAttribute}
+    />
   );
 }

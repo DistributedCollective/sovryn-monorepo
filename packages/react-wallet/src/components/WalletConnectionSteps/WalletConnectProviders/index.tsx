@@ -31,6 +31,7 @@ export function WalletConnectProviders(props: Props) {
               small={true}
               android={props.uri}
               universal='https://dcentwallet.com/MobileApp'
+              dataAttribute="mobileWallet-dcent"
             />
             <WalletItem
               image={images.mathWallet}
@@ -38,6 +39,7 @@ export function WalletConnectProviders(props: Props) {
               small={true}
               android={props.uri}
               universal='https://mathwallet.org/en-us/'
+              dataAttribute="mobileWallet-math"
             />
             <WalletItem
               image={images.rWallet}
@@ -46,6 +48,7 @@ export function WalletConnectProviders(props: Props) {
               ios={`rwallet://wc?uri=${props.uri}`}
               android={props.uri}
               universal='https://developers.rsk.co/wallet/rwallet/'
+              dataAttribute="mobileWallet-rwallet"
             />
             <WalletItem
               image={images.defiantWallet}
@@ -54,11 +57,12 @@ export function WalletConnectProviders(props: Props) {
               ios={`defiantapp://wc?uri=${props.uri}`}
               android={props.uri}
               universal='https://defiantapp.tech/'
+              dataAttribute="mobileWallet-defiant"
             />
           </WalletButtons>
         </LeftContainer>
 
-        <QRWrapper>
+        <QRWrapper data-action-id="link-how-to-connect">
           {props.uri && (
             <QRCode
               value={props.uri || ''}
@@ -76,6 +80,7 @@ export function WalletConnectProviders(props: Props) {
             href='https://wiki.sovryn.app'
             target='_blank'
             rel='noreferrer noopener'
+            data-action-id="walletDialog-link-how-to-connect"
           >
             {t(translations.dialogs.providerTypes.instructionsMobile)}
           </a>
