@@ -1,8 +1,8 @@
 import Web3 from 'web3';
 import { bufferToHex } from 'ethereumjs-util';
 import { TransactionConfig, provider } from 'web3-core';
-import { FullWallet } from '../../interfaces';
 import { debug } from '@sovryn/common';
+import { FullWallet } from '../../interfaces';
 import { RawTransactionData } from '../../interfaces/wallet.interface';
 import { ProviderType } from '../../constants';
 
@@ -24,10 +24,19 @@ export class Web3Wallet implements FullWallet {
     return this.address;
   }
 
-  // @ts-ignore
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
   public signRawTransaction(tx: RawTransactionData): Promise<string> {
-    throw new Error('signRawTransaction is not available for web3 wallets.');
+    return new Promise((resolve, reject) => {
+      new Web3(this.provider).eth
+        .signTransaction(this.prepareRawTransactionData(tx))
+        .then(response => {
+          log('signed raw transaction', response);
+          resolve(response.raw);
+        })
+        .catch(reason => {
+          error('failed to sign raw transaction', reason);
+          reject(reason);
+        });
+    });
   }
 
   public sendTransaction(tx: RawTransactionData) {
