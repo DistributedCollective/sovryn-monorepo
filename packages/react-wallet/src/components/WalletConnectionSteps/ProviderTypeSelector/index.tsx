@@ -22,6 +22,7 @@ export function ProviderTypeSelector(props: Props) {
           image={images.hardwareWallets}
           title={t(translations.dialogs.providerTypes.items.hardware)}
           onClick={() => props.onStep(WalletConnectionStep.HARDWARE_PROVIDERS)}
+          dataAttribute="walletType-hardware"
         />
         <Item
           image={images.mobileWallets}
@@ -29,11 +30,13 @@ export function ProviderTypeSelector(props: Props) {
           onClick={() =>
             props.onStep(WalletConnectionStep.WALLET_CONNECT_PROVIDERS)
           }
+          dataAttribute="walletType-mobile"
         />
         <Item
           image={images.browserWallets}
           title={t(translations.dialogs.providerTypes.items.browser)}
           onClick={() => props.onStep(WalletConnectionStep.BROWSER_PROVIDERS)}
+          dataAttribute="walletType-browser"
         />
       </ItemList>
       {!props.hideInstructionLink && (
@@ -42,6 +45,7 @@ export function ProviderTypeSelector(props: Props) {
             href='https://wiki.sovryn.app'
             target='_blank'
             rel='noreferrer noopener'
+            data-action-id="walletDialog-link-how-to-connect"
           >
             {t(translations.dialogs.providerTypes.instructions)}
           </a>

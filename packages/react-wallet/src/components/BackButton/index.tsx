@@ -6,7 +6,7 @@ interface Props {
 }
 
 export function BackButton(props: Props) {
-  return <Button onClick={props.onClick} />;
+  return <Button onClick={props.onClick} data-action-id="walletDialog-back-arrow" />;
 }
 
 const Button = styled.button.attrs(() => ({

@@ -14,6 +14,7 @@ interface Props {
   linkHref?: string;
   small?: boolean;
   href?: string;
+  dataAttribute?: string;
 }
 
 export function Item(props: Props) {
@@ -23,6 +24,7 @@ export function Item(props: Props) {
         [style.container_big]: props.linkHref && props.linkTitle,
         [style.small]: props.small,
       })}
+      data-action-id={props.dataAttribute}
     >
       <button
         type='button'
@@ -60,6 +62,7 @@ export function ItemLink(props: Props) {
         [style.container_big]: props.linkHref && props.linkTitle,
         [style.small]: props.small,
       })}
+      data-action-id={props.dataAttribute}
     >
       <a
         className={cn(style.button, {
@@ -95,6 +98,7 @@ interface WalletItemProps extends Props {
   ios?: string;
   android?: string;
   universal?: string;
+  dataAttribute?: string;
 }
 
 export function WalletItem(props: WalletItemProps) {
@@ -105,13 +109,12 @@ export function WalletItem(props: WalletItemProps) {
   };
 
   return (
-    <div>
-      <ItemLink
-        image={props.image}
-        title={props.title}
-        small={props.small}
-        href={walletItemHref()}
-      />
-    </div>
+    <ItemLink
+      image={props.image}
+      title={props.title}
+      small={props.small}
+      href={walletItemHref()}
+      dataAttribute={props.dataAttribute}
+    />
   );
 }
