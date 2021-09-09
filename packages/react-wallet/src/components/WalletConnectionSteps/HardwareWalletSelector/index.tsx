@@ -23,6 +23,7 @@ export function HardwareWalletSelector(props: Props) {
           onClick={() => props.onWalletSelected(ProviderType.LEDGER)}
           linkHref='https://shop.ledger.com/?r=3035eca29af2'
           linkTitle='Buy Now'
+          dataAttribute="hardwareWallet-ledger"
         />
         <Item
           image={images.trezorWallet}
@@ -30,6 +31,7 @@ export function HardwareWalletSelector(props: Props) {
           onClick={() => props.onWalletSelected(ProviderType.TREZOR)}
           linkHref='https://trezor.io/?offer_id=12&aff_id=7144&source=sovryn'
           linkTitle='Buy Now'
+          dataAttribute="hardwareWallet-trezor"
         />
       </ItemList>
       {!props.hideInstructionLink && (
@@ -38,6 +40,7 @@ export function HardwareWalletSelector(props: Props) {
             href='https://wiki.sovryn.app'
             target='_blank'
             rel='noreferrer noopener'
+            data-action-id="walletDialog-link-how-to-connect"
           >
             {t(translations.dialogs.providerTypes.instructions)}
           </a>
