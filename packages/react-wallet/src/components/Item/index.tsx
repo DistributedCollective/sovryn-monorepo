@@ -62,6 +62,7 @@ export function ItemLink(props: Props) {
         [style.container_big]: props.linkHref && props.linkTitle,
         [style.small]: props.small,
       })}
+      data-action-id={props.dataAttribute}
     >
       <a
         className={cn(style.button, {

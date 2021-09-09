@@ -31,6 +31,7 @@ export function BrowserWalletSelector(props: Props) {
             href='https://liquality.io/atomic-swap-wallet.html'
             linkHref='https://liquality.io/atomic-swap-wallet.html'
             linkTitle={t(translations.dialogs.browserSelector.download)}
+            dataAttribute="browserType-liquality-download"
           />
         )}
         {wallet === 'liquality' && (
@@ -40,6 +41,7 @@ export function BrowserWalletSelector(props: Props) {
             onClick={() => props.onWalletSelected(ProviderType.WEB3)}
             linkHref='https://liquality.io/atomic-swap-wallet.html'
             linkTitle={t(translations.dialogs.browserSelector.download)}
+            dataAttribute="browserType-liquality"
           />
         )}
         {wallet === 'nifty' && (
@@ -49,6 +51,7 @@ export function BrowserWalletSelector(props: Props) {
             onClick={() => props.onWalletSelected(ProviderType.WEB3)}
             linkHref='https://chrome.google.com/webstore/detail/nifty-wallet/jbdaocneiiinmjbjlgalhcelgbejmnid'
             linkTitle={t(translations.dialogs.browserSelector.download)}
+            dataAttribute="browserType-nifty"
           />
         )}
         {['metamask', 'unknown'].includes(wallet) && (
@@ -58,6 +61,7 @@ export function BrowserWalletSelector(props: Props) {
             onClick={() => props.onWalletSelected(ProviderType.WEB3)}
             linkHref='https://metamask.io/download.html'
             linkTitle={t(translations.dialogs.browserSelector.download)}
+            dataAttribute="browserType-metamask"
           />
         )}
         <Item
@@ -66,6 +70,7 @@ export function BrowserWalletSelector(props: Props) {
           onClick={() => props.onWalletSelected(ProviderType.PORTIS)}
           linkHref='https://www.portis.io'
           linkTitle={t(translations.dialogs.browserSelector.learn)}
+          dataAttribute="browserType-portis"
         />
       </ItemList>
       {!props.hideInstructionLink && (
@@ -74,6 +79,7 @@ export function BrowserWalletSelector(props: Props) {
             href='https://wiki.sovryn.app'
             target='_blank'
             rel='noreferrer noopener'
+            data-action-id="walletDialog-link-how-to-connect"
           >
             {t(translations.dialogs.providerTypes.instructions)}
           </a>
