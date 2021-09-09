@@ -118,4 +118,10 @@ export class WalletService {
     if (!this.wallet) throw Error('Not connected');
     return this.wallet.signMessage(message, {} as any);
   }
+
+  public signRawTransaction(tx: RawTransactionData) {
+    log('sign raw tx', tx, this.providerType);
+    if (!this.wallet) throw Error('Not connected');
+    return this.wallet.signRawTransaction(tx);
+  }
 }
