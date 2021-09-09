@@ -10,6 +10,7 @@ import { translations } from '../../../locales/i18n';
 interface Props {
   onStep: (value: WalletConnectionStep) => void;
   hideInstructionLink?: boolean;
+  enableSoftwareWallet?: boolean;
 }
 
 export function ProviderTypeSelector(props: Props) {
@@ -38,6 +39,15 @@ export function ProviderTypeSelector(props: Props) {
           onClick={() => props.onStep(WalletConnectionStep.BROWSER_PROVIDERS)}
           dataAttribute="walletType-browser"
         />
+        {props.enableSoftwareWallet && (
+          <Item
+            image={images.softwareWallets}
+            title={t(translations.dialogs.providerTypes.items.software)}
+            onClick={() =>
+              props.onStep(WalletConnectionStep.SOFTWARE_PROVIDERS)
+            }
+          />
+        )}
       </ItemList>
       {!props.hideInstructionLink && (
         <BottomLinkContainer>

@@ -1,5 +1,4 @@
-import React, { useState } from 'react';
-import { useMemo } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Dialog } from '../../containers/Dialog';
 import { WalletConnectionStep } from '../WalletConnectionView/types';
 import { WalletConnectionView } from '../WalletConnectionView';
@@ -8,12 +7,14 @@ type WalletConnectionDialogProps = {
   portalTargetId?: string;
   isOpen: boolean;
   onClose: () => void;
+  enableSoftwareWallet?: boolean;
 };
 
 export function WalletConnectionDialog({
   portalTargetId,
   isOpen,
   onClose,
+  enableSoftwareWallet,
 }: WalletConnectionDialogProps) {
   const [step, setStep] = useState<WalletConnectionStep>(
     WalletConnectionStep.NONE,
@@ -36,7 +37,11 @@ export function WalletConnectionDialog({
       isOpen={isOpen}
       portalTargetId={portalTargetId}
     >
-      <WalletConnectionView onStep={setStep} onCompleted={onClose} />
+      <WalletConnectionView
+        onStep={setStep}
+        onCompleted={onClose}
+        enableSoftwareWallet={enableSoftwareWallet}
+      />
     </Dialog>
   );
 }
