@@ -286,9 +286,12 @@ export function WalletProvider(props: Props) {
         p.on('chainChanged', onChainChanged);
 
         return () => {
-          p.removeListener('disconnect', onDisconnect);
-          p.removeListener('accountsChanged', onAccountChanged);
-          p.removeListener('chainChanged', onChainChanged);
+          // eslint-disable-next-line no-prototype-builtins
+          if (p && p.hasOwnProperty('removeListener')) {
+            p.removeListener('disconnect', onDisconnect);
+            p.removeListener('accountsChanged', onAccountChanged);
+            p.removeListener('chainChanged', onChainChanged);
+          }
         };
       }
     }
