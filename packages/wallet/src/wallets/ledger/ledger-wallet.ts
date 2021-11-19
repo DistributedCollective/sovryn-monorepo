@@ -10,8 +10,9 @@ import {
   getBufferFromHex,
 } from '../../utils';
 import { debug } from '@sovryn/common';
-import { RawTransactionData } from '../../interfaces/wallet.interface';
+import { RawTransactionData, RequestPayload } from '../../interfaces/wallet.interface';
 import { ProviderType } from '../../constants';
+import { TypedDataUtils, SignTypedDataVersion } from '@metamask/eth-sig-util';
 
 const { error } = debug('@sovryn/wallet:ledger-wallet');
 
@@ -122,6 +123,41 @@ export class LedgerWallet extends HardwareWallet {
     } catch (err) {
       error('Failed to display Ledger address:', err);
       return false;
+    }
+  }
+
+  public async request(payload: RequestPayload) {
+    if (payload.method === 'eth_signTypedData_v4') {
+      return this.signEIP712HashedMessage(payload.params);
+    }
+    return Promise.reject(Error(`Method ${payload.method} is not available for ledger wallets.`));
+  }
+
+  public async signEIP712HashedMessage(params: any[]): Promise<string> {
+    try {
+      let [, data] = params;
+
+      if (typeof data === 'string') {
+        data = JSON.parse(data);
+      }
+
+      const {
+        domain,
+        types,
+        primaryType,
+        message,
+      } = TypedDataUtils.sanitizeData(data);
+      const domainSeparatorHex = TypedDataUtils.hashStruct('EIP712Domain', domain, types, SignTypedDataVersion.V4).toString('hex')
+      const hashStructMessageHex = TypedDataUtils.hashStruct(primaryType as string, message, types, SignTypedDataVersion.V4).toString('hex')
+
+      const ethApp = await makeApp();
+      const signed = await ethApp.signEIP712HashedMessage(this.getPath(), domainSeparatorHex, hashStructMessageHex);
+      /*
+       @ts-expect-error: There is a type mismatch between Signature and how we use it. @todo: resolve conflicts.
+      */
+      return addHexPrefix(signed.r + signed.s + (signed.v as any).toString(16));
+    } catch (err) {
+      throw new Error(ledgerErrToMessage(err));
     }
   }
 

@@ -1,7 +1,7 @@
 import { bufferToHex } from 'ethereumjs-util';
 import { provider } from 'web3-core';
 import type WCProvider from '@walletconnect/web3-provider';
-import { RawTransactionData } from '../../interfaces/wallet.interface';
+import { RawTransactionData, RequestPayload } from '../../interfaces/wallet.interface';
 import { ProviderType } from '../../constants';
 import { Web3Wallet } from './web3';
 
@@ -45,5 +45,17 @@ export class WalletConnectWallet extends Web3Wallet {
       msgHex,
       this.address.toLowerCase(),
     ]);
+  }
+
+  public request(payload: RequestPayload) {
+    if (!this.provider) {
+      return Promise.reject(Error('provider is not availble'));
+    }
+
+    if (payload.method === 'eth_signTypedData_v4') {
+      return this.provider.wc.signTypedData(payload.params);
+    }
+
+    return Promise.reject(Error(`Method ${payload.method} is not supported.`));
   }
 }

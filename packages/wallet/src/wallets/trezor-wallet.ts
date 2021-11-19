@@ -9,7 +9,7 @@ import {
   commonGenerator,
   getBufferFromHex,
 } from '../utils';
-import { RawTransactionData } from '../interfaces/wallet.interface';
+import { RawTransactionData, RequestPayload } from '../interfaces/wallet.interface';
 import { ProviderType } from '../constants';
 import { debug } from '@sovryn/common';
 
@@ -117,6 +117,10 @@ export class TrezorWallet extends HardwareWallet {
       // eslint-disable-next-line @typescript-eslint/no-use-before-define
       throw new Error(trezorErrToMessage(err));
     }
+  }
+
+  public async request(payload: RequestPayload) {
+    return Promise.reject(Error(`Method ${payload.method} is not available for trezor wallets.`));
   }
 
   public async displayAddress() {

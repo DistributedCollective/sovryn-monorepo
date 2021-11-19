@@ -19,6 +19,13 @@ export interface RawTransactionData {
   nonce: number;
 }
 
+export interface RequestPayload {
+  method: string;
+  params: any[];
+};
+
+export type RequestResponse = string | { result: string; };
+
 export interface FullWallet extends BaseWallet {
   isReadOnly?: false;
   chainId?: number;
@@ -26,6 +33,7 @@ export interface FullWallet extends BaseWallet {
   signMessage(msg: string, node: NodeInterface): Promise<string>;
   getWalletType(): string;
   disconnect(): Promise<boolean>;
+  request(payload: RequestPayload): Promise<RequestResponse>;
 }
 
 export type WalletType = ReadOnlyWallet | FullWallet;

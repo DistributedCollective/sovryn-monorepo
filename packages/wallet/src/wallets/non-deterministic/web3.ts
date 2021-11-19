@@ -3,7 +3,7 @@ import { bufferToHex } from 'ethereumjs-util';
 import { TransactionConfig, provider } from 'web3-core';
 import { debug } from '@sovryn/common';
 import { FullWallet } from '../../interfaces';
-import { RawTransactionData } from '../../interfaces/wallet.interface';
+import { RawTransactionData, RequestPayload } from '../../interfaces/wallet.interface';
 import { ProviderType } from '../../constants';
 
 const { log, error } = debug('@sovryn/wallet:web3-wallet');
@@ -61,6 +61,13 @@ export class Web3Wallet implements FullWallet {
       this.address.toLowerCase(),
       '',
     );
+  }
+
+  public request(payload: RequestPayload) {
+    if (!this.provider) {
+      return Promise.reject(Error('provider is not availble'));
+    }
+    return (this.provider as any).request(payload);
   }
 
   public getWalletType(): string {

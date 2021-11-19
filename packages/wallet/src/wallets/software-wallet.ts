@@ -5,7 +5,7 @@ import Web3 from 'web3';
 import { Account } from 'web3-core';
 import { debug } from '@sovryn/common';
 import { stripHexPrefix } from 'ethjs-util';
-import { FullWallet, RawTransactionData } from '../interfaces/wallet.interface';
+import { FullWallet, RawTransactionData, RequestPayload } from '../interfaces/wallet.interface';
 import { ProviderType } from '../constants';
 
 const { log, error } = debug('@sovryn/wallet:software-wallet');
@@ -61,6 +61,11 @@ export class SoftwareWallet implements FullWallet {
       error(err);
       throw new Error(err.message);
     }
+  }
+
+  public request(payload: RequestPayload) {
+    log('request', payload);
+    return Promise.reject(Error(`Request is not available for software wallets.`));
   }
 
   getAddressString(): string {

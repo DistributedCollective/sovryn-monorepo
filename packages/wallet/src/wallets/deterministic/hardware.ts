@@ -1,5 +1,6 @@
 import type { TxData } from 'ethereumjs-tx';
 import type { FullWallet } from '../../interfaces';
+import { RequestPayload, RequestResponse } from '../../interfaces/wallet.interface';
 import { DeterministicWallet } from './deterministic-wallet';
 
 export interface ChainCodeResponse {
@@ -24,6 +25,7 @@ export abstract class HardwareWallet
   public abstract signMessage(msg: string): Promise<string>;
   public abstract displayAddress(): Promise<boolean>;
   public abstract getWalletType(): string;
+  public abstract request(payload: RequestPayload): Promise<RequestResponse>;
 
   public disconnect(): Promise<boolean> {
     return Promise.resolve(true);

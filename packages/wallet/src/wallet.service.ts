@@ -1,13 +1,13 @@
+import { debug } from '@sovryn/common';
 import { FullWallet } from './interfaces';
 import {
   NetworkDictionary,
   walletProviderMap,
   web3Wallets,
 } from './dictionaries';
-import { debug } from '@sovryn/common';
 import { ProviderType } from './constants';
 import { EventBag } from './utils';
-import type { RawTransactionData } from './interfaces/wallet.interface';
+import type { RawTransactionData, RequestPayload } from './interfaces/wallet.interface';
 
 const { log, error } = debug('@sovryn/wallet:wallet.service');
 
@@ -123,5 +123,11 @@ export class WalletService {
     log('sign raw tx', tx, this.providerType);
     if (!this.wallet) throw Error('Not connected');
     return this.wallet.signRawTransaction(tx);
+  }
+
+  public request(payload: RequestPayload) {
+    log('request', payload);
+    if (!this.wallet) throw Error('Not connected');
+    return this.wallet.request(payload);
   }
 }

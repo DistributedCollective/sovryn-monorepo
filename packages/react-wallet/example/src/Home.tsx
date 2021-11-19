@@ -68,6 +68,58 @@ export const Home = () => {
     }
   }, [chainId]);
 
+  const eth_signTypedData_v4 = useCallback(async () => {
+      try {
+        const result = await walletService.request({
+          method: 'eth_signTypedData_v4',
+          params: [address, JSON.stringify(
+            {
+              domain: {
+                chainId: 4,
+                name: 'OrderBook',
+                verifyingContract: address,
+                version: '1'
+              },
+              message: {
+                 maker: address,
+                 fromToken: address,
+                 toToken: address,
+                 amountIn: '0',
+                 amountOutMin: '0',
+                 recipient: address,
+                 deadline: 123,
+                 created: 0,
+              },
+              primaryType: 'Order',
+              types: {
+                EIP712Domain: [
+                  { name: 'name', type: 'string' },
+                  { name: 'version', type: 'string' },
+                  { name: 'chainId', type: 'uint256' },
+                  { name: 'verifyingContract', type: 'address' },
+                ],
+                Order: [
+                  { name: "maker", type: "address" },
+                  { name: "fromToken", type: "address" },
+                  { name: "toToken", type: "address" },
+                  { name: "amountIn", type: "uint256" },
+                  { name: "amountOutMin", type: "uint256" },
+                  { name: "recipient", type: "address" },
+                  { name: "deadline", type: "uint256" },
+                  { name: "created", type: "uint256" },
+                ],
+              },
+          }
+          )]
+        });
+
+        console.log(result);
+
+      } catch(e) {
+        console.error(e);
+      }
+  }, [address])
+
   const [balance, setBalance] = React.useState('0');
 
   useEffect(() => {
@@ -98,6 +150,9 @@ export const Home = () => {
           </div>
           <div>
             <button onClick={send}>Send balance</button>
+          </div>
+          <div>
+            <button onClick={eth_signTypedData_v4}>eth_signTypedData_v4 (Rinkeby network)</button>
           </div>
           <div>
             <button
