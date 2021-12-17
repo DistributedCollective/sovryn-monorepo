@@ -5,6 +5,7 @@ import {
   TrezorWalletProvider,
 } from '@sovryn/wallet';
 import * as React from 'react';
+import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components/macro';
 
@@ -37,6 +38,7 @@ export function HardwarePathChooser(props: Props) {
   const networks = React.useMemo(() => {
     return walletService.networkDictionary.list();
   }, [props.chainId]);
+
   const networkName = React.useMemo(() => {
     return walletService.networkDictionary.get(state.chainId)?.getName();
   }, [state.chainId]);
@@ -100,6 +102,10 @@ export function HardwarePathChooser(props: Props) {
   };
   const { t } = useTranslation();
 
+  const networkAppName = useMemo(() => {
+    return paths.find(item => item.path === state.dPath)?.network;
+  }, [state.dPath, paths])
+
   return (
     <Container>
       <h1>
@@ -149,6 +155,12 @@ export function HardwarePathChooser(props: Props) {
           DApp doesn't have any {getDeviceName(props.provider)} paths for{' '}
           {networkName || 'selected network'}
         </P>
+      )}
+      {props.provider === ProviderType.LEDGER && networkName && (
+        <div className='alert'>
+          <img src={images.errorIcon} className='alertImg' alt='warning' />
+          <span className='alertText'>{t(translations.dialogs.providerTypes.ledgerAppInstruction, { app: networkAppName?.toUpperCase() })}</span>
+        </div>
       )}
       <Button
         onClick={onSubmit}

@@ -4,7 +4,7 @@ import { WalletProvider } from '@sovryn/react-wallet';
 import { Home } from './Home';
 
 const App = () => {
-  return <WalletProvider options={{ chainId: 1, remember: true, enableSoftwareWallet: true }} portalTargetId="overlay"><Home /></WalletProvider>
+  return <WalletProvider options={{ chainId: 30, remember: true, enableSoftwareWallet: true }} portalTargetId="overlay"><Home /></WalletProvider>
 };
 
 export default App

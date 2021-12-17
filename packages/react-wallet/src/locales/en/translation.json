@@ -16,7 +16,8 @@
       },
       "instructions": "For instructions on how to connect to SOVRYN visit our Wiki",
       "ledgerInstructions": "Don't understand Derivation Paths? Read our wiki",
-      "instructionsMobile":"For instructions on how to connect mobile wallets to SOVRYN visit our Wiki"
+      "instructionsMobile":"For instructions on how to connect mobile wallets to SOVRYN visit our Wiki",
+      "ledgerAppInstruction": "Make sure you have {{app}} app opened in your Ledger Device."
     },
     "browserSelector": {
       "title": "Select browser wallet type",
