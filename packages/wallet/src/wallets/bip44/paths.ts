@@ -18,13 +18,19 @@ export const ropsten: DPath = {
 
 export const ledgerEthereum: DPath = {
   path: "m/44'/60'/0'",
-  label: 'Ethereum',
+  label: 'Ethereum - Ledger',
   network: 'eth',
 };
 
 export const ledgerLiveEthereum: DPath = {
   path: "m/44'/60'",
   label: 'Ethereum - Ledger Live',
+  network: 'eth',
+};
+
+export const ledgerEthereumLegacy: DPath = {
+  path: "m/44'/60'/0'/0",
+  label: 'Ethereum',
   network: 'eth',
 };
 
