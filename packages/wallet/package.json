@@ -1,6 +1,6 @@
 {
   "name": "@sovryn/wallet",
-  "version": "2.1.0",
+  "version": "2.1.1",
   "description": "Library for interacting with RSK and ETH wallets.",
   "author": "Rytis Grincevicius",
   "license": "MIT",
@@ -29,7 +29,7 @@
     "@ledgerhq/hw-transport-webusb": "^5.53.1",
     "@metamask/eth-sig-util": "^4.0.0",
     "@portis/web3": "^3.0.8",
-    "@sovryn/common": "^1.0.16",
+    "@sovryn/common": "^2.1.1",
     "@trezor/rollout": "^1.0.7",
     "@types/w3c-web-usb": "^1.0.5",
     "@walletconnect/web3-provider": "^1.5.2",

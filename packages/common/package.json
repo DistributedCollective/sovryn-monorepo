@@ -1,6 +1,6 @@
 {
   "name": "@sovryn/common",
-  "version": "1.0.16",
+  "version": "2.1.1",
   "description": "Library for common helpers.",
   "main": "dist/index.js",
   "module": "dist/index.es.js",
