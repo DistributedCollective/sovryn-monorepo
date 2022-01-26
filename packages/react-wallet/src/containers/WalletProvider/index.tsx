@@ -35,6 +35,8 @@ interface Options {
   locale?: string;
   // allows users to connect wallet using private key (not recommended, use for testing only.)
   enableSoftwareWallet?: boolean;
+  // instructs modal to hide wallets which does not support signTyped methods.
+  signTypedRequired?: boolean;
 }
 
 interface Props {
@@ -48,11 +50,12 @@ const REMEMBER_SESSION_KEY = '__sovryn_wallet';
 export function WalletProvider(props: Props) {
   const { t } = useTranslation();
 
-  const { chainId: expectedChainId } = props.options || {};
+  const { chainId: expectedChainId, signTypedRequired = false } = props.options || {};
 
   const [state, setState] = useState<WalletContextStateType>({
     wallet: walletService,
     expectedChainId: expectedChainId,
+    signTypedRequired: signTypedRequired,
     chainId: undefined,
     address: undefined,
     hwIndex: undefined,

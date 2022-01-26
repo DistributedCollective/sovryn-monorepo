@@ -6,6 +6,8 @@ import { images } from '../../../assets/images';
 import { BottomLinkContainer } from '../../BottomLinkContainer';
 import { translations } from '../../../locales/i18n';
 import { useTranslation } from 'react-i18next';
+import { WalletContext } from '../../..';
+import { isWalletVisibleForSignTyped } from '../../../helpers';
 interface Props {
   onWalletSelected: (value: ProviderType) => void;
   hideInstructionLink?: boolean;
@@ -13,11 +15,13 @@ interface Props {
 
 export function HardwareWalletSelector(props: Props) {
   const { t } = useTranslation();
+  const { signTypedRequired } = React.useContext(WalletContext);
   return (
     <div>
       <h1>{t(translations.dialogs.hardwareWallet.title)}:</h1>
       <ItemList>
-        <Item
+        {isWalletVisibleForSignTyped(ProviderType.LEDGER, signTypedRequired) && (
+          <Item
           image={images.ledgerWallet}
           title='Ledger'
           onClick={() => props.onWalletSelected(ProviderType.LEDGER)}
@@ -25,14 +29,17 @@ export function HardwareWalletSelector(props: Props) {
           linkTitle='Buy Now'
           dataAttribute="hardwareWallet-ledger"
         />
-        <Item
-          image={images.trezorWallet}
-          title='Trezor'
-          onClick={() => props.onWalletSelected(ProviderType.TREZOR)}
-          linkHref='https://trezor.io/?offer_id=12&aff_id=7144&source=sovryn'
-          linkTitle='Buy Now'
-          dataAttribute="hardwareWallet-trezor"
-        />
+        )}
+        {isWalletVisibleForSignTyped(ProviderType.TREZOR, signTypedRequired) && (
+          <Item
+            image={images.trezorWallet}
+            title='Trezor'
+            onClick={() => props.onWalletSelected(ProviderType.TREZOR)}
+            linkHref='https://trezor.io/?offer_id=12&aff_id=7144&source=sovryn'
+            linkTitle='Buy Now'
+            dataAttribute="hardwareWallet-trezor"
+          />
+        )}
       </ItemList>
       {!props.hideInstructionLink && (
         <BottomLinkContainer>

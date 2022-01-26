@@ -7,6 +7,7 @@ export const DEFAULT_CHAIN_ID = 30;
 export type WalletContextStateType = {
   wallet: WalletService;
   expectedChainId?: number;
+  signTypedRequired?: boolean;
   chainId?: number;
   address?: string;
   hwIndex?: number;
@@ -73,6 +74,7 @@ export type WalletContextType = WalletContextStateType &
 const defaultValue: WalletContextType = {
   wallet: walletService,
   expectedChainId: undefined,
+  signTypedRequired: false,
   connected: false,
   connecting: false,
   set: () => {

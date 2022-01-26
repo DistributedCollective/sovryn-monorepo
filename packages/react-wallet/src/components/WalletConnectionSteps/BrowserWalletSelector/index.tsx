@@ -2,8 +2,10 @@ import { ProviderType } from '@sovryn/wallet';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import styled from 'styled-components/macro';
+import { WalletContext } from '../../..';
 
 import { images } from '../../../assets/images';
+import { PORTIS_SUPPORTED_CHAINS } from '../../../contants';
 import { translations } from '../../../locales/i18n';
 import { BottomLinkContainer } from '../../BottomLinkContainer';
 import { Item, ItemLink } from '../../Item';
@@ -18,13 +20,15 @@ const wallet = detectInjectableWallet();
 
 export function BrowserWalletSelector(props: Props) {
   const { t } = useTranslation();
+  const { expectedChainId, signTypedRequired } = React.useContext(WalletContext);
 
   return (
     <div>
       <h1>{t(translations.dialogs.browserSelector.title)}:</h1>
       <P>{t(translations.dialogs.browserSelector.disable)}</P>
       <ItemList>
-        {wallet !== 'liquality' && (
+        {!signTypedRequired && (<React.Fragment>
+          {wallet !== 'liquality' && (
           <ItemLink
             image={images.liqualityWallet}
             title='Liquality'
@@ -44,6 +48,8 @@ export function BrowserWalletSelector(props: Props) {
             dataAttribute="browserType-liquality"
           />
         )}
+        </React.Fragment>)}
+
         {wallet === 'nifty' && (
           <Item
             image={images.niftyWallet}
@@ -54,7 +60,7 @@ export function BrowserWalletSelector(props: Props) {
             dataAttribute="browserType-nifty"
           />
         )}
-        {['metamask', 'unknown'].includes(wallet) && (
+        {(['metamask', 'unknown'].includes(wallet) || (signTypedRequired && wallet === 'liquality')) && (
           <Item
             image={images.metamaskWallet}
             title='MetaMask'
@@ -64,7 +70,8 @@ export function BrowserWalletSelector(props: Props) {
             dataAttribute="browserType-metamask"
           />
         )}
-        <Item
+        {PORTIS_SUPPORTED_CHAINS.includes(expectedChainId!) && (
+          <Item
           image={images.portisWallet}
           title='Portis'
           onClick={() => props.onWalletSelected(ProviderType.PORTIS)}
@@ -72,6 +79,7 @@ export function BrowserWalletSelector(props: Props) {
           linkTitle={t(translations.dialogs.browserSelector.learn)}
           dataAttribute="browserType-portis"
         />
+        )}
       </ItemList>
       {!props.hideInstructionLink && (
         <BottomLinkContainer>
