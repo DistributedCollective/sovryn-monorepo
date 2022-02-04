@@ -9,6 +9,7 @@ import { translations } from '../../../locales/i18n';
 import { isAnyWalletVisibleForSignTyped, isWalletVisibleForSignTyped } from '../../../helpers';
 import { ProviderType } from '@sovryn/wallet';
 import { WalletContext } from '../../..';
+import { WALLET_CONNECT_SUPPORTED_CHAINS } from '../../../contants';
 
 interface Props {
   onStep: (value: WalletConnectionStep) => void;
@@ -18,7 +19,7 @@ interface Props {
 
 export function ProviderTypeSelector(props: Props) {
   const { t } = useTranslation();
-  const { signTypedRequired } = React.useContext(WalletContext);
+  const { signTypedRequired, expectedChainId } = React.useContext(WalletContext);
   return (
     <div>
       <h1>{t(translations.dialogs.providerTypes.title)}</h1>
@@ -31,7 +32,7 @@ export function ProviderTypeSelector(props: Props) {
             dataAttribute="walletType-hardware"
           />
         )}
-        {isWalletVisibleForSignTyped(ProviderType.WALLET_CONNECT, signTypedRequired) && (
+        {(isWalletVisibleForSignTyped(ProviderType.WALLET_CONNECT, signTypedRequired) && WALLET_CONNECT_SUPPORTED_CHAINS.includes(expectedChainId!)) && (
           <Item
             image={images.mobileWallets}
             title={t(translations.dialogs.providerTypes.items.mobile)}
