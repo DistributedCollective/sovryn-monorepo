@@ -90,7 +90,7 @@ export const Home = () => {
     } catch (e) {
       console.error(e);
     }
-  }, [chainId]);
+  }, []);
 
   const eth_signTypedData_v4 = useCallback(async () => {
       try {
