@@ -68,6 +68,30 @@ export const Home = () => {
     }
   }, [chainId]);
 
+  const sendToChain = useCallback(async () => {
+    try {
+      const run = async () => {
+        const nonce = await node.getTransactionCount(walletService.address);
+        const tx = await walletService.signTransaction({
+          value: '0',
+          to: walletService.address,
+          chainId: 31,
+          nonce: nonce,
+          gasPrice: '65164000',
+          gasLimit: '21000',
+        });
+
+        console.log('send', tx);
+      };
+
+      run().catch(e => {
+        console.error('failed to send tx', e);
+      });
+    } catch (e) {
+      console.error(e);
+    }
+  }, [chainId]);
+
   const eth_signTypedData_v4 = useCallback(async () => {
       try {
         const result = await walletService.request({
@@ -152,6 +176,9 @@ export const Home = () => {
             <button onClick={send}>Send balance</button>
           </div>
           <div>
+            <button onClick={sendToChain}>Send balance (31 chain)</button>
+          </div>
+          <div>
             <button onClick={eth_signTypedData_v4}>eth_signTypedData_v4 (Rinkeby network)</button>
           </div>
           <div>
@@ -161,6 +188,9 @@ export const Home = () => {
             >
               Verify address
             </button>
+          </div>
+          <div>
+            Network: {chainId}
           </div>
         </React.Fragment>
       )}

@@ -5,6 +5,7 @@ import { debug } from '@sovryn/common';
 import { FullWallet } from '../../interfaces';
 import { RawTransactionData, RequestPayload } from '../../interfaces/wallet.interface';
 import { ProviderType } from '../../constants';
+import { InjectedWalletProvider } from '../../providers/injected-wallet-provider';
 
 const { log, error } = debug('@sovryn/wallet:web3-wallet');
 
@@ -12,12 +13,16 @@ export class Web3Wallet implements FullWallet {
   public chainId: number;
 
   readonly address: string;
-  readonly provider: provider;
+  readonly _provider: provider;
 
   constructor(address: string, chainId: number, provider: provider) {
     this.address = address;
     this.chainId = chainId;
-    this.provider = provider;
+    this._provider = provider;
+  }
+
+  public get provider() {
+    return this.getProvider() || this._provider;
   }
 
   public getAddressString(): string {
@@ -26,7 +31,8 @@ export class Web3Wallet implements FullWallet {
 
   public signRawTransaction(tx: RawTransactionData): Promise<string> {
     return new Promise((resolve, reject) => {
-      new Web3(this.provider).eth
+      const chainId = Number(tx.chainId || this.chainId);
+      new Web3(this.getProvider(chainId)).eth
         .signTransaction(this.prepareRawTransactionData(tx))
         .then(response => {
           log('signed raw transaction', response);
@@ -41,7 +47,8 @@ export class Web3Wallet implements FullWallet {
 
   public sendTransaction(tx: RawTransactionData) {
     return new Promise((resolve, reject) => {
-      new Web3(this.provider).eth
+      const chainId = Number(tx.chainId || this.chainId);
+      new Web3(this.getProvider(chainId)).eth
         .sendTransaction(this.prepareRawTransactionData(tx))
         .once('transactionHash', (response: string) => {
           log('signed transaction', response);
@@ -92,5 +99,9 @@ export class Web3Wallet implements FullWallet {
       to: tx.to?.toLowerCase(),
       value: tx.value,
     };
+  }
+
+  protected getProvider(chainId?: number): provider {
+    return InjectedWalletProvider.getProvider(chainId);
   }
 }

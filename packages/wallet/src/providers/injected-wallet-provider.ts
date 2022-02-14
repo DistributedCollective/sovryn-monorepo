@@ -6,38 +6,59 @@ import { WalletProviderInterface, FullWallet } from '../interfaces';
 
 const { log, error } = debug('@sovryn/wallet:injected-wallet');
 
+export const getWeb3Provider = (name: 'ethereum' | 'eth' | 'rsk' | 'bsc') => {
+  const ethereum = window[name];
+  if (ethereum) {
+    log('has ethereum injected.');
+    if ((window as any).Web3) {
+      log('has web3 injected, overwriting');
+      (window as any).web3 = new Web3(ethereum);
+    }
+
+    return ethereum;
+  } else if ((window as any).web3) {
+    log('has web3 injected.');
+    // Legacy handling; will become unavailable 11/2.
+    const { web3 } = window as any;
+    if (!web3 || !web3.currentProvider || !web3.currentProvider.sendAsync) {
+      throw new Error(
+        'Web3 not found. Please check that MetaMask is installed',
+      );
+    }
+    return web3.currentProvider;
+  }
+};
+
 export class InjectedWalletProvider implements WalletProviderInterface {
   provider: any;
 
   constructor() {
     log('constructing injected wallet provider.');
-    const { ethereum } = window as any;
-    if (ethereum) {
-      log('has ethereum injected.');
-      if ((window as any).Web3) {
-        log('has web3 injected, overwriting');
-        (window as any).web3 = new Web3(ethereum);
-      }
-
-      this.provider = ethereum;
-    } else if ((window as any).web3) {
-      log('has web3 injected.');
-      // Legacy handling; will become unavailable 11/2.
-      const { web3 } = window as any;
-      if (!web3 || !web3.currentProvider || !web3.currentProvider.sendAsync) {
-        throw new Error(
-          'Web3 not found. Please check that MetaMask is installed',
-        );
-      }
-      this.provider = web3.currentProvider;
-    }
+    this.provider = getWeb3Provider('ethereum');
   }
 
-  unlock(): Promise<FullWallet> {
-    log('connecting using injectable wallet');
+  static getProvider(requestedChainId?: number) {
+    const _provider = getWeb3Provider('ethereum');
+    if (_provider?.isLiquality) {
+      switch(requestedChainId) {
+        case 30:
+        case 31:
+          return getWeb3Provider('rsk');
+        case 56:
+        case 97:
+          return getWeb3Provider('bsc');
+        default:
+          return _provider;
+      }
+    }
+    return _provider;
+  }
+
+  unlock(requestedChainId: number): Promise<FullWallet> {
+    log('connecting using injectable wallet', requestedChainId);
     return new Promise(async (resolve, reject) => {
       try {
-        const accounts = await this.provider
+        const accounts = await InjectedWalletProvider.getProvider(requestedChainId)
           .request({ method: 'eth_requestAccounts' })
           .then((response: any) =>
             Array.isArray(response) ? response : response?.result || [],
@@ -54,7 +75,7 @@ export class InjectedWalletProvider implements WalletProviderInterface {
           return reject(Error('Permission was not given.'));
         }
 
-        const chainId = await this.provider
+        const chainId = await InjectedWalletProvider.getProvider(requestedChainId)
           .request({ method: 'eth_chainId' })
           .then((response: any) => Number(response.result || response));
         resolve(
