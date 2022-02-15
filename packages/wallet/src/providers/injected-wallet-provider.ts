@@ -6,7 +6,9 @@ import { WalletProviderInterface, FullWallet } from '../interfaces';
 
 const { log, error } = debug('@sovryn/wallet:injected-wallet');
 
-export const getWeb3Provider = (name: 'ethereum' | 'eth' | 'rsk' | 'bsc') => {
+type LiqualityNetworks = 'ethereum' | 'eth' | 'rsk' | 'bsc' | 'polygon' | 'arbitrum' | 'fuse';
+
+export const getWeb3Provider = (name: LiqualityNetworks) => {
   const ethereum = window[name];
   if (ethereum) {
     log('has ethereum injected.');
@@ -41,12 +43,25 @@ export class InjectedWalletProvider implements WalletProviderInterface {
     const _provider = getWeb3Provider('ethereum');
     if (_provider?.isLiquality) {
       switch(requestedChainId) {
+        case 1:
+        case 3:
+          return getWeb3Provider('eth');
         case 30:
         case 31:
           return getWeb3Provider('rsk');
         case 56:
         case 97:
           return getWeb3Provider('bsc');
+        case 122:
+        case 123:
+          return getWeb3Provider('fuse');
+        case 137:
+        case 80001:
+          return getWeb3Provider('polygon');
+        // case 200:
+        case 42161:
+        case 421611:
+          return getWeb3Provider('arbitrum');
         default:
           return _provider;
       }
