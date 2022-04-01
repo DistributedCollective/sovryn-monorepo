@@ -76,6 +76,15 @@
   text-decoration: underline !important;
 }
 
+.discontinued {
+  padding-top: 1rem;
+  color: #A52222;
+}
+.container .discontinued + a {
+  margin-top: 5px !important;
+  color: #A52222 !important;
+}
+
 @media screen and (min-width: 768px) {
   .container {
     width: 160px;
