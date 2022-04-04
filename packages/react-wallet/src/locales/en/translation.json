@@ -23,7 +23,8 @@
       "title": "Select browser wallet type",
       "disable": "Make sure to disable other wallet browser extensions than the one you want to use.",
       "download": "Download",
-      "learn": "Learn More"
+      "learn": "Learn More",
+      "discontinued": "DISCONTINUED"
     },
     "hardwareSelector": {
       "title": "Choose Wallet",

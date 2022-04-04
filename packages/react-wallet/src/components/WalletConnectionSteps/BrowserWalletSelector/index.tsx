@@ -55,8 +55,8 @@ export function BrowserWalletSelector(props: Props) {
             image={images.niftyWallet}
             title='Nifty'
             onClick={() => props.onWalletSelected(ProviderType.WEB3)}
-            linkHref='https://chrome.google.com/webstore/detail/nifty-wallet/jbdaocneiiinmjbjlgalhcelgbejmnid'
-            linkTitle={t(translations.dialogs.browserSelector.download)}
+            linkHref='https://wiki.sovryn.app/en/getting-started/nifty-wallet-discontinuation'
+            linkTitle={t(translations.dialogs.browserSelector.learn)}
             dataAttribute="browserType-nifty"
           />
         )}
