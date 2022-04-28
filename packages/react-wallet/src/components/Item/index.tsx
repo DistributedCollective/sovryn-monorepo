@@ -47,7 +47,7 @@ export function Item(props: Props) {
       </button>
       {props.title === 'Nifty' && (
         <span className={style.discontinued}>
-          {t(translations.dialogs.browserSelector.discontinued)}
+          {t(translations.common.discontinued)}
         </span>
       )}
       {props.linkHref && props.linkTitle && (
@@ -65,6 +65,7 @@ export function Item(props: Props) {
 }
 
 export function ItemLink(props: Props) {
+  const { t } = useTranslation();
   return (
     <div
       className={cn(style.container, {
@@ -89,6 +90,11 @@ export function ItemLink(props: Props) {
         />
         <div className={style.title}>{props.title}</div>
       </a>
+      {props.title === 'rwallet' && (
+        <span className={style.discontinued}>
+          {t(translations.common.discontinued)}
+        </span>
+      )}
       {props.linkHref && props.linkTitle && (
         <a
           href={props.linkHref}
