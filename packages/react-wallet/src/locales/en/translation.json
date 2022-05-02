@@ -3,7 +3,8 @@
     "confirm": "Confirm",
     "close": "Close",
     "cancel": "Cancel",
-    "alert": "You are connected to wrong network."
+    "alert": "You are connected to wrong network.",
+    "discontinued": "DISCONTINUED"
   },
   "dialogs": {
     "providerTypes": {
@@ -23,8 +24,7 @@
       "title": "Select browser wallet type",
       "disable": "Make sure to disable other wallet browser extensions than the one you want to use.",
       "download": "Download",
-      "learn": "Learn More",
-      "discontinued": "DISCONTINUED"
+      "learn": "Learn More"
     },
     "hardwareSelector": {
       "title": "Choose Wallet",
@@ -37,7 +37,7 @@
       "learn": "Learn More"
     },
     "walletConnect": {
-      "title":"Scan QR to Connect Wallet",
+      "title":"Scan QR code to connect wallet using WalletConnect",
       "wallet": "Compatible mobile wallets"
     },
     "hardwareWallet": {

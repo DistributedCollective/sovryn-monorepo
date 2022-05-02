@@ -79,6 +79,7 @@
 .discontinued {
   padding-top: 1rem;
   color: #A52222;
+  font-size: 14px;
 }
 .container .discontinued + a {
   margin-top: 5px !important;
