@@ -3,7 +3,10 @@ import { bufferToHex } from 'ethereumjs-util';
 import { TransactionConfig, provider } from 'web3-core';
 import { debug } from '@sovryn/common';
 import { FullWallet } from '../../interfaces';
-import { RawTransactionData, RequestPayload } from '../../interfaces/wallet.interface';
+import {
+  RawTransactionData,
+  RequestPayload,
+} from '../../interfaces/wallet.interface';
 import { ProviderType } from '../../constants';
 import { InjectedWalletProvider } from '../../providers/injected-wallet-provider';
 
