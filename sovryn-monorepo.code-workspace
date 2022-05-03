@@ -1,0 +1,21 @@
+{
+	"folders": [
+		{
+			"name": "✨ sovryn-monorepo",
+			"path": "."
+		},
+		{
+			"name": "📦 @sovryn/common",
+			"path": "packages/common"
+		},
+		{
+			"name": "📦 @sovryn/react-wallet",
+			"path": "packages/react-wallet"
+		},
+		{
+			"name": "📦 @sovryn/wallet",
+			"path": "packages/wallet"
+		}
+	],
+	"settings": {}
+}
