@@ -35,7 +35,8 @@ export class Web3Wallet implements FullWallet {
   public signRawTransaction(tx: RawTransactionData): Promise<string> {
     return new Promise((resolve, reject) => {
       const chainId = Number(tx.chainId || this.chainId);
-      new Web3(this.getProvider(chainId)).eth
+      const provider = this.getProvider(chainId) || this._provider;
+      new Web3(provider).eth
         .signTransaction(this.prepareRawTransactionData(tx))
         .then(response => {
           log('signed raw transaction', response);
@@ -51,7 +52,8 @@ export class Web3Wallet implements FullWallet {
   public sendTransaction(tx: RawTransactionData) {
     return new Promise((resolve, reject) => {
       const chainId = Number(tx.chainId || this.chainId);
-      new Web3(this.getProvider(chainId)).eth
+      const provider = this.getProvider(chainId) || this._provider;
+      new Web3(provider).eth
         .sendTransaction(this.prepareRawTransactionData(tx))
         .once('transactionHash', (response: string) => {
           log('signed transaction', response);

@@ -4,7 +4,7 @@ import { ProviderType } from '../../constants';
 import { Web3Wallet } from './web3';
 
 export class PortisWallet extends Web3Wallet {
-  readonly provider: provider;
+  readonly _provider: provider;
   readonly portis: Portis;
 
   constructor(address: string, chainId: number, portis: Portis) {

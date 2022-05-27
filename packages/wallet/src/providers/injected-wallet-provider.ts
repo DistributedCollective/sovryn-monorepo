@@ -12,7 +12,7 @@ export const getWeb3Provider = (name: LiqualityNetworks) => {
   const ethereum = window[name];
   if (ethereum) {
     log('has ethereum injected.');
-    if ((window as any).Web3) {
+    if ((window as any).web3) {
       log('has web3 injected, overwriting');
       (window as any).web3 = new Web3(ethereum);
     }
@@ -28,6 +28,8 @@ export const getWeb3Provider = (name: LiqualityNetworks) => {
       );
     }
     return web3.currentProvider;
+  } else {
+    return null;
   }
 };
 
