@@ -9,7 +9,10 @@ import {
   commonGenerator,
   getBufferFromHex,
 } from '../utils';
-import { RawTransactionData, RequestPayload } from '../interfaces/wallet.interface';
+import {
+  RawTransactionData,
+  RequestPayload,
+} from '../interfaces/wallet.interface';
 import { ProviderType } from '../constants';
 import { debug } from '@sovryn/common';
 
@@ -120,7 +123,48 @@ export class TrezorWallet extends HardwareWallet {
   }
 
   public async request(payload: RequestPayload) {
-    return Promise.reject(Error(`Method ${payload.method} is not available for trezor wallets.`));
+    if (payload.method === 'eth_signTypedData_v4') {
+      return this.signEIP712HashedMessage(payload.params);
+    }
+    return Promise.reject(
+      Error(`Method ${payload.method} is not available for trezor wallets.`),
+    );
+  }
+
+  public async signEIP712HashedMessage(params: any[]) {
+    try {
+      let [, eip712Data] = params;
+
+      if (typeof eip712Data === 'string') {
+        eip712Data = JSON.parse(eip712Data);
+      }
+
+      // This functionality is separate from trezor-connect, as it requires @metamask/eth-sig-utils,
+      // which is a large JavaScript dependency
+      const transformTypedDataPlugin = await import(
+        './trezor-plugins/typedData'
+      ).then(module => module.default);
+
+      const { domain_separator_hash, message_hash } = transformTypedDataPlugin(
+        eip712Data,
+        true,
+      );
+
+      const result = await TrezorConnect.ethereumSignTypedData({
+        path: this.getPath(),
+        data: eip712Data,
+        metamask_v4_compat: true,
+        // These are optional, but required for Trezor Model 1 compatibility
+        domain_separator_hash,
+        message_hash,
+      });
+
+      log('signed typed data:', result);
+
+      return Promise.resolve((result.payload as any).signature);
+    } catch (err) {
+      return Promise.reject(err);
+    }
   }
 
   public async displayAddress() {
