@@ -20,65 +20,75 @@ const wallet = detectInjectableWallet();
 
 export function BrowserWalletSelector(props: Props) {
   const { t } = useTranslation();
-  const { expectedChainId, signTypedRequired } = React.useContext(WalletContext);
+  const { expectedChainId, signTypedRequired, options } = React.useContext(
+    WalletContext,
+  );
 
   return (
     <div>
       <h1>{t(translations.dialogs.browserSelector.title)}:</h1>
       <P>{t(translations.dialogs.browserSelector.disable)}</P>
       <ItemList>
-        {!signTypedRequired && (<React.Fragment>
-          {wallet !== 'liquality' && (
-          <ItemLink
-            image={images.liqualityWallet}
-            title='Liquality'
-            href='https://liquality.io/atomic-swap-wallet.html'
-            linkHref='https://liquality.io/atomic-swap-wallet.html'
-            linkTitle={t(translations.dialogs.browserSelector.download)}
-            dataAttribute="browserType-liquality-download"
-          />
+        {!signTypedRequired && (
+          <React.Fragment>
+            {wallet !== 'liquality' && (
+              <ItemLink
+                options={options}
+                image={images.liqualityWallet}
+                title='Liquality'
+                href='https://liquality.io/atomic-swap-wallet.html'
+                linkHref='https://liquality.io/atomic-swap-wallet.html'
+                linkTitle={t(translations.dialogs.browserSelector.download)}
+                dataAttribute='browserType-liquality-download'
+              />
+            )}
+            {wallet === 'liquality' && (
+              <Item
+                options={options}
+                image={images.liqualityWallet}
+                title='Liquality'
+                onClick={() => props.onWalletSelected(ProviderType.WEB3)}
+                linkHref='https://liquality.io/atomic-swap-wallet.html'
+                linkTitle={t(translations.dialogs.browserSelector.download)}
+                dataAttribute='browserType-liquality'
+              />
+            )}
+          </React.Fragment>
         )}
-        {wallet === 'liquality' && (
-          <Item
-            image={images.liqualityWallet}
-            title='Liquality'
-            onClick={() => props.onWalletSelected(ProviderType.WEB3)}
-            linkHref='https://liquality.io/atomic-swap-wallet.html'
-            linkTitle={t(translations.dialogs.browserSelector.download)}
-            dataAttribute="browserType-liquality"
-          />
-        )}
-        </React.Fragment>)}
 
         {wallet === 'nifty' && (
           <Item
+            options={options}
             image={images.niftyWallet}
             title='Nifty'
             onClick={() => props.onWalletSelected(ProviderType.WEB3)}
             linkHref='https://wiki.sovryn.app/en/getting-started/nifty-wallet-discontinuation'
             linkTitle={t(translations.dialogs.browserSelector.learn)}
-            dataAttribute="browserType-nifty"
+            dataAttribute='browserType-nifty'
           />
         )}
-        {(['metamask', 'unknown'].includes(wallet) || (signTypedRequired && wallet === 'liquality')) && (
+        {(['metamask', 'unknown'].includes(wallet) ||
+          (signTypedRequired && wallet === 'liquality')) && (
           <Item
+            options={options}
             image={images.metamaskWallet}
             title='MetaMask'
             onClick={() => props.onWalletSelected(ProviderType.WEB3)}
             linkHref='https://metamask.io/download.html'
             linkTitle={t(translations.dialogs.browserSelector.download)}
-            dataAttribute="browserType-metamask"
+            dataAttribute='browserType-metamask'
           />
         )}
         {PORTIS_SUPPORTED_CHAINS.includes(expectedChainId!) && (
           <Item
-          image={images.portisWallet}
-          title='Portis'
-          onClick={() => props.onWalletSelected(ProviderType.PORTIS)}
-          linkHref='https://www.portis.io'
-          linkTitle={t(translations.dialogs.browserSelector.learn)}
-          dataAttribute="browserType-portis"
-        />
+            options={options}
+            image={images.portisWallet}
+            title='Portis'
+            onClick={() => props.onWalletSelected(ProviderType.PORTIS)}
+            linkHref='https://www.portis.io'
+            linkTitle={t(translations.dialogs.browserSelector.learn)}
+            dataAttribute='browserType-portis'
+          />
         )}
       </ItemList>
       {!props.hideInstructionLink && (
@@ -87,7 +97,7 @@ export function BrowserWalletSelector(props: Props) {
             href='https://wiki.sovryn.app'
             target='_blank'
             rel='noreferrer noopener'
-            data-action-id="walletDialog-link-how-to-connect"
+            data-action-id='walletDialog-link-how-to-connect'
           >
             {t(translations.dialogs.providerTypes.instructions)}
           </a>

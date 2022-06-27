@@ -1,10 +1,6 @@
 import React, { useCallback, useContext, useEffect } from 'react';
 
-import {
-  HardwareWallet,
-  isHardwareWallet,
-  Web3Node,
-} from '@sovryn/wallet';
+import { HardwareWallet, isHardwareWallet, Web3Node } from '@sovryn/wallet';
 import {
   WalletButton,
   WalletContext,
@@ -21,6 +17,7 @@ export const Home = () => {
     disconnect,
     chainId,
     provider,
+    setOptions,
   } = useContext(WalletContext);
 
   const sign = useCallback(async () => {
@@ -93,56 +90,56 @@ export const Home = () => {
   }, []);
 
   const eth_signTypedData_v4 = useCallback(async () => {
-      try {
-        const result = await walletService.request({
-          method: 'eth_signTypedData_v4',
-          params: [address, JSON.stringify(
-            {
-              domain: {
-                chainId: 4,
-                name: 'OrderBook',
-                verifyingContract: address,
-                version: '1'
-              },
-              message: {
-                 maker: address,
-                 fromToken: address,
-                 toToken: address,
-                 amountIn: '0',
-                 amountOutMin: '0',
-                 recipient: address,
-                 deadline: 123,
-                 created: 0,
-              },
-              primaryType: 'Order',
-              types: {
-                EIP712Domain: [
-                  { name: 'name', type: 'string' },
-                  { name: 'version', type: 'string' },
-                  { name: 'chainId', type: 'uint256' },
-                  { name: 'verifyingContract', type: 'address' },
-                ],
-                Order: [
-                  { name: "maker", type: "address" },
-                  { name: "fromToken", type: "address" },
-                  { name: "toToken", type: "address" },
-                  { name: "amountIn", type: "uint256" },
-                  { name: "amountOutMin", type: "uint256" },
-                  { name: "recipient", type: "address" },
-                  { name: "deadline", type: "uint256" },
-                  { name: "created", type: "uint256" },
-                ],
-              },
-          }
-          )]
-        });
+    try {
+      const result = await walletService.request({
+        method: 'eth_signTypedData_v4',
+        params: [
+          address,
+          JSON.stringify({
+            domain: {
+              chainId: 4,
+              name: 'OrderBook',
+              verifyingContract: address,
+              version: '1',
+            },
+            message: {
+              maker: address,
+              fromToken: address,
+              toToken: address,
+              amountIn: '0',
+              amountOutMin: '0',
+              recipient: address,
+              deadline: 123,
+              created: 0,
+            },
+            primaryType: 'Order',
+            types: {
+              EIP712Domain: [
+                { name: 'name', type: 'string' },
+                { name: 'version', type: 'string' },
+                { name: 'chainId', type: 'uint256' },
+                { name: 'verifyingContract', type: 'address' },
+              ],
+              Order: [
+                { name: 'maker', type: 'address' },
+                { name: 'fromToken', type: 'address' },
+                { name: 'toToken', type: 'address' },
+                { name: 'amountIn', type: 'uint256' },
+                { name: 'amountOutMin', type: 'uint256' },
+                { name: 'recipient', type: 'address' },
+                { name: 'deadline', type: 'uint256' },
+                { name: 'created', type: 'uint256' },
+              ],
+            },
+          }),
+        ],
+      });
 
-        console.log(result);
-
-      } catch(e) {
-        console.error(e);
-      }
-  }, [address])
+      console.log(result);
+    } catch (e) {
+      console.error(e);
+    }
+  }, [address]);
 
   const [balance, setBalance] = React.useState('0');
 
@@ -179,7 +176,9 @@ export const Home = () => {
             <button onClick={sendToChain}>Send balance (31 chain)</button>
           </div>
           <div>
-            <button onClick={eth_signTypedData_v4}>eth_signTypedData_v4 (Rinkeby network)</button>
+            <button onClick={eth_signTypedData_v4}>
+              eth_signTypedData_v4 (Rinkeby network)
+            </button>
           </div>
           <div>
             <button
@@ -189,11 +188,22 @@ export const Home = () => {
               Verify address
             </button>
           </div>
-          <div>
-            Network: {chainId}
-          </div>
+          <div>Network: {chainId}</div>
         </React.Fragment>
       )}
+
+      <div style={{ marginTop: 10 }}>
+        <button
+          onClick={() => setOptions({ viewType: 'default', hideTitle: false })}
+        >
+          Theme 1
+        </button>
+        <button
+          onClick={() => setOptions({ viewType: 'gray', hideTitle: true })}
+        >
+          Theme 2
+        </button>
+      </div>
     </div>
   );
 };

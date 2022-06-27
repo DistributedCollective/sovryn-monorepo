@@ -6,7 +6,10 @@ import { images } from '../../../assets/images';
 import { WalletConnectionStep } from '../../WalletConnectionView/types';
 import { BottomLinkContainer } from '../../BottomLinkContainer';
 import { translations } from '../../../locales/i18n';
-import { isAnyWalletVisibleForSignTyped, isWalletVisibleForSignTyped } from '../../../helpers';
+import {
+  isAnyWalletVisibleForSignTyped,
+  isWalletVisibleForSignTyped,
+} from '../../../helpers';
 import { ProviderType } from '@sovryn/wallet';
 import { WalletContext } from '../../..';
 import { WALLET_CONNECT_SUPPORTED_CHAINS } from '../../../contants';
@@ -19,39 +22,54 @@ interface Props {
 
 export function ProviderTypeSelector(props: Props) {
   const { t } = useTranslation();
-  const { signTypedRequired, expectedChainId } = React.useContext(WalletContext);
+  const { signTypedRequired, expectedChainId, options } = React.useContext(
+    WalletContext,
+  );
   return (
     <div>
       <h1>{t(translations.dialogs.providerTypes.title)}</h1>
       <ItemList>
-        {isAnyWalletVisibleForSignTyped([ProviderType.LEDGER, ProviderType.TREZOR], signTypedRequired) && (
+        {isAnyWalletVisibleForSignTyped(
+          [ProviderType.LEDGER, ProviderType.TREZOR],
+          signTypedRequired,
+        ) && (
           <Item
+            options={options}
             image={images.hardwareWallets}
             title={t(translations.dialogs.providerTypes.items.hardware)}
-            onClick={() => props.onStep(WalletConnectionStep.HARDWARE_PROVIDERS)}
-            dataAttribute="walletType-hardware"
-          />
-        )}
-        {(isWalletVisibleForSignTyped(ProviderType.WALLET_CONNECT, signTypedRequired) && WALLET_CONNECT_SUPPORTED_CHAINS.includes(expectedChainId!)) && (
-          <Item
-            image={images.mobileWallets}
-            title={t(translations.dialogs.providerTypes.items.mobile)}
             onClick={() =>
-              props.onStep(WalletConnectionStep.WALLET_CONNECT_PROVIDERS)
+              props.onStep(WalletConnectionStep.HARDWARE_PROVIDERS)
             }
-            dataAttribute="walletType-mobile"
+            dataAttribute='walletType-hardware'
           />
         )}
+        {isWalletVisibleForSignTyped(
+          ProviderType.WALLET_CONNECT,
+          signTypedRequired,
+        ) &&
+          WALLET_CONNECT_SUPPORTED_CHAINS.includes(expectedChainId!) && (
+            <Item
+              options={options}
+              image={images.mobileWallets}
+              title={t(translations.dialogs.providerTypes.items.mobile)}
+              onClick={() =>
+                props.onStep(WalletConnectionStep.WALLET_CONNECT_PROVIDERS)
+              }
+              dataAttribute='walletType-mobile'
+            />
+          )}
         {isWalletVisibleForSignTyped(ProviderType.WEB3, signTypedRequired) && (
           <Item
+            options={options}
             image={images.browserWallets}
             title={t(translations.dialogs.providerTypes.items.browser)}
             onClick={() => props.onStep(WalletConnectionStep.BROWSER_PROVIDERS)}
-            dataAttribute="walletType-browser"
+            dataAttribute='walletType-browser'
           />
         )}
         {props.enableSoftwareWallet && (
           <Item
+            options={options}
             image={images.softwareWallets}
             title={t(translations.dialogs.providerTypes.items.software)}
             onClick={() =>
@@ -66,7 +84,7 @@ export function ProviderTypeSelector(props: Props) {
             href='https://wiki.sovryn.app'
             target='_blank'
             rel='noreferrer noopener'
-            data-action-id="walletDialog-link-how-to-connect"
+            data-action-id='walletDialog-link-how-to-connect'
           >
             {t(translations.dialogs.providerTypes.instructions)}
           </a>

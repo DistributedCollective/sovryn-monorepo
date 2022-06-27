@@ -4,6 +4,10 @@ import { walletService } from '../services';
 
 export const DEFAULT_CHAIN_ID = 30;
 
+export interface WalletOptions {
+  viewType: 'default' | 'gray';
+  hideTitle: boolean;
+}
 export type WalletContextStateType = {
   wallet: WalletService;
   expectedChainId?: number;
@@ -19,6 +23,7 @@ export type WalletContextStateType = {
   uri?: string;
   connected: boolean;
   connecting: boolean;
+  options?: WalletOptions;
 };
 
 export type WalletContextFunctionsType = {
@@ -34,6 +39,10 @@ export type WalletContextFunctionsType = {
    * Disconnect from wallet, and reset context values
    */
   disconnect: () => void;
+  /**
+   * Set wallet options
+   */
+  setOptions: (options?: WalletOptions) => void;
   /**
    * Registers the passed wallet with the WalletService
    */
@@ -79,6 +88,9 @@ const defaultValue: WalletContextType = {
   connecting: false,
   set: () => {
     throw new Error('set() has not been set!');
+  },
+  setOptions: () => {
+    throw new Error('setOption() has not been set!');
   },
   disconnect: () => {
     throw new Error('disconnect() has not been set!');

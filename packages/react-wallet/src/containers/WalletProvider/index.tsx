@@ -21,6 +21,7 @@ import {
   WalletContextStateType,
   WalletContext,
   WalletContextType,
+  WalletOptions,
 } from '../../contexts';
 import { WalletConnectionDialog } from '../../components/WalletConnectionDialog';
 
@@ -50,7 +51,8 @@ const REMEMBER_SESSION_KEY = '__sovryn_wallet';
 export function WalletProvider(props: Props) {
   const { t } = useTranslation();
 
-  const { chainId: expectedChainId, signTypedRequired = false } = props.options || {};
+  const { chainId: expectedChainId, signTypedRequired = false } =
+    props.options || {};
 
   const [state, setState] = useState<WalletContextStateType>({
     wallet: walletService,
@@ -67,6 +69,10 @@ export function WalletProvider(props: Props) {
     uri: undefined,
     connected: false,
     connecting: false,
+    options: {
+      viewType: 'default',
+      hideTitle: false,
+    },
   });
 
   const [showConnectionDialog, setShowConnectionDialog] = useState(false);
@@ -350,10 +356,18 @@ export function WalletProvider(props: Props) {
     state.provider &&
     [ProviderType.WALLET_CONNECT, ProviderType.WEB3].includes(state.provider);
 
+  const setOptions = useCallback(
+    (options: WalletOptions) => {
+      setState(state => ({ ...state, options }));
+    },
+    [setState],
+  );
+
   const contextValue: WalletContextType = useMemo(
     () => ({
       ...state,
       set: setState,
+      setOptions,
       connect,
       disconnect,
       reconnect,
@@ -365,6 +379,7 @@ export function WalletProvider(props: Props) {
     [
       state,
       setState,
+      setOptions,
       connect,
       reconnect,
       disconnect,
