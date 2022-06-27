@@ -4,7 +4,7 @@ import style from './index.module.css';
 import { isMobile } from '../../services/helpers';
 import { useTranslation } from 'react-i18next';
 import { translations } from '../../locales/i18n';
-
+import { WalletOptions } from '../../contexts';
 
 interface Props {
   image: string;
@@ -18,13 +18,14 @@ interface Props {
   small?: boolean;
   href?: string;
   dataAttribute?: string;
+  options?: WalletOptions;
 }
 
 export function Item(props: Props) {
   const { t } = useTranslation();
   return (
     <div
-      className={cn(style.container, {
+      className={cn('wallet-item', style.container, {
         [style.container_big]: props.linkHref && props.linkTitle,
         [style.small]: props.small,
       })}
@@ -35,17 +36,20 @@ export function Item(props: Props) {
         className={cn(style.button, {
           [style.button_active]: props.active,
           [style.button_faded]: props.faded,
+          [style.gray]: props.options?.viewType === 'gray',
         })}
         disabled={props.disabled}
         onClick={props.onClick}
       >
         <div
-          className={style.image}
+          className={cn('wallet-image', style.image)}
           style={{ backgroundImage: `url(${props.image})` }}
         />
-        <div className={style.title}>{props.title}</div>
+        {!props.options?.hideTitle && (
+          <div className={cn('wallet-title', style.title)}>{props.title}</div>
+        )}
       </button>
-      {props.title === 'Nifty' && (
+      {props.title === 'Nifty' && !props.options?.hideTitle && (
         <span className={style.discontinued}>
           {t(translations.common.discontinued)}
         </span>
@@ -68,7 +72,7 @@ export function ItemLink(props: Props) {
   const { t } = useTranslation();
   return (
     <div
-      className={cn(style.container, {
+      className={cn('wallet-item', style.container, {
         [style.container_big]: props.linkHref && props.linkTitle,
         [style.small]: props.small,
       })}
@@ -78,6 +82,7 @@ export function ItemLink(props: Props) {
         className={cn(style.button, {
           [style.button_active]: props.active,
           [style.button_faded]: props.faded,
+          [style.gray]: props.options?.viewType === 'gray',
         })}
         href={props.href}
         target='_blank'
@@ -85,12 +90,14 @@ export function ItemLink(props: Props) {
         onClick={props.onClick}
       >
         <div
-          className={style.image}
+          className={cn('wallet-image', style.image)}
           style={{ backgroundImage: `url(${props.image})` }}
         />
-        <div className={style.title}>{props.title}</div>
+        {!props.options?.hideTitle && (
+          <div className={cn('wallet-title', style.title)}>{props.title}</div>
+        )}
       </a>
-      {props.title === 'rwallet' && (
+      {props.title === 'rwallet' && !props.options?.hideTitle && (
         <span className={style.discontinued}>
           {t(translations.common.discontinued)}
         </span>
@@ -125,6 +132,7 @@ export function WalletItem(props: WalletItemProps) {
 
   return (
     <ItemLink
+      options={props.options}
       image={props.image}
       title={props.title}
       small={props.small}

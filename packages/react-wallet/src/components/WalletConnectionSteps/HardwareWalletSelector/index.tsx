@@ -15,29 +15,37 @@ interface Props {
 
 export function HardwareWalletSelector(props: Props) {
   const { t } = useTranslation();
-  const { signTypedRequired } = React.useContext(WalletContext);
+  const { signTypedRequired, options } = React.useContext(WalletContext);
   return (
     <div>
       <h1>{t(translations.dialogs.hardwareWallet.title)}:</h1>
       <ItemList>
-        {isWalletVisibleForSignTyped(ProviderType.LEDGER, signTypedRequired) && (
+        {isWalletVisibleForSignTyped(
+          ProviderType.LEDGER,
+          signTypedRequired,
+        ) && (
           <Item
-          image={images.ledgerWallet}
-          title='Ledger'
-          onClick={() => props.onWalletSelected(ProviderType.LEDGER)}
-          linkHref='https://shop.ledger.com/?r=3035eca29af2'
-          linkTitle='Buy Now'
-          dataAttribute="hardwareWallet-ledger"
-        />
+            options={options}
+            image={images.ledgerWallet}
+            title='Ledger'
+            onClick={() => props.onWalletSelected(ProviderType.LEDGER)}
+            linkHref='https://shop.ledger.com/?r=3035eca29af2'
+            linkTitle='Buy Now'
+            dataAttribute='hardwareWallet-ledger'
+          />
         )}
-        {isWalletVisibleForSignTyped(ProviderType.TREZOR, signTypedRequired) && (
+        {isWalletVisibleForSignTyped(
+          ProviderType.TREZOR,
+          signTypedRequired,
+        ) && (
           <Item
+            options={options}
             image={images.trezorWallet}
             title='Trezor'
             onClick={() => props.onWalletSelected(ProviderType.TREZOR)}
             linkHref='https://trezor.io/?offer_id=12&aff_id=7144&source=sovryn'
             linkTitle='Buy Now'
-            dataAttribute="hardwareWallet-trezor"
+            dataAttribute='hardwareWallet-trezor'
           />
         )}
       </ItemList>
@@ -47,7 +55,7 @@ export function HardwareWalletSelector(props: Props) {
             href='https://wiki.sovryn.app'
             target='_blank'
             rel='noreferrer noopener'
-            data-action-id="walletDialog-link-how-to-connect"
+            data-action-id='walletDialog-link-how-to-connect'
           >
             {t(translations.dialogs.providerTypes.instructions)}
           </a>

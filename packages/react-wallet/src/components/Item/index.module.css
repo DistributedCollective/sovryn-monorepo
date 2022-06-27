@@ -35,6 +35,12 @@
   text-decoration: none !important;
 }
 
+.button.gray {
+  background: #343434;
+  border-radius: 8px;
+  border: none;
+}
+
 .button:hover {
   opacity: 0.5;
 }
@@ -78,12 +84,12 @@
 
 .discontinued {
   padding-top: 1rem;
-  color: #A52222;
+  color: #a52222;
   font-size: 14px;
 }
 .container .discontinued + a {
   margin-top: 5px !important;
-  color: #A52222 !important;
+  color: #a52222 !important;
 }
 
 @media screen and (min-width: 768px) {

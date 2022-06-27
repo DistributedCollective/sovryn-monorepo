@@ -209,6 +209,7 @@ export const WalletConnectionView: React.FC<WalletConnectionViewProps> = props =
         <WalletConnectProviders
           onWalletSelected={onProviderChosen}
           uri={context.uri}
+          options={context.options}
           hideInstructionLink={props.hideInstructionLink}
         />
       )}
