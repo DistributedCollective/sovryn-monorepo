@@ -36,8 +36,8 @@ export function BrowserWalletSelector(props: Props) {
                 options={options}
                 image={images.liqualityWallet}
                 title='Liquality'
-                href='https://liquality.io/atomic-swap-wallet.html'
-                linkHref='https://liquality.io/atomic-swap-wallet.html'
+                href='https://liquality.io/'
+                linkHref='https://liquality.io/'
                 linkTitle={t(translations.dialogs.browserSelector.download)}
                 dataAttribute='browserType-liquality-download'
               />
@@ -48,7 +48,7 @@ export function BrowserWalletSelector(props: Props) {
                 image={images.liqualityWallet}
                 title='Liquality'
                 onClick={() => props.onWalletSelected(ProviderType.WEB3)}
-                linkHref='https://liquality.io/atomic-swap-wallet.html'
+                linkHref='https://liquality.io/'
                 linkTitle={t(translations.dialogs.browserSelector.download)}
                 dataAttribute='browserType-liquality'
               />
