@@ -7,6 +7,7 @@ export const DEFAULT_CHAIN_ID = 30;
 export interface WalletOptions {
   viewType: 'default' | 'gray';
   hideTitle: boolean;
+  size: 'sm' | 'md';
 }
 export type WalletContextStateType = {
   wallet: WalletService;

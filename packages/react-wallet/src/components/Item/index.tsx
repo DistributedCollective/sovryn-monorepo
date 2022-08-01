@@ -28,6 +28,7 @@ export function Item(props: Props) {
       className={cn('wallet-item', style.container, {
         [style.container_big]: props.linkHref && props.linkTitle,
         [style.small]: props.small,
+        [style.sm]: props.options?.size === 'sm',
       })}
       data-action-id={props.dataAttribute}
     >
@@ -75,6 +76,7 @@ export function ItemLink(props: Props) {
       className={cn('wallet-item', style.container, {
         [style.container_big]: props.linkHref && props.linkTitle,
         [style.small]: props.small,
+        [style.sm]: props.options?.size === 'sm',
       })}
       data-action-id={props.dataAttribute}
     >

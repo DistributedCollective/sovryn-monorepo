@@ -72,7 +72,7 @@ export function WalletConnectProviders(props: Props) {
           {props.uri && (
             <QRCode
               value={props.uri || ''}
-              size={300}
+              size={props.options?.size === 'sm' ? 200 : 300}
               renderAs='svg'
               includeMargin
             />
