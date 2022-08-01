@@ -34,6 +34,20 @@ cd {YourProjectsPath}/Sovryn-frontend
 yarn link @sovryn/wallet
 ```
 
+## Publishing libraries
+
+After all changes done you can publish new package versions to the npm:
+
+```bash
+yarn lerna:publish
+```
+
+This command:
+
+- builds all packages
+- increments version of changes packages
+- publishes packages to the npm
+
 ## Contributing
 
 <a href="https://github.com/DistributedCollective/sovryn-monorepo/graphs/contributors">
