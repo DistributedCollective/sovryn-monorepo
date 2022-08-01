@@ -72,6 +72,7 @@ export function WalletProvider(props: Props) {
     options: {
       viewType: 'default',
       hideTitle: false,
+      size: 'md',
     },
   });
 

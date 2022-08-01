@@ -194,12 +194,16 @@ export const Home = () => {
 
       <div style={{ marginTop: 10 }}>
         <button
-          onClick={() => setOptions({ viewType: 'default', hideTitle: false })}
+          onClick={() =>
+            setOptions({ viewType: 'default', hideTitle: false, size: 'md' })
+          }
         >
           Theme 1
         </button>
         <button
-          onClick={() => setOptions({ viewType: 'gray', hideTitle: true })}
+          onClick={() =>
+            setOptions({ viewType: 'gray', hideTitle: false, size: 'sm' })
+          }
         >
           Theme 2
         </button>
