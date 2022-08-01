@@ -48,6 +48,8 @@ This command:
 - increments version of changes packages
 - publishes packages to the npm
 
+**!!!** You must be signed to user with user write permissions to these packages. Permissions can be requested from @creed-victor or Sovryn dev-ops. 
+
 ## Contributing
 
 <a href="https://github.com/DistributedCollective/sovryn-monorepo/graphs/contributors">
