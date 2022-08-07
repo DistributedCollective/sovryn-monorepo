@@ -1,7 +1,52 @@
 {
+  "common": {
+    "confirm": "Confirmar",
+    "close": "Fechar",
+    "cancel": "Cancelar",
+    "alert": "Você está conectado na rede errada.",
+    "discontinued": "DESCONTINUADO"
+  },
   "dialogs": {
     "providerTypes": {
-      "title": "PR_BR! Select wallet type:"
+      "title": "Selecione o tipo de carteira:",
+      "items": {
+        "hardware": "Física",
+        "mobile": "Celular",
+        "browser": "Navegador",
+        "software": "Software"
+      },
+      "instructions": "Para instruções sobre como se conectar na SOVRYN acesse nossa Wiki",
+      "ledgerInstructions": "Don't understand Derivation Paths? Read our wiki",
+      "instructionsMobile":"Para instruções sobre como conectar carteiras de celular na SOVRYN acesse nossa Wiki SOVRYN",
+      "ledgerAppInstruction": "Certifique-se de que o aplicativo {{app}} está aberto em seu dispositivo Ledger."
+    },
+    "browserSelector": {
+      "title": "Selecione a carteira de navegador",
+      "disable": "Certifique-se de desabilitar as extensões de carteira de navegador que você não deseja usar.",
+      "download": "Download",
+      "learn": "Saiba mais"
+    },
+    "hardwareSelector": {
+      "title": "Selecione a carteira",
+      "noWallet": "No wallets in selected derivation path. Try changing path or app in your wallet."
+    },
+    "softwareSelector": {
+      "title": "Connect using Software Wallet",
+      "pk": "Insira a chave privada da sua carteira.",
+      "submit": "Submit",
+      "learn": "Saiba mais"
+    },
+    "walletConnect": {
+      "title":"Leia o código QR para conectar a carteira usando a WalletConnect",
+      "wallet": "Carteiras de celular compatíveis"
+    },
+    "hardwareWallet": {
+      "title":"Selecione a carteira física",
+      "success":"Copiado com sucesso"
+    },
+    "hardwarePath": {
+      "title": "Conectar {{name}}",
+      "disable": "Conecte seu dispositivo Ledger via USB e abra o app {{networkName}}."
     }
   }
 }
