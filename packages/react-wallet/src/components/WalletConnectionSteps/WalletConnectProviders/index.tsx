@@ -47,16 +47,6 @@ export function WalletConnectProviders(props: Props) {
             />
             <WalletItem
               options={props.options}
-              image={images.rWallet}
-              title='rwallet'
-              small={true}
-              ios={`rwallet://wc?uri=${props.uri}`}
-              android={props.uri}
-              universal='https://developers.rsk.co/wallet/rwallet/'
-              dataAttribute='mobileWallet-rwallet'
-            />
-            <WalletItem
-              options={props.options}
               image={images.defiantWallet}
               title='defiant'
               small={true}

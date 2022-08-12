@@ -50,7 +50,7 @@ export function Item(props: Props) {
           <div className={cn('wallet-title', style.title)}>{props.title}</div>
         )}
       </button>
-      {props.title === 'Nifty' && !props.options?.hideTitle && (
+      {props.title === 'Injected Web' && !props.options?.hideTitle && (
         <span className={style.discontinued}>
           {t(translations.common.discontinued)}
         </span>

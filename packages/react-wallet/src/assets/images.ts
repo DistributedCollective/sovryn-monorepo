@@ -2,12 +2,11 @@ import browserWallets from './browserWallets';
 import mobileWallets from './mobileWallets';
 import hardwareWallets from './hardwareWallets';
 import metamaskWallet from './wallets/metamask';
-import niftyWallet from './wallets/nifty';
+import injectedWeb3Wallet from './wallets/injectedWeb3';
 import portisWallet from './wallets/portis';
 import liqualityWallet from './wallets/liquality';
 import ledgerWallet from './wallets/ledger';
 import trezorWallet from './wallets/trezor';
-import rWallet from './wallets/rwallet';
 import defiantWallet from './wallets/defiant';
 import softwareWallets from './wallets/software';
 import mathWallet from './wallets/math';
@@ -22,10 +21,9 @@ export const images = {
   softwareWallets,
 
   metamaskWallet,
-  niftyWallet,
+  injectedWeb3Wallet,
   portisWallet,
   liqualityWallet,
-  rWallet,
   defiantWallet,
   mathWallet,
   dcentWallet,

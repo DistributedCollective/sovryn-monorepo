@@ -59,8 +59,8 @@ export function BrowserWalletSelector(props: Props) {
         {wallet === 'nifty' && (
           <Item
             options={options}
-            image={images.niftyWallet}
-            title='Nifty'
+            image={images.injectedWeb3Wallet}
+            title='Injected Web'
             onClick={() => props.onWalletSelected(ProviderType.WEB3)}
             linkHref='https://wiki.sovryn.app/en/getting-started/nifty-wallet-discontinuation'
             linkTitle={t(translations.dialogs.browserSelector.learn)}
