@@ -4,7 +4,11 @@
   "description": "Made with create-react-library",
   "author": "Rytis Grincevicius",
   "license": "MIT",
-  "repository": "/sovryn-monorepo/packages/react-wallet",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DistributedCollective/sovryn-monorepo.git",
+    "directory": "packages/react-wallet"
+  },
   "main": "dist/index.js",
   "module": "dist/index.modern.js",
   "source": "src/index.ts",
