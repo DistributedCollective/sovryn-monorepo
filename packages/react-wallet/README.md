@@ -17,7 +17,7 @@ Then either you use the WalletButton component to connect, call the connect func
 import React, { Component, useContext } from 'react';
 
 import { WalletProvider, WalletButton, WalletContext } from '@sovryn/react-wallet';
-import '@sovryn/react-wallet/dist/index.css'
+import '@sovryn/react-wallet/index.css'
 
 class App extends Component {
   render() {
