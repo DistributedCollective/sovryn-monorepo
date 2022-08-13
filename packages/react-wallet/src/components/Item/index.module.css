@@ -82,16 +82,6 @@
   text-decoration: underline !important;
 }
 
-.discontinued {
-  padding-top: 1rem;
-  color: #a52222;
-  font-size: 14px;
-}
-.container .discontinued + a {
-  margin-top: 5px !important;
-  color: #a52222 !important;
-}
-
 @media screen and (min-width: 768px) {
   .container {
     width: 160px;

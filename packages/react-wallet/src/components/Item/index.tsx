@@ -2,8 +2,6 @@ import * as React from 'react';
 import cn from 'classnames';
 import style from './index.module.css';
 import { isMobile } from '../../services/helpers';
-import { useTranslation } from 'react-i18next';
-import { translations } from '../../locales/i18n';
 import { WalletOptions } from '../../contexts';
 
 interface Props {
@@ -22,7 +20,6 @@ interface Props {
 }
 
 export function Item(props: Props) {
-  const { t } = useTranslation();
   return (
     <div
       className={cn('wallet-item', style.container, {
@@ -50,11 +47,6 @@ export function Item(props: Props) {
           <div className={cn('wallet-title', style.title)}>{props.title}</div>
         )}
       </button>
-      {props.title === 'Injected Web' && !props.options?.hideTitle && (
-        <span className={style.discontinued}>
-          {t(translations.common.discontinued)}
-        </span>
-      )}
       {props.linkHref && props.linkTitle && (
         <a
           href={props.linkHref}
@@ -70,7 +62,6 @@ export function Item(props: Props) {
 }
 
 export function ItemLink(props: Props) {
-  const { t } = useTranslation();
   return (
     <div
       className={cn('wallet-item', style.container, {
@@ -99,11 +90,6 @@ export function ItemLink(props: Props) {
           <div className={cn('wallet-title', style.title)}>{props.title}</div>
         )}
       </a>
-      {props.title === 'rwallet' && !props.options?.hideTitle && (
-        <span className={style.discontinued}>
-          {t(translations.common.discontinued)}
-        </span>
-      )}
       {props.linkHref && props.linkTitle && (
         <a
           href={props.linkHref}
