@@ -1,4 +1,4 @@
-import Classes from '@blueprintjs/core/lib/esm/common/classes';
+import { Classes } from '@blueprintjs/core';
 import {
   Overlay,
   IOverlayProps,
