@@ -36,7 +36,14 @@ export class WalletConnectWallet extends Web3Wallet {
     if (!this.wcProvider) {
       return Promise.resolve(true);
     }
-    return this.wcProvider.disconnect().then(() => true);
+    try {
+      return this.wcProvider
+        .disconnect()
+        .then(() => true)
+        .catch(() => true); // still true
+    } catch (e) {
+      return Promise.resolve(true);
+    }
   }
 
   public signRawTransaction(tx: RawTransactionData): Promise<string> {

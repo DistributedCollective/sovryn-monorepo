@@ -38,6 +38,16 @@ export class WalletConnectProvider implements WalletProviderInterface {
           }
         });
 
+        this.provider.connector.on('disconnect', () => {
+          if (this.service.wallet) {
+            try {
+              this.service.disconnect();
+            } catch (e) {
+              error(e);
+            }
+          }
+        });
+
         const accounts = await this.provider.enable();
 
         if (accounts.length !== 0) {
