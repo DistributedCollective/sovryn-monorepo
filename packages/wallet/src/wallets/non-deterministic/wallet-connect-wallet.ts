@@ -1,16 +1,30 @@
-import { bufferToHex } from 'ethereumjs-util';
-import { provider } from 'web3-core';
 import type WCProvider from '@walletconnect/web3-provider';
-import { RawTransactionData, RequestPayload } from '../../interfaces/wallet.interface';
+import Web3 from 'web3';
+import { debug } from '@sovryn/common';
+import {
+  RawTransactionData,
+  RequestPayload,
+} from '../../interfaces/wallet.interface';
 import { ProviderType } from '../../constants';
 import { Web3Wallet } from './web3';
+import { bufferToHex } from 'ethereumjs-util';
+
+const { log, error } = debug('@sovryn/wallet:walletconnect');
 
 export class WalletConnectWallet extends Web3Wallet {
   // @ts-ignore
-  readonly provider: WCProvider;
+  readonly _provider: Web3;
+  readonly wcProvider: WCProvider;
 
-  constructor(address: string, chainId: number, provider: provider) {
+  constructor(address: string, chainId: number, provider: any) {
     super(address, chainId, provider);
+    this.wcProvider = provider;
+    this._provider = new Web3(provider);
+  }
+
+  // @ts-ignore
+  protected get provider(): Web3 {
+    return this._provider;
   }
 
   // disconnect if the user is is out
@@ -19,32 +33,49 @@ export class WalletConnectWallet extends Web3Wallet {
   }
 
   public disconnect(): Promise<boolean> {
-    if (!this.provider) {
+    if (!this.wcProvider) {
       return Promise.resolve(true);
     }
-    return this.provider.wc.killSession().then(() => true);
+    return this.wcProvider.disconnect().then(() => true);
   }
 
-  public async sendTransaction(tx: RawTransactionData) {
-    if (!this.provider) {
-      return Promise.reject(Error('provider is not availble'));
-    }
-    return await this.provider.wc.sendTransaction(
-      // @ts-ignore
-      this.prepareRawTransactionData(tx),
-    );
+  public signRawTransaction(tx: RawTransactionData): Promise<string> {
+    return new Promise((resolve, reject) => {
+      this.provider.eth
+        .signTransaction(this.prepareRawTransactionData(tx))
+        .then(response => {
+          log('signed raw transaction', response);
+          resolve(response.raw);
+        })
+        .catch(reason => {
+          error('failed to sign raw transaction', reason);
+          reject(reason);
+        });
+    });
+  }
+
+  public sendTransaction(tx: RawTransactionData) {
+    return new Promise((resolve, reject) => {
+      this.provider.eth
+        .sendTransaction(this.prepareRawTransactionData(tx))
+        .once('transactionHash', (response: string) => {
+          log('signed transaction', response);
+          resolve(response);
+        })
+        .once('error', err => {
+          error('sending failed', err);
+          reject(err);
+        });
+    });
   }
 
   public async signMessage(msg: string): Promise<string> {
-    if (!this.provider) {
-      return Promise.reject(Error('provider is not availble'));
-    }
     const msgHex = bufferToHex(Buffer.from(msg));
-    // @ts-ignore
-    return await this.provider.wc.signPersonalMessage([
+    return this.provider.eth.personal.sign(
       msgHex,
       this.address.toLowerCase(),
-    ]);
+      '',
+    );
   }
 
   public request(payload: RequestPayload) {
@@ -52,10 +83,6 @@ export class WalletConnectWallet extends Web3Wallet {
       return Promise.reject(Error('provider is not availble'));
     }
 
-    if (payload.method === 'eth_signTypedData_v4') {
-      return this.provider.wc.signTypedData(payload.params);
-    }
-
-    return Promise.reject(Error(`Method ${payload.method} is not supported.`));
+    return this.wcProvider.request(payload);
   }
 }
