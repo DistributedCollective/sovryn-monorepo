@@ -1,4 +1,4 @@
-import type WCProvider from '@walletconnect/web3-provider';
+import type WCProvider from '@walletconnect/ethereum-provider';
 import Web3 from 'web3';
 import { debug } from '@sovryn/common';
 import {
@@ -16,14 +16,14 @@ export class WalletConnectWallet extends Web3Wallet {
   readonly _provider: Web3;
   readonly wcProvider: WCProvider;
 
-  constructor(address: string, chainId: number, provider: any) {
+  constructor(address: string, chainId: number, provider: WCProvider) {
     super(address, chainId, provider);
     this.wcProvider = provider;
     this._provider = new Web3(provider);
   }
 
   // @ts-ignore
-  protected get provider(): Web3 {
+  public get provider(): Web3 {
     return this._provider;
   }
 

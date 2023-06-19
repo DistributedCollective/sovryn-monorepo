@@ -10,6 +10,7 @@ export default class PromiEvent<T> extends EventEmitter implements Promise<T> {
     ) => void,
   ) {
     super();
+    // @ts-ignore
     this.promise = new Promise<T>(executor);
   }
 
