@@ -58,16 +58,23 @@ export function WalletConnectProviders(props: Props) {
           </WalletButtons>
         </LeftContainer>
 
-        <QRWrapper data-action-id='link-how-to-connect'>
-          {props.uri && (
-            <QRCode
-              value={props.uri || ''}
-              size={props.options?.size === 'sm' ? 200 : 300}
-              renderAs='svg'
-              includeMargin
-            />
-          )}
-        </QRWrapper>
+        <div>
+          <QRWrapper data-action-id='link-how-to-connect'>
+                  {props.uri && (
+                    <QRCode
+                      value={props.uri || ''}
+                      size={props.options?.size === 'sm' ? 200 : 300}
+                      renderAs='svg'
+                      includeMargin
+                    />
+                  )}
+          </QRWrapper>
+          <Deprecated>{t(translations.deprecated)}</Deprecated>
+          <LearnLink href='https://wiki.sovryn.com/en/getting-started/deprecation-notice-walletconnect-v1-0-sovryn-alpha' target='_blank' rel='noreferrer noopener'>
+            {t(translations.learn)}
+          </LearnLink>
+        </div>
+
       </Container>
 
       {!props.hideInstructionLink && (
@@ -105,4 +112,18 @@ const QRWrapper = styled.div`
 const WalletButtons = styled.div`
   display: flex;
   align-items: center;
+`;
+const Deprecated = styled.div`
+  color: #ff0000;
+  margin-bottom: 3px;
+  font-weight: 700;
+  text-align: center;
+  text-transform: uppercase;
+`;
+const LearnLink = styled.a`
+  display: block;
+  text-align: center;
+  color: #ff0000!important;
+  text-decoration: underline;
+  font-size: 14px;
 `;

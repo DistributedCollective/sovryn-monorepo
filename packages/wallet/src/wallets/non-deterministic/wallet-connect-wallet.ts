@@ -23,7 +23,7 @@ export class WalletConnectWallet extends Web3Wallet {
   }
 
   // @ts-ignore
-  protected get provider(): Web3 {
+  public get provider(): Web3 {
     return this._provider;
   }
 

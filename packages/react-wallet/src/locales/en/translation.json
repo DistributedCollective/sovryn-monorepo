@@ -47,5 +47,7 @@
       "title": "Connect {{name}}",
       "disable": "Connect your ledger device via USB and open {{networkName}} app."
     }
-  }
+  },
+  "deprecated": "DISCONTINUED",
+  "learn": "Learn More"
 }
