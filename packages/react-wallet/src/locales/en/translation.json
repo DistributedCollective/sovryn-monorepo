@@ -48,6 +48,6 @@
       "disable": "Connect your ledger device via USB and open {{networkName}} app."
     }
   },
-  "deprecated": "DISCONTINUED",
+  "deprecated": "DEPRECATED",
   "learn": "Learn More"
 }
