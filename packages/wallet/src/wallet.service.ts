@@ -35,6 +35,7 @@ export class WalletService {
     log(`get provider ${provider}`);
     const Provider = walletProviderMap[provider];
     if (Provider) {
+      // @ts-ignore
       return new Provider(this);
     } else {
       error('provider not found.');

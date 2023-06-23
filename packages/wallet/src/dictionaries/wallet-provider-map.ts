@@ -4,13 +4,11 @@ import {
   LedgerWalletProvider,
   PortisWalletProvider,
   TrezorWalletProvider,
-  WalletConnectProvider,
 } from '../providers';
 import {
   LedgerWallet,
   PortisWallet,
   TrezorWallet,
-  WalletConnectWallet,
   Web3Wallet,
 } from '../wallets';
 import { SoftwareWalletProvider } from '../providers/software-wallet-provider';
@@ -21,7 +19,6 @@ export const walletProviderMap = {
   [ProviderType.LEDGER]: LedgerWalletProvider,
   [ProviderType.TREZOR]: TrezorWalletProvider,
   [ProviderType.PORTIS]: PortisWalletProvider,
-  [ProviderType.WALLET_CONNECT]: WalletConnectProvider,
   [ProviderType.SOFTWARE_ENTROPY]: SoftwareWalletProvider,
   [ProviderType.SOFTWARE_PK]: SoftwareWalletProvider,
 };
@@ -30,7 +27,6 @@ export const hardwareWallets = [ProviderType.LEDGER, ProviderType.TREZOR];
 export const web3Wallets = [
   ProviderType.WEB3,
   ProviderType.PORTIS,
-  ProviderType.WALLET_CONNECT,
 ];
 export const softwareWallets = [ProviderType.SOFTWARE_ENTROPY, ProviderType.SOFTWARE_PK];
 
@@ -42,7 +38,7 @@ export function isHardwareWallet(
 
 export function isWeb3Wallet(
   x: ProviderType,
-): x is ProviderType.WEB3 | ProviderType.PORTIS | ProviderType.WALLET_CONNECT {
+): x is ProviderType.WEB3 | ProviderType.PORTIS {
   return web3Wallets.includes(x);
 }
 
@@ -57,7 +53,6 @@ export const providerToWalletMap = {
   [ProviderType.LEDGER]: LedgerWallet,
   [ProviderType.TREZOR]: TrezorWallet,
   [ProviderType.PORTIS]: PortisWallet,
-  [ProviderType.WALLET_CONNECT]: WalletConnectWallet,
   [ProviderType.SOFTWARE_ENTROPY]: SoftwareWallet,
   [ProviderType.SOFTWARE_PK]: SoftwareWallet,
 };
