@@ -7,7 +7,6 @@ import {
   isSoftwareWallet,
   providerToWalletMap,
   ProviderType,
-  WalletConnectWallet,
   walletProviderMap,
   Web3Wallet,
 } from '@sovryn/wallet';
@@ -66,7 +65,6 @@ export function WalletProvider(props: Props) {
     seed: undefined,
     chainCode: undefined,
     publicKey: undefined,
-    uri: undefined,
     connected: false,
     connecting: false,
     options: {
@@ -136,12 +134,9 @@ export function WalletProvider(props: Props) {
     async (provider: ProviderType, chainId: number) => {
       if (provider && isWeb3Wallet(provider)) {
         const ProviderClass = walletProviderMap[provider];
+        // @ts-ignore
         const providerInstance = new ProviderClass(walletService);
-        const wallet = await providerInstance.unlock(chainId, (uri: string) => {
-          if (uri === undefined || typeof uri === 'string') {
-            setState(state => ({ ...state, uri }));
-          }
-        });
+        const wallet = await providerInstance.unlock(chainId);
         return await setConnectedWallet(wallet);
       }
       return false;
@@ -252,7 +247,6 @@ export function WalletProvider(props: Props) {
         seed: undefined,
         chainCode: undefined,
         publicKey: undefined,
-        uri: undefined,
         connected: false,
         connecting: false,
       });
@@ -273,9 +267,9 @@ export function WalletProvider(props: Props) {
     if (
       wallet &&
       providerType &&
-      [ProviderType.WEB3, ProviderType.WALLET_CONNECT].includes(providerType)
+      [ProviderType.WEB3].includes(providerType)
     ) {
-      const p = (wallet as Web3Wallet | WalletConnectWallet).provider;
+      const p = (wallet as Web3Wallet).provider;
       if (p && typeof p === 'object' && 'on' in p) {
         const onDisconnect = (...args: any[]) => {
           console.log('disconnect web3', args);
@@ -319,7 +313,7 @@ export function WalletProvider(props: Props) {
           data: any;
         };
 
-        if (parsed.provider === ProviderType.WALLET_CONNECT) {
+        if (session.getItem('walletconnect')) {
           session.removeItem(REMEMBER_SESSION_KEY);
           session.removeItem('walletconnect');
           return;
@@ -355,7 +349,7 @@ export function WalletProvider(props: Props) {
     props.options.chainId &&
     props.options.chainId !== state.chainId &&
     state.provider &&
-    [ProviderType.WALLET_CONNECT, ProviderType.WEB3].includes(state.provider);
+    [ProviderType.WEB3].includes(state.provider);
 
   const setOptions = useCallback(
     (options: WalletOptions) => {

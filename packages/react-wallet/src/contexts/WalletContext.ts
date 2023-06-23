@@ -21,7 +21,6 @@ export type WalletContextStateType = {
   seed?: string;
   chainCode?: string;
   publicKey?: string;
-  uri?: string;
   connected: boolean;
   connecting: boolean;
   options?: WalletOptions;

@@ -12,7 +12,6 @@ import { BackButton } from '../BackButton';
 import { HardwareWalletSelector } from '../WalletConnectionSteps/HardwareWalletSelector';
 import { HardwarePathChooser } from '../WalletConnectionSteps/HardwarePathChooser';
 import { HardwareAddressSelector } from '../WalletConnectionSteps/HardwareAddressSelector';
-import { WalletConnectProviders } from '../WalletConnectionSteps/WalletConnectProviders';
 import { DEFAULT_CHAIN_ID, WalletContext } from '../../contexts';
 import { SoftwareWalletSelector } from '../WalletConnectionSteps/SoftwareWalletSelector';
 
@@ -157,7 +156,6 @@ export const WalletConnectionView: React.FC<WalletConnectionViewProps> = props =
         WalletConnectionStep.BROWSER_PROVIDERS,
         WalletConnectionStep.HARDWARE_PROVIDERS,
         WalletConnectionStep.HARDWARE_PATH_SELECTOR,
-        WalletConnectionStep.WALLET_CONNECT_PROVIDERS,
         WalletConnectionStep.SOFTWARE_PROVIDERS,
       ].includes(state.step) && (
         <BackButton
@@ -203,14 +201,6 @@ export const WalletConnectionView: React.FC<WalletConnectionViewProps> = props =
           chainCode={state.hwOptions?.chainCode}
           publicKey={state.hwOptions?.publicKey}
           onUnlock={onUnlockDeterministicWallet}
-        />
-      )}
-      {state.step === WalletConnectionStep.WALLET_CONNECT_PROVIDERS && (
-        <WalletConnectProviders
-          onWalletSelected={onProviderChosen}
-          uri={context.uri}
-          options={context.options}
-          hideInstructionLink={props.hideInstructionLink}
         />
       )}
       {state.step === WalletConnectionStep.SOFTWARE_PROVIDERS && (

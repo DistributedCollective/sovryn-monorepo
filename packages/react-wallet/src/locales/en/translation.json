@@ -10,7 +10,7 @@
       "title": "Select wallet type:",
       "items": {
         "hardware": "Hardware",
-        "mobile": "Mobile",
+        "mobile": "WalletConnect",
         "browser": "Browser",
         "software": "Software"
       },
@@ -37,7 +37,9 @@
     },
     "walletConnect": {
       "title":"Scan QR code to connect wallet using WalletConnect",
-      "wallet": "Compatible mobile wallets"
+      "wallet": "Compatible mobile wallets",
+      "deprecated": "DEPRECATED",
+      "learn": "Learn More"
     },
     "hardwareWallet": {
       "title":"Select hardware wallet",

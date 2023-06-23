@@ -12,7 +12,7 @@ import {
 } from '../../../helpers';
 import { ProviderType } from '@sovryn/wallet';
 import { WalletContext } from '../../..';
-import { WALLET_CONNECT_SUPPORTED_CHAINS } from '../../../contants';
+import style from './index.module.css';
 
 interface Props {
   onStep: (value: WalletConnectionStep) => void;
@@ -22,7 +22,7 @@ interface Props {
 
 export function ProviderTypeSelector(props: Props) {
   const { t } = useTranslation();
-  const { signTypedRequired, expectedChainId, options } = React.useContext(
+  const { signTypedRequired, options } = React.useContext(
     WalletContext,
   );
   return (
@@ -43,21 +43,18 @@ export function ProviderTypeSelector(props: Props) {
             dataAttribute='walletType-hardware'
           />
         )}
-        {isWalletVisibleForSignTyped(
-          ProviderType.WALLET_CONNECT,
-          signTypedRequired,
-        ) &&
-          WALLET_CONNECT_SUPPORTED_CHAINS.includes(expectedChainId!) && (
-            <Item
-              options={options}
-              image={images.mobileWallets}
-              title={t(translations.dialogs.providerTypes.items.mobile)}
-              onClick={() =>
-                props.onStep(WalletConnectionStep.WALLET_CONNECT_PROVIDERS)
-              }
-              dataAttribute='walletType-mobile'
-            />
-          )}
+        <div className={style.item}>
+          <Item
+            options={options}
+            image={images.mobileWallets}
+            title={t(translations.dialogs.providerTypes.items.mobile)}
+            onClick={() => {}}
+            dataAttribute='walletType-mobile'
+          />
+          <p className={style.title}>{t(translations.dialogs.walletConnect.deprecated)}</p>
+          <a className={style.link} href="https://wiki.sovryn.com/en/getting-started/deprecation-notice-walletconnect-v1-0-sovryn-alpha" target="_blank" rel="noreferrer nofollow">{t(translations.dialogs.walletConnect.learn)}</a>
+        </div>
+
         {isWalletVisibleForSignTyped(ProviderType.WEB3, signTypedRequired) && (
           <Item
             options={options}
