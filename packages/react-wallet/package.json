@@ -33,7 +33,7 @@
     "@sovryn/wallet": "^2.2.18",
     "@types/classnames": "^2.2.11",
     "@types/react-copy-to-clipboard": "^5.0.0",
-    "caniuse-lite": "^1.0.30001287",
+    "caniuse-lite": "^1.0.30001507",
     "classnames": "^2.2.6",
     "detect-browser": "^5.2.0",
     "ethereumjs-util": "^7.0.9",
