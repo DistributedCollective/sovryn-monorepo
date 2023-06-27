@@ -23,7 +23,7 @@
       "title": "Select browser wallet type",
       "disable": "Make sure to disable other wallet browser extensions than the one you want to use.",
       "download": "Download",
-      "learn": "Learn More"
+      "learn": "Learn more"
     },
     "hardwareSelector": {
       "title": "Choose Wallet",
@@ -33,13 +33,13 @@
       "title": "Connect using Software Wallet",
       "pk": "Enter your wallet private key.",
       "submit": "Submit",
-      "learn": "Learn More"
+      "learn": "Learn more"
     },
     "walletConnect": {
       "title":"Scan QR code to connect wallet using WalletConnect",
       "wallet": "Compatible mobile wallets",
       "deprecated": "DEPRECATED",
-      "learn": "Learn More"
+      "learn": "Learn more"
     },
     "hardwareWallet": {
       "title":"Select hardware wallet",
@@ -51,5 +51,5 @@
     }
   },
   "deprecated": "DEPRECATED",
-  "learn": "Learn More"
+  "learn": "Learn more"
 }
