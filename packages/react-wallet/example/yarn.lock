@@ -3011,14 +3011,10 @@
   version "0.0.0"
   uid ""
 
-"@sovryn/wallet@link:../../wallet/dist":
-  version "0.0.0"
-  uid ""
-
-"@sovryn/wallet@~2.2.15":
-  version "2.2.15"
-  resolved "https://registry.yarnpkg.com/@sovryn/wallet/-/wallet-2.2.15.tgz#1fbf721c820081b5f6c457a877761174360ccf47"
-  integrity sha512-waatev/5BGi1+OICUN7Q5aLZxaHZcZmOBqSFdHRca19uZ313FG7ow0SFi7Ti/+wywvQHNBPX1//PmMLLk2Jf8g==
+"@sovryn/wallet@^2.2.5":
+  version "2.2.18"
+  resolved "https://registry.yarnpkg.com/@sovryn/wallet/-/wallet-2.2.18.tgz#c8d6e5db3665b8c9682a545e719aa54471e4c112"
+  integrity sha512-sOXYeHCprTSxAKKCOyl+tvxA14IDACQJ/aUIrUW77YF0EZB7zHFXTLdXHAXBKYf6brUCwLV0CtKlHm7dN5oA8Q==
   dependencies:
     "@ethereumjs/common" "^2.6.4"
     "@ethereumjs/tx" "^3.5.2"
@@ -3032,7 +3028,6 @@
     "@sovryn/common" "^2.1.1"
     "@trezor/rollout" "^1.0.7"
     "@types/w3c-web-usb" "^1.0.5"
-    "@walletconnect/web3-provider" "^1.8.0"
     ethereumjs-common "1.5.2"
     ethereumjs-tx "2.1.2"
     ethereumjs-util "7.0.3"
@@ -3041,6 +3036,10 @@
     trezor-connect "^8.2.8"
     web3 "^1.3.4"
     web3-utils "^1.3.4"
+
+"@sovryn/wallet@link:../../wallet/dist":
+  version "0.0.0"
+  uid ""
 
 "@svgr/babel-plugin-add-jsx-attribute@^4.2.0":
   version "4.2.0"
@@ -3680,7 +3679,7 @@
     js-sha3 "0.8.0"
     query-string "6.13.5"
 
-"@walletconnect/web3-provider@^1.8.0":
+"@walletconnect/web3-provider@^1.5.2":
   version "1.8.0"
   resolved "https://registry.yarnpkg.com/@walletconnect/web3-provider/-/web3-provider-1.8.0.tgz#e90d903f4c609b7158ecb5f0f41df121e93b56b5"
   integrity sha512-lqqEO0oRmCehH+c8ZPk3iH7I7YtbzmkWd58/Or2AgWAl869JamzndKCD3sTlNsPRQLxxPpraHQqzur7uclLWvg==
