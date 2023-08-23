@@ -16,13 +16,20 @@ interface Props {
   hideInstructionLink?: boolean;
 }
 
-const wallet = detectInjectableWallet();
+let initialWallet = 'none';
+detectInjectableWallet().then(value => initialWallet = value);
 
 export function BrowserWalletSelector(props: Props) {
   const { t } = useTranslation();
   const { expectedChainId, signTypedRequired, options } = React.useContext(
     WalletContext,
   );
+
+  const [wallet, setWallet] = React.useState<string>(initialWallet);
+
+  React.useEffect(() => {
+    detectInjectableWallet().then(setWallet);
+  }, []);
 
   return (
     <div>
@@ -120,8 +127,16 @@ export function BrowserWalletSelector(props: Props) {
   );
 }
 
-function detectInjectableWallet() {
+let checks = 0;
+
+async function detectInjectableWallet() {
   const { ethereum } = window as any;
+
+  while (!ethereum && checks < 5) {
+    await sleep(1000);
+    checks++;
+  }
+
   if (ethereum) {
     ethereum.autoRefreshOnNetworkChange = false;
     if (ethereum.isLiquality) return 'liquality';
@@ -133,6 +148,8 @@ function detectInjectableWallet() {
   }
   return 'none';
 }
+
+const sleep = (ms = 0) => new Promise(resolve => setTimeout(resolve, ms));
 
 const P = styled.p`
   margin: 0 auto;
