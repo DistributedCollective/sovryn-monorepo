@@ -174,6 +174,7 @@ export const WalletConnectionView: React.FC<WalletConnectionViewProps> = props =
       {state.step === WalletConnectionStep.BROWSER_PROVIDERS && (
         <BrowserWalletSelector
           onWalletSelected={onProviderChosen}
+          uri={context.uri}
           hideInstructionLink={props.hideInstructionLink}
         />
       )}

@@ -8,12 +8,13 @@ import { images } from '../../../assets/images';
 import { PORTIS_SUPPORTED_CHAINS } from '../../../contants';
 import { translations } from '../../../locales/i18n';
 import { BottomLinkContainer } from '../../BottomLinkContainer';
-import { Item, ItemLink } from '../../Item';
+import { Item, ItemLink, WalletItem } from '../../Item';
 import { ItemList } from '../../ItemList';
 
 interface Props {
   onWalletSelected: (value: ProviderType) => void;
   hideInstructionLink?: boolean;
+  uri?: string;
 }
 
 const wallet = detectInjectableWallet();
@@ -67,6 +68,21 @@ export function BrowserWalletSelector(props: Props) {
             dataAttribute='browserType-nifty'
           />
         )}
+
+        {wallet === 'defiant' && (
+          <WalletItem
+            options={options}
+            image={images.defiantWallet}
+            title='defiant'
+            ios={`defiantapp://wc?uri=${props.uri}`}
+            android={props.uri}
+            linkHref='https://defiantapp.tech/'
+            linkTitle={t(translations.dialogs.browserSelector.download)}
+            universal='https://defiantapp.tech/'
+            dataAttribute='mobileWallet-defiant'
+          />
+        )}
+
         {(['metamask', 'unknown'].includes(wallet) ||
           (signTypedRequired && wallet === 'liquality')) && (
           <Item
@@ -114,6 +130,7 @@ function detectInjectableWallet() {
     if (ethereum.isLiquality) return 'liquality';
     if (ethereum.isNiftyWallet) return 'nifty';
     if (ethereum.isMetaMask) return 'metamask';
+    if (ethereum.isDefiant) return 'defiant';
     return 'unknown';
   }
   return 'none';
