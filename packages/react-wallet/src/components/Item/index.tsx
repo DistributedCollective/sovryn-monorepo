@@ -121,11 +121,10 @@ export function WalletItem(props: WalletItemProps) {
   return (
     <ItemLink
       options={props.options}
-      image={props.image}
-      title={props.title}
       small={props.small}
       href={walletItemHref()}
       dataAttribute={props.dataAttribute}
+      {...props}
     />
   );
 }
