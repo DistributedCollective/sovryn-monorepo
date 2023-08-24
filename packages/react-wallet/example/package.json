@@ -10,7 +10,7 @@
     "eject": "node ../node_modules/react-scripts/bin/react-scripts.js eject"
   },
   "dependencies": {
-    "@blueprintjs/core": "~3.54.0",
+    "@blueprintjs/core": "^3.44.2",
     "@sovryn/react-wallet": "link:../dist",
     "@sovryn/wallet": "link:../../wallet/dist",
     "@testing-library/jest-dom": "link:../node_modules/@testing-library/jest-dom",

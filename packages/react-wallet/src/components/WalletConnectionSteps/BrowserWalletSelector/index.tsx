@@ -8,7 +8,7 @@ import { images } from '../../../assets/images';
 import { PORTIS_SUPPORTED_CHAINS } from '../../../contants';
 import { translations } from '../../../locales/i18n';
 import { BottomLinkContainer } from '../../BottomLinkContainer';
-import { Item, ItemLink } from '../../Item';
+import { Item, ItemLink, WalletItem } from '../../Item';
 import { ItemList } from '../../ItemList';
 
 interface Props {
@@ -16,13 +16,20 @@ interface Props {
   hideInstructionLink?: boolean;
 }
 
-const wallet = detectInjectableWallet();
+let initialWallet = 'none';
+detectInjectableWallet().then(value => initialWallet = value);
 
 export function BrowserWalletSelector(props: Props) {
   const { t } = useTranslation();
   const { expectedChainId, signTypedRequired, options } = React.useContext(
     WalletContext,
   );
+
+  const [wallet, setWallet] = React.useState<string>(initialWallet);
+
+  React.useEffect(() => {
+    detectInjectableWallet().then(setWallet);
+  }, []);
 
   return (
     <div>
@@ -67,6 +74,19 @@ export function BrowserWalletSelector(props: Props) {
             dataAttribute='browserType-nifty'
           />
         )}
+
+        {wallet === 'defiant' && (
+          <WalletItem
+            options={options}
+            image={images.defiantWallet}
+            title='Defiant'
+            onClick={() => props.onWalletSelected(ProviderType.WEB3)}
+            linkHref='https://defiantapp.tech/'
+            linkTitle={t(translations.dialogs.browserSelector.download)}
+            dataAttribute='browserType-defiant'
+          />
+        )}
+
         {(['metamask', 'unknown'].includes(wallet) ||
           (signTypedRequired && wallet === 'liquality')) && (
           <Item
@@ -107,17 +127,29 @@ export function BrowserWalletSelector(props: Props) {
   );
 }
 
-function detectInjectableWallet() {
+let checks = 0;
+
+async function detectInjectableWallet() {
   const { ethereum } = window as any;
+
+  while (!ethereum && checks < 5) {
+    await sleep(1000);
+    checks++;
+  }
+
   if (ethereum) {
     ethereum.autoRefreshOnNetworkChange = false;
     if (ethereum.isLiquality) return 'liquality';
     if (ethereum.isNiftyWallet) return 'nifty';
+    if (ethereum.isDefiant) return 'defiant';
+    // MetaMask must be last of the injected wallets
     if (ethereum.isMetaMask) return 'metamask';
     return 'unknown';
   }
   return 'none';
 }
+
+const sleep = (ms = 0) => new Promise(resolve => setTimeout(resolve, ms));
 
 const P = styled.p`
   margin: 0 auto;
