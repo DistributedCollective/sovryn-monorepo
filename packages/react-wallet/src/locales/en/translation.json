@@ -16,7 +16,7 @@
       },
       "instructions": "For instructions on how to connect to SOVRYN visit our Wiki",
       "ledgerInstructions": "Don't understand Derivation Paths? Read our wiki",
-      "instructionsMobile":"For instructions on how to connect mobile wallets to SOVRYN visit our Wiki",
+      "instructionsMobile": "For instructions on how to connect mobile wallets to SOVRYN visit our Wiki",
       "ledgerAppInstruction": "Make sure you have {{app}} app opened in your Ledger Device."
     },
     "browserSelector": {
@@ -36,14 +36,14 @@
       "learn": "Learn more"
     },
     "walletConnect": {
-      "title":"Scan QR code to connect wallet using WalletConnect",
+      "title": "Scan QR code to connect wallet using WalletConnect",
       "wallet": "Compatible mobile wallets",
       "deprecated": "DEPRECATED",
       "learn": "Learn more"
     },
     "hardwareWallet": {
-      "title":"Select hardware wallet",
-      "success":"Copied Successfully"
+      "title": "Select hardware wallet",
+      "success": "Copied Successfully"
     },
     "hardwarePath": {
       "title": "Connect {{name}}",
@@ -51,5 +51,7 @@
     }
   },
   "deprecated": "DEPRECATED",
+  "discontinued": "DISCONTINUED",
+  "trezorDescription": "Still need to connect with Trezor?",
   "learn": "Learn more"
 }

@@ -1,0 +1,27 @@
+.item {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.title {
+  color: #ff0000;
+  font-weight: bold;
+  margin-bottom: 3px;
+}
+.subtitle {
+  color: #ff0000;
+  margin-bottom: 3px;
+  font-size: 14px;
+}
+.link {
+  color: #ff0000 !important;
+  text-decoraton: underline;
+}
+
+@media (min-width: 768px) {
+  .title {
+    margin-top: -15px;
+  }
+}
