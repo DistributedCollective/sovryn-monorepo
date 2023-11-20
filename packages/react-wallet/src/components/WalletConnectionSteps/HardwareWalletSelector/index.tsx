@@ -8,6 +8,8 @@ import { translations } from '../../../locales/i18n';
 import { useTranslation } from 'react-i18next';
 import { WalletContext } from '../../..';
 import { isWalletVisibleForSignTyped } from '../../../helpers';
+import style from './index.module.css';
+
 interface Props {
   onWalletSelected: (value: ProviderType) => void;
   hideInstructionLink?: boolean;
@@ -38,15 +40,26 @@ export function HardwareWalletSelector(props: Props) {
           ProviderType.TREZOR,
           signTypedRequired,
         ) && (
-          <Item
-            options={options}
-            image={images.trezorWallet}
-            title='Trezor'
-            onClick={() => props.onWalletSelected(ProviderType.TREZOR)}
-            linkHref='https://trezor.io/?offer_id=12&aff_id=7144&source=sovryn'
-            linkTitle='Buy Now'
-            dataAttribute='hardwareWallet-trezor'
-          />
+          <div className={style.item}>
+            <Item
+              options={options}
+              image={images.trezorWallet}
+              title='Trezor'
+              disabled
+              onClick={() => props.onWalletSelected(ProviderType.TREZOR)}
+              dataAttribute='hardwareWallet-trezor'
+            />
+            <p className={style.title}>{t(translations.deprecated)}</p>
+            <p className={style.subtitle}>{t(translations.trezorDescription)}</p>
+            <a
+              className={style.link}
+              href='https://wiki.sovryn.com/en/getting-started/trezor-deprecation'
+              target='_blank'
+              rel='noreferrer nofollow'
+            >
+              {t(translations.dialogs.walletConnect.learn)}
+            </a>
+          </div>
         )}
       </ItemList>
       {!props.hideInstructionLink && (
