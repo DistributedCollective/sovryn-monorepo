@@ -49,7 +49,7 @@ export function HardwareWalletSelector(props: Props) {
               onClick={() => props.onWalletSelected(ProviderType.TREZOR)}
               dataAttribute='hardwareWallet-trezor'
             />
-            <p className={style.title}>{t(translations.discontinued)}</p>
+            <p className={style.title}>{t(translations.deprecated)}</p>
             <p className={style.subtitle}>{t(translations.trezorDescription)}</p>
             <a
               className={style.link}

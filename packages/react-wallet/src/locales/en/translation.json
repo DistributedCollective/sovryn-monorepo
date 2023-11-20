@@ -51,7 +51,6 @@
     }
   },
   "deprecated": "DEPRECATED",
-  "discontinued": "DISCONTINUED",
   "trezorDescription": "Still need to connect with Trezor?",
   "learn": "Learn more"
 }
