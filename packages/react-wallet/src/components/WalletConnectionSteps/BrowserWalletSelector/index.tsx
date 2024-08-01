@@ -141,6 +141,7 @@ async function detectInjectableWallet() {
     ethereum.autoRefreshOnNetworkChange = false;
     if (ethereum.isLiquality) return 'liquality';
     if (ethereum.isNiftyWallet) return 'nifty';
+    // Defiant is discontinued
     if (ethereum.isDefiant) return 'defiant';
     // MetaMask must be last of the injected wallets
     if (ethereum.isMetaMask) return 'metamask';
